@@ -12,6 +12,6 @@ namespace EnterpriseWeb.Models
         public int RatingValue { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime SubmittionDate { get; set; }
+        public DateTime SubmitionDate { get; set; }
     }
 }

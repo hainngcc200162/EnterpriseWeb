@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
+    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
   },
   "projects": {
-    "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj": {
+    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectUniqueName": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
         "projectName": "EnterpriseWeb",
-        "projectPath": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
-        "packagesPath": "C:\\Users\\GF63\\.nuget\\packages\\",
-        "outputPath": "E:\\Website1640\\EnterpriseWeb\\obj\\",
+        "projectPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\GF63\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,6 +39,26 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SQLite": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

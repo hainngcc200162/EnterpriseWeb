@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<EnterpriseWebContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EnterpriseWebContext")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
