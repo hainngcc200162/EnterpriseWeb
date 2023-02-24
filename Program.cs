@@ -3,7 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<EnterpriseWebContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("EnterpriseWebContext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EnterpriseWebContext") ?? throw new InvalidOperationException("Connection string 'FPTBOOK_STOREIdentityDbContextConnection' not found.")));
+    
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
