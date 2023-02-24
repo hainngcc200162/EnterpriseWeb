@@ -1,5 +1,5 @@
 namespace EnterpriseWeb.Models;
-public class QACoordiantor
+public class QACoordinator
 {
     public int Id{ get ; set ; }
 
