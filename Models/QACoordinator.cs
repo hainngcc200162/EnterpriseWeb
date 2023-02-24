@@ -3,6 +3,6 @@ public class QACoordiantor
 {
     public int Id{ get ; set ; }
 
-    public ICollection<QACoordinator>? QACoordinators { get; set; }
+    public ICollection<Department>? Departments { get; set; }
 
 }
