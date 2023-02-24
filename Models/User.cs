@@ -9,8 +9,8 @@ namespace EnterpriseWeb.Models
         public string? Email { get; set; }
         public string? Password { get; set; }
         public string? Role { get; set; }
-        public ICollection<Comment> CommentId { get; set; }
-        public ICollection<Idea> IdeaId { get; set; }
-        public ICollection<Rating> RatingId { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Idea> Ideas { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 }
