@@ -13,4 +13,20 @@ using EnterpriseWeb.Models;
         }
 
         public DbSet<EnterpriseWeb.Models.User> User { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Rating> Rating { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Comment> Comment { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Idea> Idea { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.IdeaCategory> IdeaCategory { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Category> Category { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.ClosureDate> ClosureDate { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Department> Department { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.QACoordinator> QACoordinator { get; set; }
     }
