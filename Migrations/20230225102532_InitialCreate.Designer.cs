@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnterpriseWeb.Migrations
 {
     [DbContext(typeof(EnterpriseWebContext))]
-    [Migration("20230224131220_InitialCreate")]
+    [Migration("20230225102532_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace EnterpriseWeb.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

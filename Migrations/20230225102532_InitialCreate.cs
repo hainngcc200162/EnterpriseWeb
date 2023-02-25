@@ -132,7 +132,8 @@ namespace EnterpriseWeb.Migrations
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubmitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    IdeaId = table.Column<int>(type: "int", nullable: false)
+                    IdeaId = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
