@@ -19,7 +19,10 @@
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RatingValue)
+                @Html.DisplayNameFor(model => model.RatingUp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RatingDown)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SubmitionDate)
@@ -37,7 +40,10 @@
                 @Html.DisplayFor(modelItem => item.User.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RatingValue)
+                @Html.DisplayFor(modelItem => item.RatingUp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatingDown)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SubmitionDate)

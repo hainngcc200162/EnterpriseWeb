@@ -9,7 +9,8 @@ namespace EnterpriseWeb.Models
         public Idea? Idea { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
-        public int RatingValue { get; set; }
+        public int RatingUp { get; set; }
+        public int RatingDown { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime SubmitionDate { get; set; }

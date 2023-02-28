@@ -48,7 +48,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Rating/Create
         public IActionResult Create()
         {
-            ViewData["IdeaID"] = new SelectList(_context.Set<Idea>(), "Id", "Id");
+            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
@@ -58,7 +58,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdeaID,UserId,RatingValue,SubmitionDate")] Rating rating)
+        public async Task<IActionResult> Create([Bind("Id,IdeaID,UserId,RatingUp,RatingDown,SubmitionDate")] Rating rating)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace EnterpriseWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdeaID"] = new SelectList(_context.Set<Idea>(), "Id", "Id", rating.IdeaID);
+            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }
@@ -84,7 +84,7 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdeaID"] = new SelectList(_context.Set<Idea>(), "Id", "Id", rating.IdeaID);
+            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }
@@ -94,7 +94,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdeaID,UserId,RatingValue,SubmitionDate")] Rating rating)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdeaID,UserId,RatingUp,RatingDown,SubmitionDate")] Rating rating)
         {
             if (id != rating.Id)
             {
@@ -121,7 +121,7 @@ namespace EnterpriseWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdeaID"] = new SelectList(_context.Set<Idea>(), "Id", "Id", rating.IdeaID);
+            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }

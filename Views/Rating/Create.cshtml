@@ -21,9 +21,14 @@
                 <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="RatingValue" class="control-label"></label>
-                <input asp-for="RatingValue" class="form-control" />
-                <span asp-validation-for="RatingValue" class="text-danger"></span>
+                <label asp-for="RatingUp" class="control-label"></label>
+                <input asp-for="RatingUp" class="form-control" />
+                <span asp-validation-for="RatingUp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RatingDown" class="control-label"></label>
+                <input asp-for="RatingDown" class="form-control" />
+                <span asp-validation-for="RatingDown" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SubmitionDate" class="control-label"></label>
