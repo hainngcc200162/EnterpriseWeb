@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnterpriseWeb.Migrations
 {
     [DbContext(typeof(EnterpriseWebContext))]
-    [Migration("20230224131220_InitialCreate")]
+    [Migration("20230228132220_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace EnterpriseWeb.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -186,11 +189,14 @@ namespace EnterpriseWeb.Migrations
 
             modelBuilder.Entity("EnterpriseWeb.Models.QACoordinator", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -208,7 +214,10 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int>("IdeaID")
                         .HasColumnType("int");
 
-                    b.Property<int>("RatingValue")
+                    b.Property<int>("RatingDown")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingUp")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SubmitionDate")

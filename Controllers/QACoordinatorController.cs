@@ -53,7 +53,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] QACoordinator qACoordinator)
+        public async Task<IActionResult> Create([Bind("Id,Name")] QACoordinator qACoordinator)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] QACoordinator qACoordinator)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Name")] QACoordinator qACoordinator)
         {
             if (id != qACoordinator.Id)
             {
@@ -136,7 +136,7 @@ namespace EnterpriseWeb.Controllers
         // POST: QACoordinator/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
             var qACoordinator = await _context.QACoordinator.FindAsync(id);
             _context.QACoordinator.Remove(qACoordinator);
@@ -144,7 +144,7 @@ namespace EnterpriseWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool QACoordinatorExists(int id)
+        private bool QACoordinatorExists(int? id)
         {
             return _context.QACoordinator.Any(e => e.Id == id);
         }

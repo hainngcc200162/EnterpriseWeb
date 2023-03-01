@@ -46,7 +46,8 @@ namespace EnterpriseWeb.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,7 +133,8 @@ namespace EnterpriseWeb.Migrations
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubmitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    IdeaId = table.Column<int>(type: "int", nullable: false)
+                    IdeaId = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -183,7 +185,8 @@ namespace EnterpriseWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdeaID = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    RatingValue = table.Column<int>(type: "int", nullable: false),
+                    RatingUp = table.Column<int>(type: "int", nullable: false),
+                    RatingDown = table.Column<int>(type: "int", nullable: false),
                     SubmitionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

@@ -10,5 +10,6 @@ public class Comment{
     public int UserId { get; set; }
     public User? User { get; set; }
     public int IdeaId { get; set; }
-    public Idea? Idea { get; set; } 
+    public Idea? Idea { get; set; }
+    public int? status { get; set; } 
 }

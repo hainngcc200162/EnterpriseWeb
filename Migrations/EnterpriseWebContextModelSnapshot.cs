@@ -85,6 +85,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdeaId");
@@ -183,11 +186,14 @@ namespace EnterpriseWeb.Migrations
 
             modelBuilder.Entity("EnterpriseWeb.Models.QACoordinator", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -205,7 +211,10 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int>("IdeaID")
                         .HasColumnType("int");
 
-                    b.Property<int>("RatingValue")
+                    b.Property<int>("RatingDown")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingUp")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SubmitionDate")
