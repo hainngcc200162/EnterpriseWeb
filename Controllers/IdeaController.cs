@@ -24,6 +24,23 @@ namespace EnterpriseWeb.Controllers
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department).Include(i => i.User);
             return View(await enterpriseWebContext.ToListAsync());
         }
+        public async Task<IActionResult> Search(string bookCategory, string search){
+            IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
+            var books = from m in _context.Idea select m;
+            var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
+            
+            if (!string.IsNullOrEmpty(search))
+            {
+                books = books.Where(s => s.Title!.Contains(search));
+            }
+          
+            var bookcategoryVM = new IdeaCategoryView
+            {
+                Ideas = await books.ToListAsync(),
+            };
+            return View(bookcategoryVM);
+
+        }
 
         // GET: Idea/Details/5
         public async Task<IActionResult> Details(int? id)

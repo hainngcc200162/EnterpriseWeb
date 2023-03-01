@@ -8,217 +8,221 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = EnterpriseWeb
 build_property.RootNamespace = EnterpriseWeb
-build_property.ProjectDir = C:\Users\nguye\Desktop\EnterpriseWeb\
+build_property.ProjectDir = E:\Website1640\EnterpriseWeb\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\nguye\Desktop\EnterpriseWeb
+build_property.MSBuildProjectDirectory = E:\Website1640\EnterpriseWeb
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Category/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Category/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Category/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Category/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Category/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Category/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Category/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Category/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Category/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Category/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/ClosureDate/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/ClosureDate/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/ClosureDate/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/ClosureDate/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/ClosureDate/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/ClosureDate/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/ClosureDate/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/ClosureDate/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/ClosureDate/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/ClosureDate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Comment/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Comment/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Comment/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Comment/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Comment/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Comment/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Comment/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Comment/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Comment/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Comment/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Department/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Department/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Department/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Department/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Department/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Department/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Department/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Department/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Department/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Department/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Home/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Home/Privacy.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/IdeaCategory/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/IdeaCategory/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/IdeaCategory/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/IdeaCategory/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/IdeaCategory/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Idea/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Idea/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Idea/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Idea/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Idea/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/QACoordinator/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Idea/Search.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxTZWFyY2guY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Website1640/EnterpriseWeb/Views/QACoordinator/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/QACoordinator/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/QACoordinator/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/QACoordinator/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/QACoordinator/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/QACoordinator/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/QACoordinator/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/QACoordinator/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/QACoordinator/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Rating/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Rating/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Rating/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Rating/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Rating/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Rating/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Rating/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Rating/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Rating/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Rating/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Shared/Error.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/User/Create.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/User/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/User/Delete.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/User/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/User/Details.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/User/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/User/Edit.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/User/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/User/Index.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/_ViewImports.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/_ViewStart.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/nguye/Desktop/EnterpriseWeb/Views/Shared/_Layout.cshtml]
+[E:/Website1640/EnterpriseWeb/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-j72jopljrx
