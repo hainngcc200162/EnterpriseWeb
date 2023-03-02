@@ -21,7 +21,10 @@ namespace EnterpriseWeb.Controllers
         // GET: IdeaCategory
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.IdeaCategory.Include(i => i.Category).Include(i => i.Idea);
+            // var enterpriseWebContext = _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category).Where(m => m.Category.Name == "Fantasy");
+                        var enterpriseWebContext = _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category);
+                ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Name");
+                ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Title");  
             return View(await enterpriseWebContext.ToListAsync());
         }
 
@@ -84,8 +87,8 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Id", ideaCategory.CategoryID);
-            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", ideaCategory.IdeaID);
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Name", ideaCategory.CategoryID);
+            ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Title", ideaCategory.IdeaID);
             return View(ideaCategory);
         }
 
