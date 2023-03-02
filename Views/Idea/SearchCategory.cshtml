@@ -1,4 +1,4 @@
-@model EnterpriseWeb.Models.IdeaCategoryView
+@model EnterpriseWeb.Models.CategorySearchView
 
 @{
     ViewData["Title"] = "Index";
@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-controller="Idea" asp-action="Search" method="get">
+<form asp-controller="Idea" asp-action="SearchCategory" method="get">
     <p>
         Title: <input type="text" asp-for="Search" />
         <input type="submit" value="Filter" />
@@ -23,6 +23,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Idea.Title)
             </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.Idea.Comments)
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>

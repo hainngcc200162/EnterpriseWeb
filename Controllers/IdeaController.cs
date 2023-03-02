@@ -26,19 +26,37 @@ namespace EnterpriseWeb.Controllers
         }
         public async Task<IActionResult> Search(string bookCategory, string search){
             IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
-            var books = from m in _context.Idea select m;
+            var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
             var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
             
             if (!string.IsNullOrEmpty(search))
             {
-                books = books.Where(s => s.Title!.Contains(search));
+                books = books.Where(s => s.Idea.Title!.Contains(search));
             }
           
             var bookcategoryVM = new IdeaCategoryView
             {
-                Ideas = await books.ToListAsync(),
+                IdeaCategories = await books.ToListAsync(),
             };
             return View(bookcategoryVM);
+
+        }
+        public async Task<IActionResult> SearchCategory(string bookCategory, string search){
+            IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
+            var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
+            var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
+            
+            if (!string.IsNullOrEmpty(search))
+            {
+                books = books.Where(s => s.Category.Name!.Contains(search));
+            }
+
+          
+            var categorysearchVM = new CategorySearchView
+            {
+                IdeaCategories = await books.ToListAsync(),
+            };
+            return View(categorysearchVM);
 
         }
 

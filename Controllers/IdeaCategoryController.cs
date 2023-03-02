@@ -22,7 +22,7 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> Index()
         {
             // var enterpriseWebContext = _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category).Where(m => m.Category.Name == "Fantasy");
-                        var enterpriseWebContext = _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category);
+                var enterpriseWebContext = _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category);
                 ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Name");
                 ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Title");  
             return View(await enterpriseWebContext.ToListAsync());
