@@ -6,14 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
+using EnterpriseWeb.Areas.Identity.Data;
+
+
 
 namespace EnterpriseWeb.Controllers
 {
     public class IdeaCategoryController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public IdeaCategoryController(EnterpriseWebContext context)
+        public IdeaCategoryController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }
@@ -51,7 +54,7 @@ namespace EnterpriseWeb.Controllers
         // GET: IdeaCategory/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Id");
+            ViewData["CategoryID"] = new SelectList(_context.Category, "Id", "Id");
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id");
             return View();
         }
@@ -69,7 +72,7 @@ namespace EnterpriseWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Id", ideaCategory.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Category, "Id", "Id", ideaCategory.CategoryID);
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", ideaCategory.IdeaID);
             return View(ideaCategory);
         }
@@ -124,7 +127,7 @@ namespace EnterpriseWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "Id", ideaCategory.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Category, "Id", "Id", ideaCategory.CategoryID);
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", ideaCategory.IdeaID);
             return View(ideaCategory);
         }

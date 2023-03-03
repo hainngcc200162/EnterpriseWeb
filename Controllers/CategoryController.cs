@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
+using EnterpriseWeb.Areas.Identity.Data;
 
 namespace EnterpriseWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public CategoryController(EnterpriseWebContext context)
+        public CategoryController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }

@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
-
+using EnterpriseWeb.Areas.Identity.Data;
 namespace EnterpriseWeb.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public DepartmentController(EnterpriseWebContext context)
+        public DepartmentController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }
