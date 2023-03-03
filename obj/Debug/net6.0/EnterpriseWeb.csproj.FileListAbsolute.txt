@@ -18,8 +18,6 @@ C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\EnterpriseWeb.pdb
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Humanizer.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\MessagePack.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\MessagePack.Annotations.dll
-C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
-C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
@@ -55,8 +53,6 @@ C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.EntityFrameworkC
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
-C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
-C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Identity.Client.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\nguye\Desktop\EnterpriseWeb\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll

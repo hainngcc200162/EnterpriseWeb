@@ -10,7 +10,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
             //Seed Roles
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Admin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Student.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.QACoordinator.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.QAManager.ToString()));
         }
         public static async Task SeedSuperAdminAsync(UserManager<IdeaUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -35,7 +35,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
                     await userManager.CreateAsync(defaultUserAdmin, "123Pa$$word.");
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Admin.ToString());
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Student.ToString());
-                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QACoordinator.ToString());
+                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QAManager.ToString());
                 }
 
             }
