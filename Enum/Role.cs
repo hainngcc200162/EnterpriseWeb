@@ -3,6 +3,6 @@ public enum Roles
 {
     Admin,
     Student,
-    QACoordinator
+    QAManager
 }
 }
