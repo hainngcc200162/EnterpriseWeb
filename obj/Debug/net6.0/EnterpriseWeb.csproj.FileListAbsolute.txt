@@ -334,8 +334,6 @@ C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Desig
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Sqlite.dll
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.Identity.Client.dll
 C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
