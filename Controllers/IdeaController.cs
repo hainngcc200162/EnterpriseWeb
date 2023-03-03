@@ -71,6 +71,7 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
+                .Include(i => i.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
@@ -196,5 +197,36 @@ namespace EnterpriseWeb.Controllers
         {
             return _context.Idea.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Comment(int id,string commenttext){
+            int userId = 1;
+            
+            var comment = new Comment{
+                CommentText = commenttext,
+                IdeaId = id,
+                UserId = userId,
+                SubmitDate = DateTime.Now,
+                status = 1,              
+            };
+            _context.Comment.Add(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> IncognitoComment(int id,string commenttext){
+            int userId = 1;
+            
+            var comment = new Comment{
+                CommentText = commenttext,
+                IdeaId = id,
+                UserId = userId,
+                SubmitDate = DateTime.Now,
+                status = 0,              
+            };
+            _context.Comment.Add(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }        
+
     }
 }
