@@ -10741,24 +10741,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\leduh\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Inspiron\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj",
+      "projectUniqueName": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
       "projectName": "EnterpriseWeb",
-      "projectPath": "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj",
-      "packagesPath": "C:\\Users\\leduh\\.nuget\\packages\\",
-      "outputPath": "C:\\Enterprise\\EnterpriseWeb\\obj\\",
+      "projectPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+      "packagesPath": "C:\\Users\\Inspiron\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\leduh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Inspiron\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

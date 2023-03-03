@@ -26,6 +26,33 @@ namespace EnterpriseWeb.Controllers
             _context = context;
             _userManager = userManager;
         }
+        public async Task<IActionResult> Comment(int id,string commenttext, string incognito){
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if(incognito.Equals("no")){
+                var comment = new Comment{
+                CommentText = commenttext,
+                IdeaId = id,
+                UserId = userId,
+                SubmitDate = DateTime.Now,
+                status = 1,              
+                };
+            _context.Comment.Add(comment);
+            await _context.SaveChangesAsync();                
+            }else if(incognito.Equals("yes")){
+                var comment = new Comment{
+                CommentText = commenttext,
+                IdeaId = id,
+                UserId = userId,
+                SubmitDate = DateTime.Now,
+                status = 0,              
+                };
+            _context.Comment.Add(comment);
+            await _context.SaveChangesAsync();                
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: Idea
         public async Task<IActionResult> Index()
@@ -79,9 +106,12 @@ namespace EnterpriseWeb.Controllers
                 return NotFound();
             }
 
+            ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Name");
+
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
+                .Include(i => i.Comments)
                 // .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)

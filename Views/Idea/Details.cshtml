@@ -52,8 +52,32 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ClosureDate.Id)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.Comments) {
+                <strong asp-items="ViewBag.UserId">
+                    @Html.DisplayFor(modelItem => item.UserId):
+                </strong>
+                @Html.DisplayFor(modelItem => item.CommentText);
+                <br>
+            }
+        </dd>
     </dl>
 </div>
+
+<div class="col-md-4">
+    <form asp-action="Comment" asp-route-id="@Model.Id">
+            <input class="form-control" name="commenttext" placeholder="Comment"/>
+            <input type="submit" value="Comment" class="btn btn-primary"/>  
+            <select name="incognito">
+                <option value="no">Public</option>
+                <option value="yes">Incognito Comment</option>
+            </select>         
+    </form>
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
