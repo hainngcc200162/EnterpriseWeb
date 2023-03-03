@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
+    "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {
+    "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectUniqueName": "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj",
         "projectName": "EnterpriseWeb",
-        "projectPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
-        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\obj\\",
+        "projectPath": "C:\\Enterprise\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "packagesPath": "C:\\Users\\leduh\\.nuget\\packages\\",
+        "outputPath": "C:\\Enterprise\\EnterpriseWeb\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\leduh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -52,7 +56,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SQLite": {
               "target": "Package",
@@ -86,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }
