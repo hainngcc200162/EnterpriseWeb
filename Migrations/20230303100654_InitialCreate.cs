@@ -228,7 +228,7 @@ namespace EnterpriseWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SupportingDocuments = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -263,7 +263,7 @@ namespace EnterpriseWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubmitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdeaId = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<int>(type: "int", nullable: true)
@@ -315,7 +315,7 @@ namespace EnterpriseWeb.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdeaID = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     RatingUp = table.Column<int>(type: "int", nullable: false),
                     RatingDown = table.Column<int>(type: "int", nullable: false),

@@ -7,7 +7,7 @@ namespace EnterpriseWeb.Models
         public int Id { get; set; }
         public int IdeaID { get; set; }
         public Idea? Idea { get; set; }
-        public int UserId { get; set; }
+        public string? UserId { get; set; }
         public IdeaUser? IdeaUser { get; set; }
         public int RatingUp { get; set; }
         public int RatingDown { get; set; }

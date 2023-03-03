@@ -9,7 +9,7 @@ public class Comment
     public string? CommentText { get; set; }
     [DataType(DataType.Date)]
     public DateTime SubmitDate { get; set; }
-    public int UserId { get; set; }
+    public string? UserId { get; set; }
     public IdeaUser? IdeaUser { get; set; }
     public int IdeaId { get; set; }
     public Idea? Idea { get; set; }

@@ -7,15 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 namespace EnterpriseWeb.Controllers
 {
     public class IdeaController : Controller
     {
         private readonly EnterpriseWebIdentityDbContext _context;
+        private readonly UserManager<IdeaUser> _userManager;
 
-        public IdeaController(EnterpriseWebIdentityDbContext context)
+        public IdeaController(EnterpriseWebIdentityDbContext context, UserManager<IdeaUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Idea
@@ -24,16 +33,17 @@ namespace EnterpriseWeb.Controllers
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department);
             return View(await enterpriseWebContext.ToListAsync());
         }
-        public async Task<IActionResult> Search(string bookCategory, string search){
+        public async Task<IActionResult> Search(string bookCategory, string search)
+        {
             IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
             var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
             var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
-            
+
             if (!string.IsNullOrEmpty(search))
             {
                 books = books.Where(s => s.Idea.Title!.Contains(search));
             }
-          
+
             var bookcategoryVM = new IdeaCategoryView
             {
                 IdeaCategories = await books.ToListAsync(),
@@ -41,17 +51,18 @@ namespace EnterpriseWeb.Controllers
             return View(bookcategoryVM);
 
         }
-        public async Task<IActionResult> SearchCategory(string bookCategory, string search){
+        public async Task<IActionResult> SearchCategory(string bookCategory, string search)
+        {
             IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
             var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
             var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
-            
+
             if (!string.IsNullOrEmpty(search))
             {
                 books = books.Where(s => s.Category.Name!.Contains(search));
             }
 
-          
+
             var categorysearchVM = new CategorySearchView
             {
                 IdeaCategories = await books.ToListAsync(),
@@ -83,7 +94,19 @@ namespace EnterpriseWeb.Controllers
 
         // GET: Idea/Create
         public IActionResult Create()
-        {
+        {;
+            // ViewData["uid"] = _userManager.GetUserId(User);
+            // var users = await _userManager.Users.Where(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToListAsync();
+            // var userRolesViewModel = new List<UserRolesViewModel>();
+            // foreach (IdeaUser user in users)
+            // {
+            //     var thisViewModel = new UserRolesViewModel();
+            //     thisViewModel.UserId = user.Id;
+            //     thisViewModel.Name = user.Name;
+            //     thisViewModel.PhoneNumber = user.PhoneNumber;
+            //     thisViewModel.Address = user.Address;
+            //     userRolesViewModel.Add(thisViewModel);
+            // }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
             // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id");
@@ -99,6 +122,7 @@ namespace EnterpriseWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
@@ -106,7 +130,7 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
+            ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
             return View(idea);
         }
 
@@ -208,13 +232,13 @@ namespace EnterpriseWeb.Controllers
         //Thumpup and thumpdown in index view
         public async Task<IActionResult> CreateUp(int id)
         {
-            var userId = 1; // replace with code to get the current user ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
             //Check closure date
             var idea = await _context.Idea.SingleOrDefaultAsync(r => r.Id == id);
             // var closure = await _context.ClosureDate.FindAsync(idea.ClosureDateID);
             // if ( closure.ClousureDate > DateTime.Now)
             // {
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
 
             if (rating == null)
             {
@@ -245,8 +269,8 @@ namespace EnterpriseWeb.Controllers
 
         public async Task<IActionResult> CreateDown(int id)
         {
-            var userId = 1; // replace with code to get the current user ID
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
                 rating = new Rating
@@ -272,8 +296,8 @@ namespace EnterpriseWeb.Controllers
         //Thumpup and thumpdown in detail view
         public async Task<IActionResult> DetailUp(int id)
         {
-            var userId = 1; // replace with code to get the current user ID
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
                 rating = new Rating
@@ -297,8 +321,8 @@ namespace EnterpriseWeb.Controllers
 
         public async Task<IActionResult> DetailDown(int id)
         {
-            var userId = 1; // replace with code to get the current user ID
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
                 rating = new Rating
