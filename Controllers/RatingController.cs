@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
-
+using EnterpriseWeb.Areas.Identity.Data;
 namespace EnterpriseWeb.Controllers
 {
     public class RatingController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public RatingController(EnterpriseWebContext context)
+        public RatingController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Rating
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Rating.Include(r => r.Idea).Include(r => r.User);
+            var enterpriseWebContext = _context.Rating.Include(r => r.Idea);
             return View(await enterpriseWebContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace EnterpriseWeb.Controllers
 
             var rating = await _context.Rating
                 .Include(r => r.Idea)
-                .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rating == null)
             {
@@ -49,7 +48,6 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Create()
         {
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -67,7 +65,6 @@ namespace EnterpriseWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }
 
@@ -85,7 +82,6 @@ namespace EnterpriseWeb.Controllers
                 return NotFound();
             }
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }
 
@@ -122,7 +118,6 @@ namespace EnterpriseWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdeaID"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaID);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", rating.UserId);
             return View(rating);
         }
 
@@ -136,7 +131,6 @@ namespace EnterpriseWeb.Controllers
 
             var rating = await _context.Rating
                 .Include(r => r.Idea)
-                .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rating == null)
             {

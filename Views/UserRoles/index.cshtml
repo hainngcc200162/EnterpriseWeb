@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Identity
+@using EnterpriseWeb.Areas.Identity.Data
+
+@inject SignInManager<IdeaUser> SignInManager
+@inject UserManager<IdeaUser> UserManager
+@using EnterpriseWeb.Models;
+@model List<EnterpriseWeb.Models.UserRolesViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>User Roles</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Home Address</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.DOB</td>
+                <td>@user.Address</td>
+                <td>@user.Email</td>
+                <td>@string.Join(" , ", user.Roles.ToList())</td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="UserRoles" asp-action="Manage"
+                    asp-route-userId="@user.UserId">Manage Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

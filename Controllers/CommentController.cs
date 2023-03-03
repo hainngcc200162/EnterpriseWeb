@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
+using EnterpriseWeb.Areas.Identity.Data;
 
 namespace EnterpriseWeb.Controllers
 {
     public class CommentController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public CommentController(EnterpriseWebContext context)
+        public CommentController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Comment
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Comment.Include(c => c.Idea).Include(c => c.User);
+            var enterpriseWebContext = _context.Comment.Include(c => c.Idea);
             return View(await enterpriseWebContext.ToListAsync());
         }
 
@@ -35,7 +36,6 @@ namespace EnterpriseWeb.Controllers
 
             var comment = await _context.Comment
                 .Include(c => c.Idea)
-                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
@@ -49,7 +49,6 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Create()
         {
             ViewData["IdeaId"] = new SelectList(_context.Set<Idea>(), "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -58,7 +57,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CommentText,SubmitDate,UserId,IdeaId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,CommentText,SubmitDate,UserId,IdeaId,status")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +66,6 @@ namespace EnterpriseWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdeaId"] = new SelectList(_context.Set<Idea>(), "Id", "Id", comment.IdeaId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", comment.UserId);
             return View(comment);
         }
 
@@ -85,7 +83,6 @@ namespace EnterpriseWeb.Controllers
                 return NotFound();
             }
             ViewData["IdeaId"] = new SelectList(_context.Set<Idea>(), "Id", "Id", comment.IdeaId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", comment.UserId);
             return View(comment);
         }
 
@@ -94,7 +91,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CommentText,SubmitDate,UserId,IdeaId")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CommentText,SubmitDate,UserId,IdeaId,status")] Comment comment)
         {
             if (id != comment.Id)
             {
@@ -122,7 +119,6 @@ namespace EnterpriseWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdeaId"] = new SelectList(_context.Set<Idea>(), "Id", "Id", comment.IdeaId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", comment.UserId);
             return View(comment);
         }
 
@@ -136,7 +132,6 @@ namespace EnterpriseWeb.Controllers
 
             var comment = await _context.Comment
                 .Include(c => c.Idea)
-                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {

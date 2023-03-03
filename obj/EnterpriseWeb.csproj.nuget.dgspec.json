@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
+    "C:\\Users\\nguye\\Desktop\\University\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {
+    "C:\\Users\\nguye\\Desktop\\University\\EnterpriseWeb\\EnterpriseWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectUniqueName": "C:\\Users\\nguye\\Desktop\\University\\EnterpriseWeb\\EnterpriseWeb.csproj",
         "projectName": "EnterpriseWeb",
-        "projectPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectPath": "C:\\Users\\nguye\\Desktop\\University\\EnterpriseWeb\\EnterpriseWeb.csproj",
         "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\obj\\",
+        "outputPath": "C:\\Users\\nguye\\Desktop\\University\\EnterpriseWeb\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -43,6 +43,10 @@
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.10, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

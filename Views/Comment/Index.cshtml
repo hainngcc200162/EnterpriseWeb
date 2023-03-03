@@ -19,10 +19,13 @@
                 @Html.DisplayNameFor(model => model.SubmitDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.UserId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Idea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
             </th>
             <th></th>
         </tr>
@@ -37,10 +40,13 @@
                 @Html.DisplayFor(modelItem => item.SubmitDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Idea.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

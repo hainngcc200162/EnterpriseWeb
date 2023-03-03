@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using EnterpriseWeb.Areas.Identity.Data;
 namespace EnterpriseWeb.Models
 {
     public class Rating
@@ -8,7 +8,7 @@ namespace EnterpriseWeb.Models
         public int IdeaID { get; set; }
         public Idea? Idea { get; set; }
         public int UserId { get; set; }
-        public User? User { get; set; }
+        public IdeaUser? IdeaUser { get; set; }
         public int RatingUp { get; set; }
         public int RatingDown { get; set; }
 

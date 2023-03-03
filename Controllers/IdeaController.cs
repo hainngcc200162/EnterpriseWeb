@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
-
+using EnterpriseWeb.Areas.Identity.Data;
 namespace EnterpriseWeb.Controllers
 {
     public class IdeaController : Controller
     {
-        private readonly EnterpriseWebContext _context;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public IdeaController(EnterpriseWebContext context)
+        public IdeaController(EnterpriseWebIdentityDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department).Include(i => i.User);
+            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department);
             return View(await enterpriseWebContext.ToListAsync());
         }
 
@@ -36,7 +36,6 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
-                .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
@@ -51,7 +50,6 @@ namespace EnterpriseWeb.Controllers
         {
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
-            ViewData["UserID"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -60,7 +58,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserId,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +68,6 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -89,7 +86,6 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -98,7 +94,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserId,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
         {
             if (id != idea.Id)
             {
@@ -127,7 +123,6 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -142,7 +137,6 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
-                .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
