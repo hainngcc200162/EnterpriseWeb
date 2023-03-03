@@ -71,6 +71,7 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
+                // .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
@@ -85,6 +86,7 @@ namespace EnterpriseWeb.Controllers
         {
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
+            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -93,16 +95,18 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserId,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
         {
             if (ModelState.IsValid)
             {
+                idea.SubmissionDate = DateTime.Now;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -121,6 +125,7 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -129,7 +134,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserId,SubmissionDate,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
         {
             if (id != idea.Id)
             {
@@ -140,6 +145,7 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
+                    idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
@@ -158,6 +164,7 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -172,6 +179,7 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
+                // .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
@@ -195,6 +203,121 @@ namespace EnterpriseWeb.Controllers
         private bool IdeaExists(int id)
         {
             return _context.Idea.Any(e => e.Id == id);
+        }
+
+        //Thumpup and thumpdown in index view
+        public async Task<IActionResult> CreateUp(int id)
+        {
+            var userId = 1; // replace with code to get the current user ID
+            //Check closure date
+            var idea = await _context.Idea.SingleOrDefaultAsync(r => r.Id == id);
+            // var closure = await _context.ClosureDate.FindAsync(idea.ClosureDateID);
+            // if ( closure.ClousureDate > DateTime.Now)
+            // {
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+
+            if (rating == null)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    RatingUp = 1,
+                    RatingDown = 0,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+            }
+            else
+            {
+                rating.RatingUp += 1;
+                rating.SubmitionDate = DateTime.Now;
+            }
+            // }
+            // else
+            // {
+            //     return Content("<script>alert('The closure date has passed.');</script>");
+            // }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> CreateDown(int id)
+        {
+            var userId = 1; // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            if (rating == null)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    RatingUp = 0,
+                    RatingDown = 1,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+            }
+            else
+            {
+                rating.RatingDown += 1;
+                rating.SubmitionDate = DateTime.Now;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        //Thumpup and thumpdown in detail view
+        public async Task<IActionResult> DetailUp(int id)
+        {
+            var userId = 1; // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            if (rating == null)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    RatingUp = 1,
+                    RatingDown = 0,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+            }
+            else
+            {
+                rating.RatingUp += 1;
+                rating.SubmitionDate = DateTime.Now;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public async Task<IActionResult> DetailDown(int id)
+        {
+            var userId = 1; // replace with code to get the current user ID
+            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId == userId);
+            if (rating == null)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    RatingUp = 0,
+                    RatingDown = 1,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+            }
+            else
+            {
+                rating.RatingDown += 1;
+                rating.SubmitionDate = DateTime.Now;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
         }
     }
 }
