@@ -22,10 +22,10 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserId)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UserId)
         </dd>
         <dt class="col-sm-2">
@@ -56,11 +56,15 @@
             @Html.DisplayNameFor(model => model.Comments)
         </dt>
         <dd class="col-sm-10">
-            @foreach (var item in Model.Comments) {
-                <strong asp-items="ViewBag.UserId">
-                    @Html.DisplayFor(modelItem => item.UserId):
+            @foreach (var item in Model.Comments)
+            {
+                <strong>
+                    <strong>
+                        @item.IdeaUser?.Name:
+                    </strong>
                 </strong>
-                @Html.DisplayFor(modelItem => item.CommentText);
+                @Html.DisplayFor(modelItem => item.CommentText)
+                ;
                 <br>
             }
         </dd>
@@ -69,12 +73,12 @@
 
 <div class="col-md-4">
     <form asp-action="Comment" asp-route-id="@Model.Id">
-            <input class="form-control" name="commenttext" placeholder="Comment"/>
-            <input type="submit" value="Comment" class="btn btn-primary"/>  
-            <select name="incognito">
-                <option value="no">Public</option>
-                <option value="yes">Incognito Comment</option>
-            </select>         
+        <input class="form-control" name="commenttext" placeholder="Comment" />
+        <input type="submit" value="Comment" class="btn btn-primary" />
+        <select name="incognito">
+            <option value="no">Public</option>
+            <option value="yes">Incognito Comment</option>
+        </select>
     </form>
 </div>
 
@@ -85,9 +89,9 @@
 <div>
     @if (Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now)
     {
-        <a asp-action="CreateUp" asp-route-id="@Model.Id">Up</a>
+        <a asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="true">Up</a>
         <text>|</text>
-        <a asp-action="CreateDown" asp-route-id="@Model.Id">Down</a>
+        <a asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="false">Down</a>
     }
     else
     {

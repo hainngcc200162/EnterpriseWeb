@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="create-idea-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -47,6 +47,12 @@
                 <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
             </div>
             <div class="form-group">
+                <label>
+                    <input type="checkbox" name="agree" id="agree-checkbox" required>
+                    I agree to the terms and conditions.
+                </label>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -61,4 +67,14 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        var form = document.getElementById('create-idea-form');
+        var checkbox = document.getElementById('agree-checkbox');
+        form.addEventListener('submit', function(event) {
+            if (!checkbox.checked) {
+                event.preventDefault();
+                alert('Please agree to the terms and conditions before submitting the form.');
+            }
+        });
+    </script>
 }

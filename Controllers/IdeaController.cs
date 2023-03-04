@@ -26,29 +26,37 @@ namespace EnterpriseWeb.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Comment(int id,string commenttext, string incognito){
+        public async Task<IActionResult> Comment(int id, string commenttext, string incognito)
+        {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-            if(incognito.Equals("no")){
-                var comment = new Comment{
-                CommentText = commenttext,
-                IdeaId = id,
-                UserId = userId,
-                SubmitDate = DateTime.Now,
-                status = 1,              
+
+            if (incognito.Equals("no"))
+            {
+                var comment = new Comment
+                {
+                    CommentText = commenttext,
+                    IdeaId = id,
+                    UserId = userId,
+                    IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    SubmitDate = DateTime.Now,
+                    status = 1,
                 };
-            _context.Comment.Add(comment);
-            await _context.SaveChangesAsync();                
-            }else if(incognito.Equals("yes")){
-                var comment = new Comment{
-                CommentText = commenttext,
-                IdeaId = id,
-                UserId = userId,
-                SubmitDate = DateTime.Now,
-                status = 0,              
+                _context.Comment.Add(comment);
+                await _context.SaveChangesAsync();
+            }
+            else if (incognito.Equals("yes"))
+            {
+                var comment = new Comment
+                {
+                    CommentText = commenttext,
+                    IdeaId = id,
+                    UserId = userId,
+                    IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    SubmitDate = DateTime.Now,
+                    status = 0,
                 };
-            _context.Comment.Add(comment);
-            await _context.SaveChangesAsync();                
+                _context.Comment.Add(comment);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
@@ -60,7 +68,8 @@ namespace EnterpriseWeb.Controllers
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department);
             return View(await enterpriseWebContext.ToListAsync());
         }
-        public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber){
+        public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber)
+        {
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -78,7 +87,8 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        public async Task<IActionResult> FilterCategory(string currentFilter, string searchString, int? pageNumber){
+        public async Task<IActionResult> FilterCategory(string currentFilter, string searchString, int? pageNumber)
+        {
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -111,7 +121,7 @@ namespace EnterpriseWeb.Controllers
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
                 .Include(i => i.Comments)
-                // .Include(i => i.User)
+                .ThenInclude(i => i.IdeaUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
@@ -123,7 +133,8 @@ namespace EnterpriseWeb.Controllers
 
         // GET: Idea/Create
         public IActionResult Create()
-        {;
+        {
+            ;
             // ViewData["uid"] = _userManager.GetUserId(User);
             // var users = await _userManager.Users.Where(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToListAsync();
             // var userRolesViewModel = new List<UserRolesViewModel>();
@@ -153,6 +164,7 @@ namespace EnterpriseWeb.Controllers
             {
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
+                idea.IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -198,6 +210,7 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
+                    idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
@@ -259,14 +272,9 @@ namespace EnterpriseWeb.Controllers
         }
 
         //Thumpup and thumpdown in index view
-        public async Task<IActionResult> CreateUp(int id)
+        public async Task<IActionResult> CreateRating(int id, bool isUp)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            //Check closure date
-            var idea = await _context.Idea.SingleOrDefaultAsync(r => r.Id == id);
-            // var closure = await _context.ClosureDate.FindAsync(idea.ClosureDateID);
-            // if ( closure.ClousureDate > DateTime.Now)
-            // {
             var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
 
             if (rating == null)
@@ -275,55 +283,34 @@ namespace EnterpriseWeb.Controllers
                 {
                     IdeaID = id,
                     UserId = userId,
-                    RatingUp = 1,
-                    RatingDown = 0,
+                    IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    RatingUp = isUp ? 1 : 0,
+                    RatingDown = isUp ? 0 : 1,
                     SubmitionDate = DateTime.Now
                 };
                 _context.Rating.Add(rating);
             }
             else
             {
-                rating.RatingUp += 1;
-                rating.SubmitionDate = DateTime.Now;
-            }
-            // }
-            // else
-            // {
-            //     return Content("<script>alert('The closure date has passed.');</script>");
-            // }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> CreateDown(int id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
-            if (rating == null)
-            {
-                rating = new Rating
+                if (isUp)
                 {
-                    IdeaID = id,
-                    UserId = userId,
-                    RatingUp = 0,
-                    RatingDown = 1,
-                    SubmitionDate = DateTime.Now
-                };
-                _context.Rating.Add(rating);
-            }
-            else
-            {
-                rating.RatingDown += 1;
+                    rating.RatingUp += 1;
+                }
+                else
+                {
+                    rating.RatingDown += 1;
+                }
                 rating.SubmitionDate = DateTime.Now;
             }
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
 
         //Thumpup and thumpdown in detail view
-        public async Task<IActionResult> DetailUp(int id)
+        public async Task<IActionResult> DetailRating(int id, bool isUp)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
             var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
@@ -333,44 +320,28 @@ namespace EnterpriseWeb.Controllers
                 {
                     IdeaID = id,
                     UserId = userId,
-                    RatingUp = 1,
-                    RatingDown = 0,
+                    IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    RatingUp = isUp ? 1 : 0,
+                    RatingDown = isUp ? 0 : 1,
                     SubmitionDate = DateTime.Now
                 };
                 _context.Rating.Add(rating);
             }
             else
             {
-                rating.RatingUp += 1;
+                if (isUp)
+                {
+                    rating.RatingUp += 1;
+                }
+                else
+                {
+                    rating.RatingDown += 1;
+                }
                 rating.SubmitionDate = DateTime.Now;
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id = id });
         }
 
-        public async Task<IActionResult> DetailDown(int id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
-            if (rating == null)
-            {
-                rating = new Rating
-                {
-                    IdeaID = id,
-                    UserId = userId,
-                    RatingUp = 0,
-                    RatingDown = 1,
-                    SubmitionDate = DateTime.Now
-                };
-                _context.Rating.Add(rating);
-            }
-            else
-            {
-                rating.RatingDown += 1;
-                rating.SubmitionDate = DateTime.Now;
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", new { id = id });
-        }
     }
 }

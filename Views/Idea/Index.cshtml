@@ -69,9 +69,9 @@
                 <td>
                     @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
                     {
-                        <a asp-action="CreateUp" asp-route-id="@item.Id">Up</a>
+                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
                         <text>|</text>
-                        <a asp-action="CreateDown" asp-route-id="@item.Id">Down</a>
+                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
                     }
                     else
                     {
