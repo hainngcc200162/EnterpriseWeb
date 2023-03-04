@@ -60,42 +60,41 @@ namespace EnterpriseWeb.Controllers
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department);
             return View(await enterpriseWebContext.ToListAsync());
         }
-        public async Task<IActionResult> Search(string bookCategory, string search)
-        {
-            IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
-            var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
-            var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
-
-            if (!string.IsNullOrEmpty(search))
+        public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber){
+            if (searchString != null)
             {
-                books = books.Where(s => s.Idea.Title!.Contains(search));
+                pageNumber = 1;
             }
-
-            var bookcategoryVM = new IdeaCategoryView
+            else
             {
-                IdeaCategories = await books.ToListAsync(),
-            };
-            return View(bookcategoryVM);
-
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.IdeaCategory.Include(s => s.Idea).Include(i => i.Category) select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Idea.Title.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        public async Task<IActionResult> SearchCategory(string bookCategory, string search)
-        {
-            IQueryable<string> bookQuery = from m in _context.IdeaCategory orderby m.Idea.Title select m.Idea.Title;
-            var books = from m in _context.IdeaCategory.Include(n => n.Idea).Include(a => a.Category) select m;
-            var FPTBOOK_STOREIdentityDbContext = from m in _context.IdeaCategory.Include(a => a.Idea).Include(b => b.Category) select m;
-
-            if (!string.IsNullOrEmpty(search))
+        public async Task<IActionResult> FilterCategory(string currentFilter, string searchString, int? pageNumber){
+            if (searchString != null)
             {
-                books = books.Where(s => s.Category.Name!.Contains(search));
+                pageNumber = 1;
             }
-
-
-            var categorysearchVM = new CategorySearchView
+            else
             {
-                IdeaCategories = await books.ToListAsync(),
-            };
-            return View(categorysearchVM);
-
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.IdeaCategory.Include(s => s.Idea).Include(i => i.Category) select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Category.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Idea/Details/5
