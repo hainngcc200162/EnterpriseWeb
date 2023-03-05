@@ -1164,3 +1164,5 @@ E:\Website1640\EnterpriseWeb\obj\Debug\net6.0\refint\EnterpriseWeb.dll
 E:\Website1640\EnterpriseWeb\obj\Debug\net6.0\EnterpriseWeb.pdb
 E:\Website1640\EnterpriseWeb\obj\Debug\net6.0\EnterpriseWeb.genruntimeconfig.cache
 E:\Website1640\EnterpriseWeb\obj\Debug\net6.0\ref\EnterpriseWeb.dll
+C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\SendGrid.dll
+C:\Enterprise\EnterpriseWeb\bin\Debug\net6.0\StarkbankEcdsa.dll

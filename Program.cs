@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 using EnterpriseWeb.Areas.Identity.Data;
+using EnterpriseWeb.Areas.Identity.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<EnterpriseWebIdentityDbContext>(options =>
@@ -15,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdeaUser>(options => options.SignIn.RequireC
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 var app = builder.Build();
 
