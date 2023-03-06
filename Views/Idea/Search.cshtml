@@ -1,0 +1,37 @@
+@model EnterpriseWeb.Models.IdeaCategoryView
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Idea" asp-action="Search" method="get">
+    <p>
+        Title: <input type="text" asp-for="Search" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <tbody>
+@foreach (var item in Model.IdeaCategories) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idea.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
