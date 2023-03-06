@@ -12,6 +12,8 @@ namespace EnterpriseWeb.Controllers
 {
     public class CategoryController : Controller
     {
+        private string Layout = "_ViewAdmin";
+        private string Layout1 = "_ViewAdmin1";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public CategoryController(EnterpriseWebIdentityDbContext context)
@@ -22,6 +24,12 @@ namespace EnterpriseWeb.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = Layout;
+            return View(await _context.Category.ToListAsync());
+        }
+        public async Task<IActionResult> Darktheme()
+        {
+            ViewBag.Layout = Layout1;
             return View(await _context.Category.ToListAsync());
         }
 
@@ -46,6 +54,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Category/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = Layout;
             return View();
         }
 
@@ -56,6 +65,7 @@ namespace EnterpriseWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Status")] Category category)
         {
+            ViewBag.Layout = Layout;
             if (ModelState.IsValid)
             {
                 _context.Add(category);
