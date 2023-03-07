@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
+    "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
   },
   "projects": {
-    "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj": {
+    "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectUniqueName": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
         "projectName": "EnterpriseWeb",
-        "projectPath": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
-        "packagesPath": "C:\\Users\\GF63\\.nuget\\packages\\",
-        "outputPath": "E:\\Website1640\\EnterpriseWeb\\obj\\",
+        "projectPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "packagesPath": "C:\\Users\\Inspiron\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\GF63\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Inspiron\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -90,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }
