@@ -23,11 +23,15 @@ namespace EnterpriseWeb.Controllers
         private readonly UserManager<IdeaUser> _userManager;
         private NotificationSender _notificationSender;
 
-        public IdeaController(EnterpriseWebIdentityDbContext context, UserManager<IdeaUser> userManager, NotificationSender notificationSender)
+        private readonly IWebHostEnvironment hostEnvironment;
+
+
+        public IdeaController(EnterpriseWebIdentityDbContext context, UserManager<IdeaUser> userManager, NotificationSender notificationSender, IWebHostEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
             _notificationSender = notificationSender;
+            hostEnvironment = environment;
         }
         public async Task<IActionResult> Comment(int id, string commenttext, string incognito)
         {
@@ -181,10 +185,19 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
         {
             if (ModelState.IsValid)
             {
+                string filename=Path.GetFileName(myfile.FileName);
+                var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                string fullPath=filePath+"\\"+filename;
+                // Copy files to FileSystem using Streams
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {	
+                    await myfile.CopyToAsync(stream);
+                    }
+                idea.SupportingDocuments = filename;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 idea.IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
