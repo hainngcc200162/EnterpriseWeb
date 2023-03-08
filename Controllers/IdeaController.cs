@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OfficeOpenXml;
+using OfficeOpenXml.Style; 
 using Microsoft.AspNetCore.Identity;
 using EnterpriseWeb.Areas.Identity.Services;
 namespace EnterpriseWeb.Controllers
@@ -33,6 +35,41 @@ namespace EnterpriseWeb.Controllers
             _notificationSender = notificationSender;
             hostEnvironment = environment;
         }
+
+        public IActionResult ExportIdeaList(){
+            List<Idea> ideas = _context.Idea.ToList<Idea>();
+            var stream = new MemoryStream();
+            using (var xlPackage = new ExcelPackage(stream))
+            {
+                var worksheet = xlPackage.Workbook.Worksheets.Add("Ideas");
+                worksheet.Cells["A1"].Value = "List Idea";
+                worksheet.Cells["A3"].Value = "Title";
+                worksheet.Cells["B3"].Value = "Description";
+                worksheet.Cells["C3"].Value = "Submission Date";
+                worksheet.Cells["D3"].Value = "Department";
+                worksheet.Cells["E3"].Value = "ClosureDate";
+
+
+                int row = 4;
+                foreach (var idea in ideas)
+                {
+                    worksheet.Cells[row, 1].Value = idea.Title;
+                    worksheet.Cells[row, 2].Value = idea.Description;
+                    worksheet.Cells[row, 3].Value = idea.SubmissionDate;
+                    worksheet.Cells[row, 4].Value = idea.Department;
+                    worksheet.Cells[row, 5].Value = idea.ClosureDate;
+
+
+                    row++;
+                }
+                xlPackage.Save();
+            }
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = "IdeaList.xlsx";
+            stream.Position = 0;
+            return File(stream, contentType, fileName);
+        }
+
         public async Task<IActionResult> Comment(int id, string commenttext, string incognito)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

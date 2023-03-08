@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "neFaLcB8fCcs7aI7lGPtC7vRdt8lGOvFNxnp0hrb3Oo=",
+  "Hash": "ktcFRy2Pe57NpZfYYJdu4Q4Jtuo6L3JTYVzP4jyJX+U=",
   "Source": "EnterpriseWeb",
   "BasePath": "_content/EnterpriseWeb",
   "Mode": "Default",
@@ -36531,6 +36531,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\plugins\\uplot\\uPlot.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\uploads\\Thuế (1).docx",
+      "SourceId": "EnterpriseWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\",
+      "BasePath": "_content/EnterpriseWeb",
+      "RelativePath": "uploads/Thuế (1).docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\Thuế (1).docx"
     }
   ]
 }
