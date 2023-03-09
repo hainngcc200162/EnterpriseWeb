@@ -1,0 +1,108 @@
+@model  PaginatedList<EnterpriseWeb.Models.Category>
+@{
+    ViewData["Title"] = "Create";
+}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Simple Tables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Category</h3>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" >
+                    <form asp-action="ViewCategory" method="get">
+                      <div class="form-actions no-color">
+                          <p>
+                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                              <input type="submit" value="Search" class="btn btn-default" />
+                          </p>
+                      </div>
+                  </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  @* <thead>
+                    <tr>
+                      <th>@Html.DisplayNameFor(model => model.Id)</th>
+                      <th>@Html.DisplayNameFor(model => model.Name)</th>
+                      <th>@Html.DisplayNameFor(model => model.Status)</th>
+                      <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    </tr>
+                    </thead> *@
+                    <tbody>
+                      @foreach (var item in Model) {
+                        <tr>
+                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                          <td>
+                            <div class="sparkbar" data-color="#00a65a" data-height="20">@Html.DisplayFor(modelItem => item.Description)</div>
+                          </td>
+                          <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                          </td>         
+                        </tr>
+                      }
+                    </tbody>
+                </table>
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+
+                <a asp-action="ViewCategory"
+                  asp-route-sortOrder="@ViewData["CurrentSort"]"
+                  asp-route-pageNumber="@(Model.PageIndex - 1)"
+                  asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                  class="btn btn-default @prevDisabled">
+                    Previous
+                </a>
+                <a asp-action="ViewCategory"
+                  asp-route-sortOrder="@ViewData["CurrentSort"]"
+                  asp-route-pageNumber="@(Model.PageIndex + 1)"
+                  asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                  class="btn btn-default @nextDisabled">
+                    Next
+                </a>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>

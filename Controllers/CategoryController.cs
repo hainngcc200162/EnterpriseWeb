@@ -27,10 +27,25 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout;
             return View(await _context.Category.ToListAsync());
         }
-        public async Task<IActionResult> Darktheme()
+        public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
-            ViewBag.Layout = Layout1;
-            return View(await _context.Category.ToListAsync());
+            ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Category select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Category/Details/5
@@ -70,7 +85,7 @@ namespace EnterpriseWeb.Controllers
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ViewCategory));
             }
             return View(category);
         }
@@ -121,7 +136,7 @@ namespace EnterpriseWeb.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ViewCategory));
             }
             return View(category);
         }
@@ -152,7 +167,7 @@ namespace EnterpriseWeb.Controllers
             var category = await _context.Category.FindAsync(id);
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ViewCategory));
         }
 
         private bool CategoryExists(int id)

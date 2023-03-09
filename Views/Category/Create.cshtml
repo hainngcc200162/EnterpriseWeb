@@ -62,7 +62,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="card card-secondary">
             <div class="card-header">
               <h3 class="card-title">General</h3>
@@ -84,24 +84,7 @@
                     <input asp-for="Status" class="form-control" />
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <div class="col-md-6">
-          <div class="card card-secondary">
-            <div class="card-header">
-              <h3 class="card-title">More Specific</h3>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-                    <div class="form-group">
+                <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
                     <input asp-for="Description" class="form-control" />
                     <span asp-validation-for="Description" class="text-danger"></span>
