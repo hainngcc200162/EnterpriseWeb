@@ -18,6 +18,8 @@ public class IdeaUser : IdentityUser
 
     [PersonalData]
     public string  Address { get; set; }
+    [PersonalData]
+    public byte[] ProfilePicture { get; set; }
 
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<Idea>? Ideas { get; set; }
