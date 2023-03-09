@@ -223,9 +223,10 @@ namespace EnterpriseWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
-        {
+        {   
             if (ModelState.IsValid)
             {
+                ModelState.AddModelError("CheckFile", "File name with extention png,jpg or not empty !");
                 string filename=Path.GetFileName(myfile.FileName);
                 var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
                 string fullPath=filePath+"\\"+filename;
@@ -272,7 +273,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
         {
             if (id != idea.Id)
             {
@@ -283,6 +284,15 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
+                    string filename=Path.GetFileName(myfile.FileName);
+                    var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                    string fullPath=filePath+"\\"+filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {	
+                        await myfile.CopyToAsync(stream);
+                        }
+                    idea.SupportingDocuments = filename;                    
                     idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
