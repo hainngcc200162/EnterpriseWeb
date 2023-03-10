@@ -39,6 +39,10 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SupportingDocuments)
+            <form method="post" action="@Url.Action("Download", "Idea")">
+                <input type="hidden" name="fileName" value="@Model.SupportingDocuments" />
+                <button type="submit">Download</button>
+            </form>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Department)
@@ -61,7 +65,8 @@
                 <strong>
                     @if (item.status == 1)
                     {
-                        @item.IdeaUser?.Name;
+                        @item.IdeaUser?.Name
+                        ;
                     }
                     else
                     {

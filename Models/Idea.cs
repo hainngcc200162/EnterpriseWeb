@@ -14,8 +14,7 @@ namespace EnterpriseWeb.Models
         [DataType(DataType.Date)]
         public DateTime SubmissionDate { get; set; }
         [DataType(DataType.Upload)]
-        [Required]
-        public string SupportingDocuments { get; set; }
+        public string? SupportingDocuments { get; set; }
         public int? DepartmentID { get; set; }
         public Department? Department { get; set; }
         public int? ClosureDateID { get; set; }

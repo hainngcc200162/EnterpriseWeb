@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FudgBn5IkdRTekhnDk4Z3vFsWrxsuQ0uoSlcZHVP2KU=",
+  "Hash": "iMCbPb3ZL/ic0L+qX94dWc8a5W8y4+rstR9KQcPGk6Q=",
   "Source": "EnterpriseWeb",
   "BasePath": "_content/EnterpriseWeb",
   "Mode": "Default",
@@ -36550,12 +36550,12 @@
       "OriginalItemSpec": "wwwroot\\plugins\\uplot\\uPlot.min.css"
     },
     {
-      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\uploads\\450d6ed002a7dff986b6.jpg",
+      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\uploads\\Thuế (1) (1).docx",
       "SourceId": "EnterpriseWeb",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\",
       "BasePath": "_content/EnterpriseWeb",
-      "RelativePath": "uploads/450d6ed002a7dff986b6.jpg",
+      "RelativePath": "uploads/Thuế (1) (1).docx",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -36564,24 +36564,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\450d6ed002a7dff986b6.jpg"
-    },
-    {
-      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\uploads\\Thuế (1).docx",
-      "SourceId": "EnterpriseWeb",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\",
-      "BasePath": "_content/EnterpriseWeb",
-      "RelativePath": "uploads/Thuế (1).docx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\Thuế (1).docx"
+      "OriginalItemSpec": "wwwroot\\uploads\\Thuế (1) (1).docx"
     }
   ]
 }

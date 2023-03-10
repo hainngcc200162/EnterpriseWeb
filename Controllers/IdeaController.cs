@@ -14,9 +14,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
-using OfficeOpenXml.Style; 
+using OfficeOpenXml.Style;
 using Microsoft.AspNetCore.Identity;
 using EnterpriseWeb.Areas.Identity.Services;
+using Microsoft.AspNetCore.StaticFiles;
+using System.IO;
+using System.Threading.Tasks;
 namespace EnterpriseWeb.Controllers
 {
     public class IdeaController : Controller
@@ -36,7 +39,44 @@ namespace EnterpriseWeb.Controllers
             hostEnvironment = environment;
         }
 
-        public IActionResult ExportIdeaList(){
+        //Download files
+        [HttpPost]
+        public IActionResult Download(string fileName)
+        {
+            var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads", fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            var fileExtension = Path.GetExtension(filePath);
+            var contentType = GetContentType(fileExtension);
+
+            return File(memory, contentType, fileName);
+        }
+
+        private string GetContentType(string fileExtension)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            string contentType;
+            if (!provider.TryGetContentType(fileExtension, out contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            return contentType;
+        }
+
+
+        public IActionResult ExportIdeaList()
+        {
             List<Idea> ideas = _context.Idea.ToList<Idea>();
             var stream = new MemoryStream();
             using (var xlPackage = new ExcelPackage(stream))
@@ -223,18 +263,17 @@ namespace EnterpriseWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
-        {   
+        {
             if (ModelState.IsValid)
             {
-                ModelState.AddModelError("CheckFile", "File name with extention png,jpg or not empty !");
-                string filename=Path.GetFileName(myfile.FileName);
+                string filename = Path.GetFileName(myfile.FileName);
                 var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                string fullPath=filePath+"\\"+filename;
+                string fullPath = filePath + "\\" + filename;
                 // Copy files to FileSystem using Streams
                 using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {	
+                {
                     await myfile.CopyToAsync(stream);
-                    }
+                }
                 idea.SupportingDocuments = filename;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
@@ -273,7 +312,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile newfile)
         {
             if (id != idea.Id)
             {
@@ -284,15 +323,16 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
-                    string filename=Path.GetFileName(myfile.FileName);
+                    
+                    string filename = Path.GetFileName(newfile.FileName);
                     var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                    string fullPath=filePath+"\\"+filename;
+                    string fullPath = filePath + "\\" + filename;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
-                        {	
-                        await myfile.CopyToAsync(stream);
-                        }
-                    idea.SupportingDocuments = filename;                    
+                    {
+                        await newfile.CopyToAsync(stream);
+                    }
+                    idea.SupportingDocuments = filename;
                     idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
@@ -344,6 +384,8 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var idea = await _context.Idea.FindAsync(id);
+            var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads", idea.SupportingDocuments);
+            System.IO.File.Delete(filePath);
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -412,7 +454,7 @@ namespace EnterpriseWeb.Controllers
             {
                 if (isUp)
                 {
-                    if(rating.RatingUp == 1)
+                    if (rating.RatingUp == 1)
                     {
                         rating.RatingUp = 0;
                         // _context.Rating.Remove(rating);
@@ -425,7 +467,7 @@ namespace EnterpriseWeb.Controllers
                 }
                 else
                 {
-                    if(rating.RatingDown == 1)
+                    if (rating.RatingDown == 1)
                     {
                         rating.RatingDown = 0;
                         // _context.Rating.Remove(rating);
@@ -501,7 +543,7 @@ namespace EnterpriseWeb.Controllers
             {
                 if (isUp)
                 {
-                    if(rating.RatingUp == 1)
+                    if (rating.RatingUp == 1)
                     {
                         rating.RatingUp = 0;
                         // _context.Rating.Remove(rating);
@@ -514,7 +556,7 @@ namespace EnterpriseWeb.Controllers
                 }
                 else
                 {
-                    if(rating.RatingDown == 1)
+                    if (rating.RatingDown == 1)
                     {
                         rating.RatingDown = 0;
                         // _context.Rating.Remove(rating);

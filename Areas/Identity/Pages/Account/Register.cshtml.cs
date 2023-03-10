@@ -118,6 +118,9 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Profile Picture")]
+            public byte[] ProfilePicture { get; set; }
         }
 
 
@@ -171,11 +174,13 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                 }
             }
 
+            
+
             // If we got this far, something failed, redisplay form
             return Page();
         }
 
-        private IdeaUser CreateUser()
+        private  IdeaUser CreateUser()
         {
             try
             {
@@ -184,6 +189,15 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                 user.DOB = Input.DOB;
                 user.Address = Input.Address;
                 user.PhoneNumber = Input.PhoneNumber;
+                if (Request.Form.Files.Count > 0)
+            {
+                IFormFile file = Request.Form.Files.FirstOrDefault();
+                using (var dataStream = new MemoryStream())
+                {
+                    file.CopyToAsync(dataStream);
+                    user.ProfilePicture = dataStream.ToArray();
+                }
+            }
                 return user;
             }
             catch
