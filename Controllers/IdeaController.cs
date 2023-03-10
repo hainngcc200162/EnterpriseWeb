@@ -20,6 +20,8 @@ using EnterpriseWeb.Areas.Identity.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using System.Threading.Tasks;
+using System.IO.Compression;
+
 namespace EnterpriseWeb.Controllers
 {
     public class IdeaController : Controller
@@ -51,28 +53,23 @@ namespace EnterpriseWeb.Controllers
             }
 
             var memory = new MemoryStream();
-            using (var stream = new FileStream(filePath, FileMode.Open))
+
+            using (var archive = new ZipArchive(memory, ZipArchiveMode.Create, true))
             {
-                stream.CopyTo(memory);
+                var fileEntry = archive.CreateEntry(fileName);
+
+                using (var originalFileStream = new FileStream(filePath, FileMode.Open))
+                using (var compressedFileStream = fileEntry.Open())
+                {
+                    originalFileStream.CopyTo(compressedFileStream);
+                }
             }
+
             memory.Position = 0;
 
-            var fileExtension = Path.GetExtension(filePath);
-            var contentType = GetContentType(fileExtension);
-
-            return File(memory, contentType, fileName);
+            return File(memory, "application/octet-stream", $"{fileName}.zip");
         }
 
-        private string GetContentType(string fileExtension)
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            string contentType;
-            if (!provider.TryGetContentType(fileExtension, out contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-            return contentType;
-        }
 
 
         public IActionResult ExportIdeaList()
@@ -238,22 +235,8 @@ namespace EnterpriseWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
-            ;
-            // ViewData["uid"] = _userManager.GetUserId(User);
-            // var users = await _userManager.Users.Where(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)).ToListAsync();
-            // var userRolesViewModel = new List<UserRolesViewModel>();
-            // foreach (IdeaUser user in users)
-            // {
-            //     var thisViewModel = new UserRolesViewModel();
-            //     thisViewModel.UserId = user.Id;
-            //     thisViewModel.Name = user.Name;
-            //     thisViewModel.PhoneNumber = user.PhoneNumber;
-            //     thisViewModel.Address = user.Address;
-            //     userRolesViewModel.Add(thisViewModel);
-            // }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
-            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -303,7 +286,6 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 
@@ -312,7 +294,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile newfile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments")] Idea idea, IFormFile newfile, string currentfile)
         {
             if (id != idea.Id)
             {
@@ -323,16 +305,31 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
-                    
-                    string filename = Path.GetFileName(newfile.FileName);
-                    var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                    string fullPath = filePath + "\\" + filename;
-                    // Copy files to FileSystem using Streams
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    if (newfile != null)
                     {
-                        await newfile.CopyToAsync(stream);
+                        string filename = Path.GetFileName(newfile.FileName);
+                        var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                        string fullPath = Path.Combine(filePath, filename);
+                        if (!filename.Equals(currentfile))
+                        {
+                            string oldFilePath = Path.Combine(filePath, currentfile);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                            using (var stream = new FileStream(fullPath, FileMode.Create))
+                            {
+                                await newfile.CopyToAsync(stream);
+                            }
+                            idea.SupportingDocuments = filename;
+                        } else{
+                            idea.SupportingDocuments = filename;
+                        }
                     }
-                    idea.SupportingDocuments = filename;
+                    else
+                    {
+                        idea.SupportingDocuments = currentfile;
+                    }
                     idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
@@ -353,7 +350,6 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            // ViewData["UserID"] = new SelectList(_context.User, "Id", "Id", idea.UserID);
             return View(idea);
         }
 

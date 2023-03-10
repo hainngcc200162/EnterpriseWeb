@@ -39,7 +39,8 @@
                     Current file: 
                     @Html.DisplayFor(model => model.SupportingDocuments)
                 </dd>
-                <input asp-for="SupportingDocuments" type="file" name="newfile" required/>                
+                <input asp-for="SupportingDocuments" type="file" name="newfile"/>
+                <input asp-for="SupportingDocuments" type="hidden" name="currentfile" />                
                 <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
             </div>
             <div class="form-group">

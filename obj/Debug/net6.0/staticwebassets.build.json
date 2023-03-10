@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "slGXle0v4RLzaW34wbRvrPuMiyv+csOfw2/ZIDCtBjg=",
+  "Hash": "4jLmgdpMPJr6Upr+3j//tyGYdARiqMpVJJChPXzD+RQ=",
   "Source": "EnterpriseWeb",
   "BasePath": "_content/EnterpriseWeb",
   "Mode": "Default",
@@ -35530,12 +35530,12 @@
       "OriginalItemSpec": "wwwroot\\plugins\\uplot\\uPlot.min.css"
     },
     {
-      "Identity": "C:\\Enterprise\\EnterpriseWeb\\wwwroot\\uploads\\Thuế (1) (1).docx",
+      "Identity": "C:\\Enterprise\\EnterpriseWeb\\wwwroot\\uploads\\AS2 presentation template.pptx.pdf",
       "SourceId": "EnterpriseWeb",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Enterprise\\EnterpriseWeb\\wwwroot\\",
       "BasePath": "_content/EnterpriseWeb",
-      "RelativePath": "uploads/Thuế (1) (1).docx",
+      "RelativePath": "uploads/AS2 presentation template.pptx.pdf",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -35544,7 +35544,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\Thuế (1) (1).docx"
+      "OriginalItemSpec": "wwwroot\\uploads\\AS2 presentation template.pptx.pdf"
     },
     {
       "Identity": "C:\\Users\\leduh\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\6.0.0\\staticwebassets\\V5\\css\\site.css",
