@@ -192,7 +192,8 @@ namespace EnterpriseWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate).Include(i => i.Department);
+            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings);
             return View(await enterpriseWebContext.ToListAsync());
         }
         public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber)
@@ -235,25 +236,28 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: Idea/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
+            
+ 
             ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Name");
 
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
                 .Include(i => i.Comments)
+                .Include(i => i.Viewings)
                 .ThenInclude(i => i.IdeaUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
                 return NotFound();
             }
+            await ViewingIdea(id);
 
             return View(idea);
         }
@@ -502,6 +506,7 @@ namespace EnterpriseWeb.Controllers
                 }
                 rating.SubmitionDate = DateTime.Now;
             }
+            await ViewingIdea(id);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -593,6 +598,29 @@ namespace EnterpriseWeb.Controllers
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id = id });
+        }
+
+        public async Task ViewingIdea(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+
+            var viewing = await _context.Viewing.SingleOrDefaultAsync(r => r.IdeaId == id && r.UserId.Equals(userId));
+            if (viewing == null)
+            {
+                viewing = new Viewing
+                    {
+                        IdeaId = id,
+                        UserId = userId,
+                        IdeaUser = user,
+                        Count = 1,
+                        ViewDate = DateTime.Now
+                    };
+                    _context.Viewing.Add(viewing);
+                    await _context.SaveChangesAsync();
+            }
+
         }
 
     }

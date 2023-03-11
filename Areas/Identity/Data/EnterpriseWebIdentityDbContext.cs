@@ -2,6 +2,7 @@ using EnterpriseWeb.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using EnterpriseWeb.Models;
 
 namespace EnterpriseWeb.Areas.Identity.Data;
 
@@ -35,4 +36,6 @@ public class EnterpriseWebIdentityDbContext : IdentityDbContext<IdeaUser>
         public DbSet<EnterpriseWeb.Models.Department> Department { get; set; }
 
         public DbSet<EnterpriseWeb.Models.QACoordinator> QACoordinator { get; set; }
+
+        public DbSet<EnterpriseWeb.Models.Viewing> Viewing { get; set; }
 }

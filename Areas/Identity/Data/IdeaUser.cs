@@ -24,5 +24,6 @@ public class IdeaUser : IdentityUser
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<Idea>? Ideas { get; set; }
     public ICollection<Rating>? Ratings { get; set; }
+    public ICollection<Viewing>? Viewings { get; set; }
 }
 

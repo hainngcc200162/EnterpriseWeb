@@ -22,5 +22,6 @@ namespace EnterpriseWeb.Models
         public ICollection<IdeaCategory>? IdeaCategories { get; set; }
         public ICollection<Comment>? Comments { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
+        public ICollection<Viewing>? Viewings { get; set; }
     }
 }

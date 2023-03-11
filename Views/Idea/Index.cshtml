@@ -30,6 +30,9 @@
                 @Html.DisplayNameFor(model => model.SupportingDocuments)
             </th>
             <th>
+                View
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Department)
             </th>
             <th>
@@ -41,6 +44,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+            var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
@@ -56,6 +60,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.SupportingDocuments)
+                </td>
+                <td>
+                    @totalViews
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Department.Id)

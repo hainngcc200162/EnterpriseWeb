@@ -319,6 +319,38 @@ namespace EnterpriseWeb.Migrations
                     b.ToTable("Rating");
                 });
 
+            modelBuilder.Entity("EnterpriseWeb.Models.Viewing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdeaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdeaUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ViewDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdeaId");
+
+                    b.HasIndex("IdeaUserId");
+
+                    b.ToTable("Viewing");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -535,6 +567,23 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("IdeaUser");
                 });
 
+            modelBuilder.Entity("EnterpriseWeb.Models.Viewing", b =>
+                {
+                    b.HasOne("EnterpriseWeb.Models.Idea", "Idea")
+                        .WithMany("Viewings")
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnterpriseWeb.Areas.Identity.Data.IdeaUser", "IdeaUser")
+                        .WithMany("Viewings")
+                        .HasForeignKey("IdeaUserId");
+
+                    b.Navigation("Idea");
+
+                    b.Navigation("IdeaUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -593,6 +642,8 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("Ideas");
 
                     b.Navigation("Ratings");
+
+                    b.Navigation("Viewings");
                 });
 
             modelBuilder.Entity("EnterpriseWeb.Models.Category", b =>
@@ -612,6 +663,8 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("IdeaCategories");
 
                     b.Navigation("Ratings");
+
+                    b.Navigation("Viewings");
                 });
 
             modelBuilder.Entity("EnterpriseWeb.Models.QACoordinator", b =>
