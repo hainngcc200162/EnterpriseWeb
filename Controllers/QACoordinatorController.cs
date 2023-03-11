@@ -11,6 +11,7 @@ namespace EnterpriseWeb.Controllers
 {
     public class QACoordinatorController : Controller
     {
+        private string Layout = "_ViewAdmin";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public QACoordinatorController(EnterpriseWebIdentityDbContext context)
@@ -21,6 +22,7 @@ namespace EnterpriseWeb.Controllers
         // GET: QACoordinator
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = Layout;
             return View(await _context.QACoordinator.ToListAsync());
         }
 
@@ -45,6 +47,7 @@ namespace EnterpriseWeb.Controllers
         // GET: QACoordinator/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = Layout;
             return View();
         }
 

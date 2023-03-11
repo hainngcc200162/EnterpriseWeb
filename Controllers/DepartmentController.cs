@@ -11,6 +11,7 @@ namespace EnterpriseWeb.Controllers
 {
     public class DepartmentController : Controller
     {
+        private string Layout = "_ViewAdmin";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public DepartmentController(EnterpriseWebIdentityDbContext context)
@@ -21,6 +22,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Department
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = Layout;
             var enterpriseWebContext = _context.Department.Include(d => d.QACoordinator);
             return View(await enterpriseWebContext.ToListAsync());
         }
@@ -47,6 +49,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Department/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = Layout;
             ViewData["QACoordinatorID"] = new SelectList(_context.Set<QACoordinator>(), "Id", "Id");
             return View();
         }

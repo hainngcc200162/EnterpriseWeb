@@ -33,32 +33,31 @@
                 <h3 class="card-title">Category</h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" >
-                    <form asp-action="ViewCategory" method="get">
-                      <div class="form-actions no-color">
+                    <div class="input-group-append">
+                        <form asp-action="ViewCategory" method="get">
                           <p>
                               <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                              <input type="submit" value="Search" class="btn btn-default" />
+                              <button type = "submit" value="Search"><i class="fas fa-search"></i></button>
                           </p>
-                      </div>
-                  </form>
-                    </div>
+                    </form>
+                
                   </div>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
-                  @* <thead>
+                  <thead>
                     <tr>
-                      <th>@Html.DisplayNameFor(model => model.Id)</th>
-                      <th>@Html.DisplayNameFor(model => model.Name)</th>
-                      <th>@Html.DisplayNameFor(model => model.Status)</th>
-                      <th>@Html.DisplayNameFor(model => model.Description)</th>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Status</th>
+                      <th>Description</th>
+                      <th>Action</th>
                     </tr>
-                    </thead> *@
-                    <tbody>
-                      @foreach (var item in Model) {
+                  </thead>
+                  <tbody>
+                    @foreach (var item in Model) {
                         <tr>
                           <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
                           <td>@Html.DisplayFor(modelItem => item.Name)</td>
@@ -72,7 +71,7 @@
                           </td>         
                         </tr>
                       }
-                    </tbody>
+                  </tbody>
                 </table>
                 @{
                     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
