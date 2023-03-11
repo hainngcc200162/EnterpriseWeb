@@ -21,7 +21,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Rating
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Rating.Include(r => r.Idea);
+            var enterpriseWebContext = _context.Rating.Include(r => r.Idea).Include(r => r.IdeaUser);
             return View(await enterpriseWebContext.ToListAsync());
         }
 
