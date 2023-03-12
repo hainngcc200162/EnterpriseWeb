@@ -68,6 +68,11 @@
                 </table>
                 <div class="card-footer clearfix">
                   <ul class="pagination pagination-sm m-0 float-left">
+                    <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <<               
+                        </a></li>
                         @{
                           int i = Model.PageIndex;
                           if(i >= 1 && i <= 2 && Model.TotalPages < 3){
@@ -106,6 +111,11 @@
                         }
                         }
                         }
+                        <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="@(Model.TotalPages)"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            >>               
+                        </a></li>
                 </ul> 
               </div>
               </div>
