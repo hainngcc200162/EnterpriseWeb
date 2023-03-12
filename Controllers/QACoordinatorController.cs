@@ -70,6 +70,7 @@ namespace EnterpriseWeb.Controllers
         // GET: QACoordinator/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = Layout;
             if (id == null)
             {
                 return NotFound();

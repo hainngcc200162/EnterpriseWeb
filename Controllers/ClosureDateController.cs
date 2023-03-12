@@ -71,6 +71,7 @@ namespace EnterpriseWeb.Controllers
         // GET: ClosureDate/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = Layout;
             if (id == null)
             {
                 return NotFound();
