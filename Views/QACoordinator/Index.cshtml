@@ -1,4 +1,4 @@
-@model IEnumerable<EnterpriseWeb.Models.QACoordinator>
+@model PaginatedList<EnterpriseWeb.Models.QACoordinator>
 
 @{
     ViewData["Title"] = "Index";
@@ -24,6 +24,20 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">All QACoordinator</h3>
+                <div class="card-tools">
+                    <div class="input-group-append">
+                        <form asp-action="Index" method="get">
+                          <p>
+                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                              <button type = "submit" value="Search"><i class="fas fa-search"></i></button>
+                          </p>
+                    </form>
+                
+                  </div>
+                </div>
+              </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
@@ -47,6 +61,49 @@
                       }
                   </tbody>
                 </table>
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-left">
+                        @{
+                          int i = Model.PageIndex;
+                          if(i >= 1 && i <= 2 && Model.TotalPages < 3){
+                            for(i = 1; i <= Model.TotalPages; i ++){
+                              <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li>                     
+                              }
+                          }
+                          else if(i >= 0 && i <= 2 && Model.TotalPages >= 3){
+                                for(i = 1; i <= 3; i ++){
+                                  <li class="page-item"><a class="page-link" asp-action="Index"
+                                  asp-route-pageNumber="@(i)"
+                                  asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                      @(i)                
+                                  </a></li>                     
+                                  }
+                          }else if (i < Model.TotalPages && i >= 2 && Model.TotalPages >= 2){
+                            for(i = Model.PageIndex - 1; i < Model.PageIndex + 2; i++){
+                                <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li> 
+                            }
+                        } 
+                        else if (Model.PageIndex >= Model.TotalPages){
+                           for(i = Model.TotalPages - 2; i < Model.TotalPages + 1; i++){
+                                <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li> 
+                        }
+                        }
+                        }
+                </ul> 
+              </div>
+
               </div>
               <!-- /.card-body -->
             </div>

@@ -20,12 +20,27 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: QACoordinator
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
-            return View(await _context.QACoordinator.ToListAsync());
-        }
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var qa = from m in _context.QACoordinator select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                qa = qa.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<QACoordinator>.CreateAsync(qa.AsNoTracking(), pageNumber ?? 1, pageSize));
 
+        }
         // GET: QACoordinator/Details/5
         public async Task<IActionResult> Details(int? id)
         {
