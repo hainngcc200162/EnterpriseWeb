@@ -4,31 +4,33 @@
 @inject SignInManager<IdeaUser> SignInManager
 @inject UserManager<IdeaUser> UserManager
 
-<ul class="navbar-nav">
+<ul>
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item" style="align-self: center;">
+    <li>
+        <a class="nav-link scrollto">
         @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
         {
             <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
         }
+        </a>
     </li>
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+    <li>
+        @* <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a> *@
+        <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserAsync(User).Result.Name!</a>
     </li>
-    <li class="nav-item">
+    <li>
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><a  class="nav-link scrollto">Logout</a></button>
         </form>
     </li>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    <li>
+        <a a class="nav-link scrollto" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <li>
+        <a a class="nav-link scrollto" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
