@@ -26,6 +26,7 @@ namespace EnterpriseWeb.Controllers
 {
     public class IdeaController : Controller
     {
+        private string Layout = "_ViewAdmin";
         private readonly EnterpriseWebIdentityDbContext _context;
         private readonly UserManager<IdeaUser> _userManager;
         private NotificationSender _notificationSender;
@@ -39,6 +40,31 @@ namespace EnterpriseWeb.Controllers
             _userManager = userManager;
             _notificationSender = notificationSender;
             hostEnvironment = environment;
+        }
+        public IActionResult Blog()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings) select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Title.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         public IActionResult Chart()
         {

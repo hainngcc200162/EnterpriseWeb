@@ -267,10 +267,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Website1640/EnterpriseWeb/Views/Home/Blog.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCbG9nLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [E:/Website1640/EnterpriseWeb/Views/Home/Contact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -301,6 +297,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/Website1640/EnterpriseWeb/Views/IdeaCategory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYUNhdGVnb3J5XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Website1640/EnterpriseWeb/Views/Idea/Blog.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxCbG9nLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Website1640/EnterpriseWeb/Views/Idea/Chart.cshtml]
@@ -341,6 +341,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/Website1640/EnterpriseWeb/Views/Idea/SearchCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxTZWFyY2hDYXRlZ29yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Website1640/EnterpriseWeb/Views/Idea/ViewIdea.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxWaWV3SWRlYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Website1640/EnterpriseWeb/Views/QACoordinator/Create.cshtml]

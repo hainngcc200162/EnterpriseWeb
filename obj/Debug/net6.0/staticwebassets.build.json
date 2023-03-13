@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SojT806yznnYxpvrPCG8OE2oN6Kk1r2WhlaWI8N3/V4=",
+  "Hash": "niIt6VPxn0JN4TV2/+goJWjhOcBjcbOMVbWNXU9sAr8=",
   "Source": "EnterpriseWeb",
   "BasePath": "_content/EnterpriseWeb",
   "Mode": "Default",
@@ -37398,6 +37398,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\plugins\\uplot\\uPlot.min.css"
+    },
+    {
+      "Identity": "E:\\Website1640\\EnterpriseWeb\\wwwroot\\uploads\\ASM1 1639 GCC0901 Lam Phi GCC200011.pdf",
+      "SourceId": "EnterpriseWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\Website1640\\EnterpriseWeb\\wwwroot\\",
+      "BasePath": "_content/EnterpriseWeb",
+      "RelativePath": "uploads/ASM1 1639 GCC0901 Lam Phi GCC200011.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\ASM1 1639 GCC0901 Lam Phi GCC200011.pdf"
     },
     {
       "Identity": "E:\\Website1640\\EnterpriseWeb\\wwwroot\\vendor\\animate.css\\animate.compat.css",

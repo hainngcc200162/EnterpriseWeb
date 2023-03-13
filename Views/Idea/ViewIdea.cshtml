@@ -1,0 +1,158 @@
+@model PaginatedList<EnterpriseWeb.Models.Idea>
+<div class="content-wrapper">
+    <h1>Index</h1>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <p>
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+                <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
+                <a asp-action="Chart" class="btn btn-warning">Chart</a>
+            </p>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">All QACoordinator</h3>
+                <div class="card-tools">
+                    <div class="input-group-append">
+                        <form asp-action="ViewIdea" method="get">
+                          <p>
+                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                              <button type = "submit" value="Search"><i class="fas fa-search"></i></button>
+                          </p>
+                    </form>
+                
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Name</th>
+                      <th>View</th>
+                      <th>SubmissionDate</th>
+                      <th>SupportingDocuments</th>
+                      <th>Department</th>
+                      <th>ClosureDate</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (var item in Model) {
+                         var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                        <tr>                          
+                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                          <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
+                          <td>
+                            @totalViews
+                          </td>
+                          <td>@Html.DisplayFor(modelItem => item.SubmissionDate)</td>
+                          <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                          <td>@Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)</td>
+                          <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
+                          </td>
+                          <td>
+                            @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
+                            {
+                                <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
+                                <text>|</text>
+                                <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
+                            }
+                            else
+                            {
+                                <div class="alert alert-danger">
+                                    The closure date has passed.
+                                </div>
+                            }
+                        </td>         
+                        </tr>
+                      }
+                  </tbody>
+                </table>
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-left">
+                    <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="1"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  <<                
+                              </a></li> 
+                        @{
+                          int i = Model.PageIndex;
+                          if(i >= 1 && i <= 2 && Model.TotalPages < 3){
+                            for(i = 1; i <= Model.TotalPages; i ++){
+                              <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li>                     
+                              }
+                          }
+                          else if(i >= 0 && i <= 2 && Model.TotalPages >= 3){
+                                for(i = 1; i <= 3; i ++){
+                                  <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                                  asp-route-pageNumber="@(i)"
+                                  asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                      @(i)                
+                                  </a></li>                     
+                                  }
+                          }else if (i < Model.TotalPages && i >= 2 && Model.TotalPages >= 2){
+                            for(i = Model.PageIndex - 1; i < Model.PageIndex + 2; i++){
+                                <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li> 
+                            }
+                        } 
+                        else if (Model.PageIndex >= Model.TotalPages){
+                           for(i = Model.TotalPages - 2; i < Model.TotalPages + 1; i++){
+                                <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                              asp-route-pageNumber="@(i)"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  @(i)                
+                              </a></li> 
+                        }
+                        }
+                        }
+                        <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                      asp-route-pageNumber="@(Model.TotalPages)"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            >>               
+                        </a></li>
+                </ul> 
+              </div>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>

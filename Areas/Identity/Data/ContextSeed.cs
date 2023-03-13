@@ -37,7 +37,6 @@ namespace EnterpriseWeb.Areas.Identity.Data
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Student.ToString());
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QAManager.ToString());
                 }
-
             }
         }
     }
