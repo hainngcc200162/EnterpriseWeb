@@ -9,7 +9,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
         {
             //Seed Roles
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Student.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Staff.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.QAManager.ToString()));
         }
         public static async Task SeedSuperAdminAsync(UserManager<IdeaUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -24,7 +24,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 DOB = new DateTime(2008, 3, 9, 16, 5, 7, 123),
                 EmailConfirmed = true,
                 PhoneNumber = "0909090909",
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
 
             };
             if (userManager.Users.All(u => u.Id != defaultUserAdmin.Id))
@@ -32,9 +32,9 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 var user = await userManager.FindByEmailAsync(defaultUserAdmin.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultUserAdmin, "123Pa$$word.");
+                    await userManager.CreateAsync(defaultUserAdmin, "Admin@123");
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Admin.ToString());
-                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Student.ToString());
+                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Staff.ToString());
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QAManager.ToString());
                 }
             }
