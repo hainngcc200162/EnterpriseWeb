@@ -25,6 +25,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 EmailConfirmed = true,
                 PhoneNumber = "0909090909",
                 PhoneNumberConfirmed = true,
+                ProfilePicture = await transferPic("././wwwroot/img/admin.jpg")
 
             };
             if (userManager.Users.All(u => u.Id != defaultUserAdmin.Id))
@@ -38,6 +39,13 @@ namespace EnterpriseWeb.Areas.Identity.Data
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QAManager.ToString());
                 }
             }
+        }
+        public static async Task<byte[]> transferPic(string path)
+        {
+            using var image = System.Drawing.Image.FromFile(path);
+            using var mStream = new MemoryStream();
+            image.Save(mStream, image.RawFormat);
+            return mStream.ToArray();
         }
     }
 }
