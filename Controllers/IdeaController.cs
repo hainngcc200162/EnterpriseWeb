@@ -68,6 +68,7 @@ namespace EnterpriseWeb.Controllers
         }
         public IActionResult Chart()
         {
+            ViewBag.Layout = Layout;
             var data = _context.Rating.Include(s => s.Idea)
                         .GroupBy(s => s.Idea.Title)
                         .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown= g.Sum(s => s.RatingDown)})
