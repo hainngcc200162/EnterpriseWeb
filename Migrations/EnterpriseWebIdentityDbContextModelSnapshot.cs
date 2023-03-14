@@ -138,6 +138,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<DateTime>("FinalDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("ClosureDate");

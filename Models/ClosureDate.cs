@@ -4,6 +4,7 @@ namespace EnterpriseWeb.Models;
 
 public class ClosureDate{
     public int Id { get; set; }
+    public string? Name { get; set; }
     [DataType(DataType.Date)]
     public DateTime AcademicYear { get; set; }
     [DataType(DataType.Date)]

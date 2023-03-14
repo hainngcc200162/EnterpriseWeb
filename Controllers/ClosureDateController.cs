@@ -21,10 +21,25 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: ClosureDate
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
-            return View(await _context.ClosureDate.ToListAsync());
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var closuredate = from m in _context.ClosureDate select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                closuredate = closuredate.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<ClosureDate>.CreateAsync(closuredate.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: ClosureDate/Details/5
@@ -57,7 +72,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AcademicYear,ClousureDate,FinalDate")] ClosureDate closureDate)
+        public async Task<IActionResult> Create([Bind("Id,Name,AcademicYear,ClousureDate,FinalDate")] ClosureDate closureDate)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +105,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AcademicYear,ClousureDate,FinalDate")] ClosureDate closureDate)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AcademicYear,ClousureDate,FinalDate")] ClosureDate closureDate)
         {
             if (id != closureDate.Id)
             {
