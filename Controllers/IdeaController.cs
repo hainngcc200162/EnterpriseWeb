@@ -58,7 +58,8 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings) select m;
+                                        .Include(i => i.Department).Include(i => i.Viewings)
+                        select m;
             if (!String.IsNullOrEmpty(searchString))
             {
                 ideas = ideas.Where(s => s.Title.Contains(searchString));
@@ -71,7 +72,7 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout;
             var data = _context.Rating.Include(s => s.Idea)
                         .GroupBy(s => s.Idea.Title)
-                        .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown= g.Sum(s => s.RatingDown)})
+                        .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown = g.Sum(s => s.RatingDown) })
                         .ToList();
 
             string[] labels = new string[data.Count];
@@ -269,8 +270,8 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            
- 
+
+
             ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Name");
 
             var idea = await _context.Idea
@@ -306,15 +307,18 @@ namespace EnterpriseWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                string filename = Path.GetFileName(myfile.FileName);
-                var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                string fullPath = filePath + "\\" + filename;
-                // Copy files to FileSystem using Streams
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await myfile.CopyToAsync(stream);
+                //Getting FileName
+                var fileName = Path.GetFileName(myfile.FileName);
+                //Getting file Extension
+                var fileExtension = Path.GetExtension(fileName);
+                // concatenating  FileName + FileExtension
+                var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+                using (var target = new MemoryStream())
+                { 
+                    myfile.CopyTo(target);
+                    idea.DataFiles = target.ToArray();
                 }
-                idea.SupportingDocuments = filename;
+                idea.SupportingDocuments = fileName;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 idea.IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -379,7 +383,9 @@ namespace EnterpriseWeb.Controllers
                                 await newfile.CopyToAsync(stream);
                             }
                             idea.SupportingDocuments = filename;
-                        } else{
+                        }
+                        else
+                        {
                             idea.SupportingDocuments = filename;
                         }
                     }
@@ -637,15 +643,15 @@ namespace EnterpriseWeb.Controllers
             if (viewing == null)
             {
                 viewing = new Viewing
-                    {
-                        IdeaId = id,
-                        UserId = userId,
-                        IdeaUser = user,
-                        Count = 1,
-                        ViewDate = DateTime.Now
-                    };
-                    _context.Viewing.Add(viewing);
-                    await _context.SaveChangesAsync();
+                {
+                    IdeaId = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    Count = 1,
+                    ViewDate = DateTime.Now
+                };
+                _context.Viewing.Add(viewing);
+                await _context.SaveChangesAsync();
             }
 
         }

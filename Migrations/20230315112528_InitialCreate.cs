@@ -234,6 +234,7 @@ namespace EnterpriseWeb.Migrations
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SupportingDocuments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataFiles = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: true),
                     ClosureDateID = table.Column<int>(type: "int", nullable: true)
                 },
