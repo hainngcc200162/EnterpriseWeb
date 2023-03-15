@@ -48,6 +48,7 @@
             @Html.DisplayFor(model => model.SupportingDocuments)
             <form method="post" action="@Url.Action("Download", "Idea")">
                 <input type="hidden" name="fileName" value="@Model.SupportingDocuments" />
+                <input type="hidden" name="dataFile" value="@System.Convert.ToBase64String(Model.DataFiles)"/>
                 <button type="submit">Download</button>
             </form>
         </dd>

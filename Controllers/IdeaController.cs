@@ -97,25 +97,18 @@ namespace EnterpriseWeb.Controllers
 
         //Download files
         [HttpPost]
-        public IActionResult Download(string fileName)
+        public IActionResult Download(string fileName, byte[] dataFile)
         {
-            var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads", fileName);
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
-
+            var fileData = dataFile;
             var memory = new MemoryStream();
 
             using (var archive = new ZipArchive(memory, ZipArchiveMode.Create, true))
             {
                 var fileEntry = archive.CreateEntry(fileName);
 
-                using (var originalFileStream = new FileStream(filePath, FileMode.Open))
                 using (var compressedFileStream = fileEntry.Open())
                 {
-                    originalFileStream.CopyTo(compressedFileStream);
+                    compressedFileStream.Write(fileData, 0, fileData.Length);
                 }
             }
 
@@ -314,7 +307,7 @@ namespace EnterpriseWeb.Controllers
                 // concatenating  FileName + FileExtension
                 var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
                 using (var target = new MemoryStream())
-                { 
+                {
                     myfile.CopyTo(target);
                     idea.DataFiles = target.ToArray();
                 }
