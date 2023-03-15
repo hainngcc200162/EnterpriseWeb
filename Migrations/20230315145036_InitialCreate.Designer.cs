@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnterpriseWeb.Migrations
 {
     [DbContext(typeof(EnterpriseWebIdentityDbContext))]
-    [Migration("20230315112528_InitialCreate")]
+    [Migration("20230315145036_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -218,7 +218,7 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int?>("ClosureDateID")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("DataFiles")
+                    b.Property<byte[]>("DataFile")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("DepartmentID")

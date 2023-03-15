@@ -309,7 +309,7 @@ namespace EnterpriseWeb.Controllers
                 using (var target = new MemoryStream())
                 {
                     myfile.CopyTo(target);
-                    idea.DataFiles = target.ToArray();
+                    idea.DataFile = target.ToArray();
                 }
                 idea.SupportingDocuments = fileName;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -348,7 +348,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments")] Idea idea, IFormFile newfile, string currentfile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile")] Idea idea, IFormFile newfile)
         {
             if (id != idea.Id)
             {
@@ -362,29 +362,15 @@ namespace EnterpriseWeb.Controllers
                     if (newfile != null)
                     {
                         string filename = Path.GetFileName(newfile.FileName);
-                        var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                        string fullPath = Path.Combine(filePath, filename);
-                        if (!filename.Equals(currentfile))
+                        // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                        // string fullPath = Path.Combine(filePath, filename);
+
+                        using (var dataStream = new MemoryStream())
                         {
-                            string oldFilePath = Path.Combine(filePath, currentfile);
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-                            }
-                            using (var stream = new FileStream(fullPath, FileMode.Create))
-                            {
-                                await newfile.CopyToAsync(stream);
-                            }
-                            idea.SupportingDocuments = filename;
+                            await newfile.CopyToAsync(dataStream);
+                            idea.DataFile = dataStream.ToArray();
                         }
-                        else
-                        {
-                            idea.SupportingDocuments = filename;
-                        }
-                    }
-                    else
-                    {
-                        idea.SupportingDocuments = currentfile;
+                        idea.SupportingDocuments = filename;
                     }
                     idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
