@@ -7,6 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using Microsoft.AspNetCore.Identity;
+using EnterpriseWeb.Areas.Identity.Services;
+using Microsoft.AspNetCore.StaticFiles;
+using System.IO;
+using System.Threading.Tasks;
+using System.IO.Compression;
 
 namespace EnterpriseWeb.Controllers
 {
@@ -22,7 +36,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Comment
         public async Task<IActionResult> Index()
         {
-            var enterpriseWebContext = _context.Comment.Include(c => c.Idea);
+            var enterpriseWebContext = _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser);
             return View(await enterpriseWebContext.ToListAsync());
         }
 
@@ -156,5 +170,21 @@ namespace EnterpriseWeb.Controllers
         {
             return _context.Comment.Any(e => e.Id == id);
         }
+
+
+        public async Task<IActionResult> Commented()
+        {   
+            var enterpriseWebContext = _context.Comment.Include(c => c.Idea)
+                                                        .Include(i => i.IdeaUser);
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _context.Comment != null ?
+                    View(await _context.Comment
+                    .Include(i => i.IdeaUser).Include(i => i.Idea)
+                    .Where(o => o.UserId == userID)
+                    .ToListAsync()) :
+                    Problem("Entity set 'EnterpriseWebContext'  is null.");
+                
+        }
     }
 }
+

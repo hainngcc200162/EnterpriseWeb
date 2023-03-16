@@ -67,33 +67,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        public IActionResult Chart()
-        {
-            ViewBag.Layout = Layout;
-            var data = _context.Rating.Include(s => s.Idea)
-                        .GroupBy(s => s.Idea.Title)
-                        .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown = g.Sum(s => s.RatingDown) })
-                        .ToList();
-
-            string[] labels = new string[data.Count];
-            string[] ratingdown = new string[data.Count];
-            string[] ratingup = new string[data.Count];
-
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                labels[i] = data[i].Title;
-                ratingdown[i] = data[i].RatingDown.ToString();
-                ratingup[i] = data[i].RatingUp.ToString();
-
-            }
-
-            ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
-            ViewData["ratingdown"] = String.Join(",", ratingdown);
-            ViewData["ratingup"] = String.Join(",", ratingup);
-
-            return View(data);
-        }
+       
 
         //Download files
         [HttpPost]
@@ -214,7 +188,7 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> Index()
         {
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings);
+                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser);
             return View(await enterpriseWebContext.ToListAsync());
         }
         public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber)
@@ -643,6 +617,47 @@ namespace EnterpriseWeb.Controllers
                 await _context.SaveChangesAsync();
             }
 
+        }
+
+         public IActionResult Chart()
+        {
+            ViewBag.Layout = Layout;
+            var data = _context.Rating.Include(s => s.Idea)
+                        .GroupBy(s => s.Idea.Title)
+                        .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown = g.Sum(s => s.RatingDown) })
+                        .ToList();
+
+            string[] labels = new string[data.Count];
+            string[] ratingdown = new string[data.Count];
+            string[] ratingup = new string[data.Count];
+
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                labels[i] = data[i].Title;
+                ratingdown[i] = data[i].RatingDown.ToString();
+                ratingup[i] = data[i].RatingUp.ToString();
+
+            }
+
+            ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
+            ViewData["ratingdown"] = String.Join(",", ratingdown);
+            ViewData["ratingup"] = String.Join(",", ratingup);
+
+            return View(data);
+        }
+        public async Task<IActionResult> Record()
+        {
+            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate);
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return _context.Idea != null ?
+                        View(await _context.Idea.Include(i => i.ClosureDate)
+                                                
+                                                .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser)
+                                                .Where(o => o.UserId == userID)
+                                                .ToListAsync()) :
+                        Problem("Entity set 'EnterpriseWebContext.Order'  is null.");
         }
 
     }
