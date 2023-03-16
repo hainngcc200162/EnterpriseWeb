@@ -3,33 +3,31 @@
 
 @inject SignInManager<IdeaUser> SignInManager
 @inject UserManager<IdeaUser> UserManager
-
-@if (SignInManager.IsSignedIn(User))
-{
-    <li>
-        <a class="nav-link scrollto">
-        @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
-        {
-            <img style="width:30px;height:30px; object-fit:cover; border-radius:20px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
-        }
-        </a>
-    </li>
-    <li>
-        @* <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a> *@
-        <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserAsync(User).Result.Name</a>
-    </li>
-    <li>
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><a class="nav-link scrollto">Logout</a></button>
-        </form>
-    </li>
-}
-else
-{
-    <li>
-        <a a class="nav-link scrollto" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li>
-        <a a class="nav-link scrollto" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li>
+            <a class="nav-link scrollto">
+            @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
+            {
+                <img style="width:30px;height:30px; object-fit:cover; border-radius:20px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
+            }
+            </a>
+        </li>
+        <li>
+            <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserAsync(User).Result.Name</a>
+        </li>
+        <li>
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><a class="nav-link scrollto">Logout</a></button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a a class="nav-link scrollto" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li>
+            <a a class="nav-link scrollto" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
