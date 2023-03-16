@@ -288,6 +288,7 @@ namespace EnterpriseWeb.Controllers
         {
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
+            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
@@ -296,7 +297,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile, int[] selectedCategoryIds)
         {
             if (ModelState.IsValid)
             {
@@ -316,6 +317,15 @@ namespace EnterpriseWeb.Controllers
                 idea.SubmissionDate = DateTime.Now;
                 idea.IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _context.Add(idea);
+                await _context.SaveChangesAsync();
+
+                // Add idea categories
+                foreach (var categoryId in selectedCategoryIds)
+                {
+                    var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
+                    _context.IdeaCategory.Add(ideaCategory);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

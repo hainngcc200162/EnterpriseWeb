@@ -15,36 +15,41 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class ="form-password" />
+                <input asp-for="Title" class="form-password" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class ="form-password" />
+                <input asp-for="Description" class="form-password" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group" hidden>
                 <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class ="form-password" />
+                <input asp-for="UserId" class="form-password" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group" hidden>
                 <label asp-for="SubmissionDate" class="control-label"></label>
-                <input asp-for="SubmissionDate" class ="form-password" />
+                <input asp-for="SubmissionDate" class="form-password" />
                 <span asp-validation-for="SubmissionDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SupportingDocuments" class="control-label"></label>
-                <input asp-for="SupportingDocuments" type="file" name="myfile" required/>
+                <input asp-for="SupportingDocuments" type="file" name="myfile" required />
                 <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Categories</label>
+                <select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
+                    multiple></select>
+            </div>
+            <div class="form-group">
                 <label asp-for="DepartmentID" class="control-label"></label>
-                <select asp-for="DepartmentID" class ="form-password" asp-items="ViewBag.DepartmentID"></select>
+                <select asp-for="DepartmentID" class="form-password" asp-items="ViewBag.DepartmentID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ClosureDateID" class="control-label"></label>
-                <select asp-for="ClosureDateID" class ="form-password" asp-items="ViewBag.ClosureDateID"></select>
+                <select asp-for="ClosureDateID" class="form-password" asp-items="ViewBag.ClosureDateID"></select>
             </div>
             <div class="form-group">
                 <label>
@@ -70,7 +75,7 @@
     <script>
         var form = document.getElementById('create-idea-form');
         var checkbox = document.getElementById('agree-checkbox');
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', function (event) {
             if (!checkbox.checked) {
                 event.preventDefault();
                 alert('Please agree to the terms and conditions before submitting the form.');
