@@ -216,6 +216,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int?>("ClosureDateID")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("DataFile")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int?>("DepartmentID")
                         .HasColumnType("int");
 

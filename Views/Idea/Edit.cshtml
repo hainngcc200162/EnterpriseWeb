@@ -34,14 +34,25 @@
                 <span asp-validation-for="SubmissionDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SupportingDocuments" class="control-label"></label>
                 <dd class="col-sm-10">
-                    Current file: 
+                    Current file:
                     @Html.DisplayFor(model => model.SupportingDocuments)
                 </dd>
-                <input asp-for="SupportingDocuments" type="file" name="newfile"/>
-                <input asp-for="SupportingDocuments" type="hidden" name="currentfile" />                
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="SupportingDocuments" class="control-label"></label>
+                <input asp-for="SupportingDocuments" class="form-control" />
                 <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Upload file</label>
+                <input asp-for="SupportingDocuments" type="file" name="newfile" />
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="DataFile" class="control-label"></label>
+                <input asp-for="DataFile" class="form-control"
+                    value="@System.Convert.ToBase64String(Model.DataFile)" />
+                <span asp-validation-for="DataFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DepartmentID" class="control-label"></label>
@@ -65,5 +76,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
