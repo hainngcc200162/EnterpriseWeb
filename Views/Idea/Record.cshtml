@@ -38,11 +38,9 @@
                                 </th>
                                 <th>
                                     RatingUp
-                                    @* @Html.DisplayNameFor(model => model.RatingUp) *@
                                 </th>
                                 <th>
                                     RatingDown
-                                    @* @Html.DisplayNameFor(model => model.RatingDown) *@
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.ClosureDate)
@@ -54,6 +52,8 @@
                             @foreach (var item in Model)
                             {
                                 var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                                var ratingUp = item.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingUp));
+                                var ratingDown = item.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingDown));
                                 <tr>
                                     <td>
                                         <a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Title)</a>
@@ -74,10 +74,10 @@
                                         @Html.DisplayFor(modelItem => item.Department.Name)
                                     </td>
                                     <td>
-
+                                        @ratingUp
                                     </td>
                                     <td>
-
+                                        @ratingDown
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)

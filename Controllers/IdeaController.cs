@@ -246,6 +246,7 @@ namespace EnterpriseWeb.Controllers
                 .Include(i => i.Department)
                 .Include(i => i.Comments)
                 .Include(i => i.Viewings)
+                .Include(i => i.Ratings)
                 .ThenInclude(i => i.IdeaUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
@@ -406,8 +407,11 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var idea = await _context.Idea.FindAsync(id);
-            var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads", idea.SupportingDocuments);
-            System.IO.File.Delete(filePath);
+            var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
+            foreach(var ideacategory in ideacategories)
+            {
+                _context.IdeaCategory.Remove(ideacategory);
+            }
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -651,10 +655,14 @@ namespace EnterpriseWeb.Controllers
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate);
             var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+
             return _context.Idea != null ?
                         View(await _context.Idea.Include(i => i.ClosureDate)
-                                                
-                                                .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser)
+                                                .Include(i => i.Department)
+                                                .Include(i => i.Viewings)
+                                                .Include(i => i.IdeaUser)
+                                                .Include(i => i.Ratings)
                                                 .Where(o => o.UserId == userID)
                                                 .ToListAsync()) :
                         Problem("Entity set 'EnterpriseWebContext.Order'  is null.");

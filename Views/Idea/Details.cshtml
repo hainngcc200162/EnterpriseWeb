@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Details";
     var totalViews = Model.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+    var ratingUp = Model.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingUp));
+    var ratingDown = Model.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingDown));
+
 }
 
 <h1>Details</h1>
@@ -40,6 +43,18 @@
         </dt>
         <dd class="col-sm-10">
             @totalViews
+        </dd>
+        <dt class="col-sm-2">
+            Thumb up
+        </dt>
+        <dd class="col-sm-10">
+            @ratingUp
+        </dd>
+        <dt class="col-sm-2">
+            Thumb down
+        </dt>
+        <dd class="col-sm-10">
+            @ratingDown
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SupportingDocuments)
