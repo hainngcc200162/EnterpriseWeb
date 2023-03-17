@@ -23,16 +23,16 @@
             @Html.DisplayFor(model => model.SubmitDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
+            @Html.DisplayNameFor(model => model.IdeaUser.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
+            @Html.DisplayFor(model => model.IdeaUser.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Idea)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Idea.Id)
+            @Html.DisplayFor(model => model.Idea.Title)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.status)
@@ -44,5 +44,6 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a> |
+    <a asp-action="Commented">Back to My Idea List</a>
 </div>

@@ -1,89 +1,108 @@
 @model IEnumerable<EnterpriseWeb.Models.Idea>
 @{
     ViewData["Title"] = "Record";
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupportingDocuments)
-            </th>
-            <th>
-                View
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                RatingUp
-                @* @Html.DisplayNameFor(model => model.RatingUp) *@
-            </th>
-            <th>
-                RatingDown
-                @* @Html.DisplayNameFor(model => model.RatingDown) *@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosureDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubmissionDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SupportingDocuments)
-                </td>
-                <td>
-                    @totalViews
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
-                </td>
-                <td>
 
-                </td>
-                <td>
-                    
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
-                </td>
-                @* <td>
-            @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
-            {
-            <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
-            <text>|</text>
-            <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
-            }
-            else
-            {
-            <div class="alert alert-danger">
-            The closure date has passed.
+}
+<section class="bg0 p-t-120 p-b-80">
+    <div class="container">
+        <div class="row p-b-20">
+            <div class="col-lg-12 col-xl-12 m-lr-auto m-b-50">
+                <div class="m-l-20 m-r-20 m-lr-0-xl">
+                    <div class="flex-w flex-t p-b-13">
+                        <div class="size-208">
+                            <h3 class="mtext-109 cl2 p-b-30">
+                                My Idea list
+                            </h3>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Title)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SubmissionDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupportingDocuments)
+                                </th>
+                                <th>
+                                    View
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Department)
+                                </th>
+                                <th>
+                                    RatingUp
+                                    @* @Html.DisplayNameFor(model => model.RatingUp) *@
+                                </th>
+                                <th>
+                                    RatingDown
+                                    @* @Html.DisplayNameFor(model => model.RatingDown) *@
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ClosureDate)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                                <tr>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Title)</a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SubmissionDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupportingDocuments)
+                                    </td>
+                                    <td>
+                                        @totalViews
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Department.Name)
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
+                                    </td>
+                                    @* <td>
+                                @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
+                                {
+                                <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
+                                <text>|</text>
+                                <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
+                                }
+                                else
+                                {
+                                <div class="alert alert-danger">
+                                The closure date has passed.
+                                </div>
+                                }
+                                </td> *@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a asp-action="~/Identity/Account/Manage"type="button" class="btn btn-warning" >Back to List</a>
             </div>
-            }
-            </td> *@
-            </tr>
-        }
-    </tbody>
-</table>
+        </div>
+    </div>
+</section>

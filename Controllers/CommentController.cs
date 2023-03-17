@@ -50,6 +50,7 @@ namespace EnterpriseWeb.Controllers
 
             var comment = await _context.Comment
                 .Include(c => c.Idea)
+                .Include(i => i.IdeaUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
@@ -173,7 +174,7 @@ namespace EnterpriseWeb.Controllers
 
 
         public async Task<IActionResult> Commented()
-        {   
+        {
             var enterpriseWebContext = _context.Comment.Include(c => c.Idea)
                                                         .Include(i => i.IdeaUser);
             var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -183,7 +184,13 @@ namespace EnterpriseWeb.Controllers
                     .Where(o => o.UserId == userID)
                     .ToListAsync()) :
                     Problem("Entity set 'EnterpriseWebContext'  is null.");
-                
+
+        }
+
+        public async Task<IActionResult> CommentedDetail(int id)
+        {
+            var enterpriseWebContext = _context.Comment.Where(e => e.Idea.Id == id).Include(b => b.IdeaUser);
+            return View(await enterpriseWebContext.ToListAsync());
         }
     }
 }
