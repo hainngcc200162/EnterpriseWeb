@@ -19,7 +19,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
             {
                 UserName = "Admin@gmail.com",
                 Email = "Admin@gmail.com",
-                Name = "NGUYEN NGOC HAI",
+                Name = "Admin",
                 Address = "Can Tho",
                 DOB = new DateTime(2008, 3, 9, 16, 5, 7, 123),
                 EmailConfirmed = true,
@@ -43,7 +43,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
             {
                 UserName = "Staff@gmail.com",
                 Email = "Staff@gmail.com",
-                Name = "NGUYEN NGOC HAI",
+                Name = "Staff",
                 Address = "Can Tho",
                 DOB = new DateTime(2008, 2, 9, 16, 5, 7, 123),
                 EmailConfirmed = true,
@@ -68,7 +68,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
             {
                 UserName = "QA@gmail.com",
                 Email = "QA@gmail.com",
-                Name = "NGUYEN NGOC HAI",
+                Name = "QAManager",
                 Address = "Can Tho",
                 DOB = new DateTime(2008, 2, 8, 16, 5, 7, 123),
                 EmailConfirmed = true,
