@@ -623,30 +623,46 @@ namespace EnterpriseWeb.Controllers
 
         }
 
-         public IActionResult Chart()
+        public IActionResult Chart()
         {
             ViewBag.Layout = Layout;
-            var data = _context.Rating.Include(s => s.Idea)
-                        .GroupBy(s => s.Idea.Title)
-                        .Select(g => new { Title = g.Key, RatingUp = g.Sum(s => s.RatingUp), RatingDown = g.Sum(s => s.RatingDown) })
-                        .ToList();
+            var data = _context.Department
+            .Select(d => new
+            {
+                DepartmentName = d.Name,
+                ContributorCount = _context.Idea
+                    .Where(i => i.DepartmentID == d.Id)
+                    .Select(i => i.UserId)
+                    .Distinct()
+                    .Count(),
+                NumberIdea = _context.Idea
+                    .Where(i => i.DepartmentID == d.Id)
+                    .Select(i => i.Id)
+                    .Count(),
+                PercentageIdea = (_context.Idea.Select(i => i.Id)
+                    .Count())
+            })
+            .ToList();
 
             string[] labels = new string[data.Count];
-            string[] ratingdown = new string[data.Count];
-            string[] ratingup = new string[data.Count];
+            string[] numberidea = new string[data.Count];
+            string[] percentageidea = new string[data.Count];
+
+            string[] counts = new string[data.Count];
 
 
             for (int i = 0; i < data.Count; i++)
             {
-                labels[i] = data[i].Title;
-                ratingdown[i] = data[i].RatingDown.ToString();
-                ratingup[i] = data[i].RatingUp.ToString();
+                labels[i] = data[i].DepartmentName;
+                numberidea[i] = data[i].NumberIdea.ToString();
+                percentageidea[i] = data[i].PercentageIdea.ToString();
+                counts[i] = data[i].ContributorCount.ToString();
 
             }
 
             ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
-            ViewData["ratingdown"] = String.Join(",", ratingdown);
-            ViewData["ratingup"] = String.Join(",", ratingup);
+            ViewData["counts"] = String.Join(",", counts);
+            ViewData["numberidea"] = String.Join(",", numberidea);
 
             return View(data);
         }

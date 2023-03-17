@@ -1,71 +1,180 @@
 <div class="content-wrapper">
-<div class="col-sm-12">
-    <h2>Statistical of Store</h2>
-    <hr>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titles</th>
-                <th>Rating Down</th>
-                <th>Rating Up</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (
-            var item in Model)
-            {
+    <div class="col-sm-12">
+        <h2>Contributors by Department</h2>
+        <hr>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.Title</td>
-                    <td>@item.RatingDown</td>
-                    <td>@item.RatingUp</td>
+                    <th>Department</th>
+                    <th>Number of ideas</th>
+                    <th>Percentage of ideas</th>                    
+                    <th>Contributors</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-
-    <div>
-        <canvas id="myChart1"></canvas>
-    </div>
-    <div>
-        <canvas id="myChart2"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <div>
-        <script>
-            const labels = [@Html.Raw(ViewData["labels"])];
-            const data1 = {
-                labels: labels,
-                datasets: [{
-                    label: 'Idea',
-                    backgroundColor: 'rgb(0,0,255)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [@ViewData["ratingup"]],
-                },
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    label: 'Idea',
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
-                    data: [@ViewData["ratingdown"]],
-                }]
-            };
+                    <tr>
+                        <td>@item.DepartmentName</td>
+                        <td>@item.NumberIdea</td>
+                        <td>@item.PercentageIdea</td>
+                        <td>@item.ContributorCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-            const config1 = {
-                type: 'bar',
-                data: data1,
-                options: {}
-            };
+        <div class="col-sm-12" style="margin: auto; width: 800px; height:400px;">
+            <canvas id="myChart1"></canvas>
+        </div>
+        <div class="col-sm-12" style="margin: auto; width: 800px; height:400px;">
+            <canvas id="myChart2"></canvas>
+        </div>
+        <div class="col-sm-8" style="margin: auto; width: 400px; height:400px;">
+            <canvas id="myChart3"></canvas>
+        </div>
 
-            const myChart1 = new Chart(
-                document.getElementById('myChart1'),
-                config1
-            );
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div>
+            <script>
+                const labels = [@Html.Raw(ViewData["labels"])];
+                const data1 = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Contributors by Department',
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1,
+                        data: [@ViewData["counts"]],
+                    }]
+                };
 
-            function loadImage() {
-                var myImage = myChart2.toBase64Image();
-                document.getElementById("chartImg").scr = myImage;
-            }
-        </script>
+                const data2 = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of ideas made by each Department',
+                        backgroundColor: 'rgba(255, 255, 0, 0.5)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1,
+                        data: [@ViewData["numberidea"]],
+                    }]
+                };
+
+
+
+                const data3 = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Percentage of ideas by each Department',
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)',
+                            'rgb(199, 199, 199)',
+                            'rgb(255, 102, 255)',
+                        ],
+                        data: [@ViewData["numberidea"]],
+                    }]
+                };
+
+                const config1 = {
+                    type: 'bar',
+                    data: data1,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Department Name',
+                                    fontSize: 14,
+                                    fontStyle: 'bold'
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Number of Contributors',
+                                    fontSize: 14,
+                                    fontStyle: 'bold'
+                                }
+                            }]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Contributors by Department',
+                            fontSize: 18,
+                            fontStyle: 'bold'
+                        }
+                    }
+                };
+
+                const config2 = {
+                    type: 'bar',
+                    data: data2,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Department Name',
+                                    fontSize: 14,
+                                    fontStyle: 'bold'
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Number of ideas made by each Department',
+                                    fontSize: 14,
+                                    fontStyle: 'bold'
+                                }
+                            }]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of ideas',
+                            fontSize: 18,
+                            fontStyle: 'bold'
+                        }
+                    }
+                };
+
+                const config3 = {
+                    type: 'pie',
+                    data: data3,
+                }
+
+                const myChart1 = new Chart(
+                    document.getElementById('myChart1'),
+                    config1
+                );
+
+                const myChart2 = new Chart(
+                    document.getElementById('myChart2'),
+                    config2
+                );
+
+                const myChart3 = new Chart(
+                    document.getElementById('myChart3'),
+                    config3
+                );
+
+                function loadImage() {
+                    var myImage = myChart2.toBase64Image();
+                    document.getElementById("chartImg").src = myImage;
+                }
+            </script>
+        </div>
+
     </div>
-
-</div>
 </div>
