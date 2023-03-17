@@ -5,9 +5,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 style = "text-align:center;">What are you thinking?</h1>
 
-<h4>Idea</h4>
+@* <h4>Idea</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -62,12 +62,60 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+</div> *@
+    <div class="col-md-6" style = "width: 600px; margin: auto;">
+              <div class="form contact-form">
+                <form asp-action="Create" id="create-idea-form" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                  <p>Title</p>
+                  <div class="form-group" style = "color:black;">
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                  </div>
+                  <p>Description</p>
+                  <div class="form-group mt-3" style = "color:black;">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                  </div>
+                  <div class="form-group" hidden>
+                    <input asp-for="UserId" class="form-control" />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="SubmissionDate" class="control-label"></label>
+                    <input asp-for="SubmissionDate" class="form-password" />
+                    <span asp-validation-for="SubmissionDate" class="text-danger"></span>
+                </div>
+                  <p>SupportingDocuments</p>
+                  <div class="form-group mt-3" style = "color:black;">
+                    <input asp-for="SupportingDocuments" type="file" name="myfile" class="form-control" required />
+                    <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+                  </div>
+                  <p>Category</p>
+                  <div class="form-group mt-3" style = "color:black;">
+                    <select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
+                        multiple></select>
+                  </div>
+                  <p>Department</p>
+                  <div class="form-group mt-3" style = "color:black;">
+                    <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
+                  </div>
+                  <p>ClosureDate</p>
+                  <div class="form-group mt-3" style = "color:black;">
+                    <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
+                  </div>
+                  <div class="form-group" style = "color:black;">
+                    <label>
+                        <input type="checkbox" name="agree" id="agree-checkbox" required>
+                        I agree to the terms and conditions.
+                    </label>
+                </div>
+                  <div class="text-center">
+                    <input type="submit" value="Send Message" class = "btn btn-dark">
+                    </div>
+                </form>
+              </div>
+            </div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
