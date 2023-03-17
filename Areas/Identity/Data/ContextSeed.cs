@@ -35,8 +35,55 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 {
                     await userManager.CreateAsync(defaultUserAdmin, "Admin@123");
                     await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Admin.ToString());
-                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.Staff.ToString());
-                    await userManager.AddToRoleAsync(defaultUserAdmin, Enums.Roles.QAManager.ToString());
+                }
+            }
+
+            //Seed Default User
+            var defaultUserStaff = new IdeaUser
+            {
+                UserName = "Staff@gmail.com",
+                Email = "Staff@gmail.com",
+                Name = "NGUYEN NGOC HAI",
+                Address = "Can Tho",
+                DOB = new DateTime(2008, 2, 9, 16, 5, 7, 123),
+                EmailConfirmed = true,
+                PhoneNumber = "0909090908",
+                PhoneNumberConfirmed = true,
+                ProfilePicture = await transferPic("././wwwroot/img/staff.jpg")
+
+            };
+            if (userManager.Users.All(u => u.Id != defaultUserStaff.Id))
+            {
+                var user = await userManager.FindByEmailAsync(defaultUserStaff.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultUserStaff, "Admin@123");
+                    await userManager.AddToRoleAsync(defaultUserStaff, Enums.Roles.Staff.ToString());
+
+                }
+            }
+
+            //Seed Default User
+            var defaultUserQAManager = new IdeaUser
+            {
+                UserName = "QA@gmail.com",
+                Email = "QA@gmail.com",
+                Name = "NGUYEN NGOC HAI",
+                Address = "Can Tho",
+                DOB = new DateTime(2008, 2, 8, 16, 5, 7, 123),
+                EmailConfirmed = true,
+                PhoneNumber = "0909090907",
+                PhoneNumberConfirmed = true,
+                ProfilePicture = await transferPic("././wwwroot/img/qamanager.jpg")
+
+            };
+            if (userManager.Users.All(u => u.Id != defaultUserQAManager.Id))
+            {
+                var user = await userManager.FindByEmailAsync(defaultUserQAManager.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultUserQAManager, "Admin@123");
+                    await userManager.AddToRoleAsync(defaultUserQAManager, Enums.Roles.QAManager.ToString());
                 }
             }
         }
