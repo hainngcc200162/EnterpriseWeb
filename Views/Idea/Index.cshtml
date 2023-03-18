@@ -3,196 +3,77 @@
 @{
     ViewData["Title"] = "Index";
 }
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-    <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
-    <a asp-action="Chart" class="btn btn-warning">Chart</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdeaUser.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupportingDocuments)
-            </th>
-            <th>
-                View
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosureDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdeaUser.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubmissionDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SupportingDocuments)
-                </td>
-                <td>
-                    @totalViews
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-                <td>
-                    @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
-                    {
-                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
-                        <text>|</text>
-                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger">
-                            The closure date has passed.
-                        </div>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-    <!-- ======= Blog Section ======= -->
-    <div id="blog" class="blog-area">
-      <div class="blog-inner area-padding">
-        <div class="blog-overly"></div>
-        <div class="container ">
-          <div class="row">
-            <!-- Start Left Blog -->
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <div class="single-blog">
-                <div class="single-blog-img">
-                  <a href="blog.html">
-                    <img src="assets/img/blog/1.jpg" alt="">
-                  </a>
-                </div>
-                <div class="blog-meta">
-                  <span class="comments-type">
-                    <i class="fa fa-comment-o"></i>
-                    <a href="#">13 comments</a>
-                  </span>
-                  <span class="date-type">
-                    <i class="fa fa-calendar"></i>2016-03-05 / 09:10:16
-                  </span>
-                </div>
-                <div class="blog-text">
-                  <h4>
-                    <a href="blog.html">Assumenda repud eum veniam</a>
-                  </h4>
-                  <p>
-                    Lorem ipsum dolor sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.
-                  </p>
-                </div>
-                <span>
-                  <a href="blog.html" class="ready-btn">Read more</a>
-                </span>
-              </div>
-              <!-- Start single blog -->
-            </div>
-            <!-- End Left Blog-->
-            <!-- Start Left Blog -->
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <div class="single-blog">
-                <div class="single-blog-img">
-                  <a href="blog.html">
-                    <img src="assets/img/blog/2.jpg" alt="">
-                  </a>
-                </div>
-                <div class="blog-meta">
-                  <span class="comments-type">
-                    <i class="fa fa-comment-o"></i>
-                    <a href="#">130 comments</a>
-                  </span>
-                  <span class="date-type">
-                    <i class="fa fa-calendar"></i>2016-03-05 / 09:10:16
-                  </span>
-                </div>
-                <div class="blog-text">
-                  <h4>
-                    <a href="blog.html">Explicabo magnam quibusdam.</a>
-                  </h4>
-                  <p>
-                    Lorem ipsum dolor sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.
-                  </p>
-                </div>
-                <span>
-                  <a href="blog.html" class="ready-btn">Read more</a>
-                </span>
-              </div>
-              <!-- Start single blog -->
-            </div>
-            <!-- End Left Blog-->
-            <!-- Start Right Blog-->
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <div class="single-blog">
-                <div class="single-blog-img">
-                  <a href="blog.html">
-                    <img src="assets/img/blog/3.jpg" alt="">
-                  </a>
-                </div>
-                <div class="blog-meta">
-                  <span class="comments-type">
-                    <i class="fa fa-comment-o"></i>
-                    <a href="#">10 comments</a>
-                  </span>
-                  <span class="date-type">
-                    <i class="fa fa-calendar"></i>2016-03-05 / 09:10:16
-                  </span>
-                </div>
-                <div class="blog-text">
-                  <h4>
-                    <a href="blog.html">Lorem ipsum dolor sit amet</a>
-                  </h4>
-                  <p>
-                    Lorem ipsum dolor sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.sit amet conse adipis elit Assumenda repud eum veniam optio modi sit explicabo nisi magnam quibusdam.
-                  </p>
-                </div>
-                <span>
-                  <a href="blog.html" class="ready-btn">Read more</a>
-                </span>
-              </div>
-            </div>
-            <!-- End Right Blog-->
+<div class="dropdown" style="padding:20px; float:right">
+  <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Sort by
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["MostView"]">Sort by most Viewed</a></li>
+    <li><a class="dropdown-item">Sort by Rating</a></li>
+  </ul>
+</div>
+
+@foreach (var item in Model){
+
+  var ratingUp = @item.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+  var ratingDown = @item.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
+
+
+    <div id="blog" class="flex-container" style="padding:30px">
+      <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto">
+        <div class="single-blog">
+          <div>
+            <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)" 
+            style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
+            <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(modelItem => item.IdeaUser.Name)
+            <br>
+            <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(modelItem => item.Department.Name) &gt;</span>
+            
+            </h4>
           </div>
+          <div class="blog-meta">
+            <span class="date-type">
+              <i class="fa fa-calendar"></i>Submission Date: @Html.DisplayFor(modelItem => item.SubmissionDate)
+              <br>
+              <i class='fas fa-calendar-times' style="color:rgba(255, 0, 0, 0.751)"></i>Closure Date: 
+              @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
+            </span>            
+          </div>
+          <div class="blog-text">
+            <h4>
+                Title:
+                <b>@Html.DisplayFor(modelItem => item.Title)</b>
+            </h4>
+            <p>
+                <b>Description: &ldquo;</b>
+                <i>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </i>   
+                <b>&rdquo; &middot;</b>           
+            </p>
+          </div>
+            <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
+
+            <a>
+                <i class="far fa-comment" style="padding-left: 15px"></i> Comments: CHUA LAM DUOC
+                <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
+                <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
+            </a>
+            
+            <br><br>
+            <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
+        
+            @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a>  *@
+
+            <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
+            @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a>  *@
+            
+
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
         </div>
       </div>
-    </div><!-- End Blog Section -->
+    </div>
+}
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>

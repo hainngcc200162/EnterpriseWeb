@@ -185,11 +185,24 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: Idea
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser);
-            return View(await enterpriseWebContext.ToListAsync());
+            ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "";
+            ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostView";
+            var enterpriseWebContext =  from e in _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser).Include(i => i.Ratings)
+                                        select e;
+            switch (sortOrder){
+                case "mostView":
+                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
+                    break;
+                case "mostRating":
+                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
+                    break;
+                default:
+                    break;
+            }
+            return View(await enterpriseWebContext.AsNoTracking().ToListAsync());
         }
         public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber)
         {
@@ -639,8 +652,10 @@ namespace EnterpriseWeb.Controllers
                     .Where(i => i.DepartmentID == d.Id)
                     .Select(i => i.Id)
                     .Count(),
-                PercentageIdea = (_context.Idea.Select(i => i.Id)
-                    .Count())
+                PercentageIdea = _context.Idea
+                    .Where(i => i.DepartmentID == d.Id)
+                    .Select(i => i.Id)
+                    .Count()*100/ _context.Idea.Count()
             })
             .ToList();
 
@@ -663,6 +678,7 @@ namespace EnterpriseWeb.Controllers
             ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
             ViewData["counts"] = String.Join(",", counts);
             ViewData["numberidea"] = String.Join(",", numberidea);
+            ViewData["percentageidea"] = String.Join(",", percentageidea);
 
             return View(data);
         }
