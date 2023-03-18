@@ -2298,6 +2298,11 @@ span.email-notes {
     text-align: center;
 }
 
+.avatar-default {
+    background-image: url(../img/avatardefault.png);
+    background-position: center;
+}
+
 
 /*--------------------------------------------------------------
 # Responsive
