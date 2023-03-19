@@ -70,7 +70,7 @@
                     <li class="page-item"><a class="page-link" asp-action="Index"
                       asp-route-pageNumber="1"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            <<               
+                            <i class = "fas fa-angle-double-left"></i>                  
                         </a></li>
                         @{
                           int i = Model.PageIndex;
@@ -110,11 +110,19 @@
                         }
                         }
                         }
-                        <li class="page-item"><a class="page-link" asp-action="Index"
+                        @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="Index"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            >>               
+                            <i class = "fas fa-angle-double-right"></i>                
                         </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
                 </ul> 
               </div>
               </div>

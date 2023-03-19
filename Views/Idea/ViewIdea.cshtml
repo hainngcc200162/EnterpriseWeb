@@ -49,7 +49,6 @@
                       <th>Status</th>
                       <th>SubmissionDate</th>
                       <th>SupportingDocuments</th>
-                      <th>Department</th>
                       <th>ClosureDate</th>
                       <th>Action</th>
                     </tr>
@@ -81,10 +80,10 @@
                           </td>
                           <td>@Html.DisplayFor(modelItem => item.SubmissionDate)</td>
                           <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                          @* <td>@Html.DisplayFor(modelItem => item.Department.Name)</td> *@
                           <td>@Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)</td>
                           <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
+                            <a asp-action="EditQA" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
                           </td>
                           <td>
@@ -107,16 +106,16 @@
                 </table>
                 <div class="card-footer clearfix">
                   <ul class="pagination pagination-sm m-0 float-left">
-                    <li class="page-item"><a class="page-link" asp-action="Index"
+                    <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                               asp-route-pageNumber="1"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                  <<                
+                                  <i class = "fas fa-angle-double-left"></i>                  
                               </a></li> 
                         @{
                           int i = Model.PageIndex;
                           if(i >= 1 && i <= 2 && Model.TotalPages < 3){
                             for(i = 1; i <= Model.TotalPages; i ++){
-                              <li class="page-item"><a class="page-link" asp-action="Index"
+                              <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                               asp-route-pageNumber="@(i)"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                   @(i)                
@@ -150,11 +149,19 @@
                         }
                         }
                         }
-                        <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                        @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            >>               
+                            <i class = "fas fa-angle-double-right"></i>                
                         </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
                 </ul> 
               </div>
 

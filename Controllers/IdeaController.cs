@@ -27,6 +27,7 @@ namespace EnterpriseWeb.Controllers
     public class IdeaController : Controller
     {
         private string Layout = "_ViewAdmin";
+        private string Layout1 = "_QACoordinator";
         private readonly EnterpriseWebIdentityDbContext _context;
         private readonly UserManager<IdeaUser> _userManager;
         private NotificationSender _notificationSender;
@@ -47,7 +48,7 @@ namespace EnterpriseWeb.Controllers
         }
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout1;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -59,7 +60,7 @@ namespace EnterpriseWeb.Controllers
             ViewData["CurrentFilter"] = searchString;
             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
                                         .Include(i => i.Department).Include(i => i.Viewings)
-                                        .Include(i => i.IdeaUser)
+                                        .Include(i => i.IdeaUser).Include(i => i.IdeaCategories)
                         select m;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -68,7 +69,26 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
+        public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout1;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Category select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
 
         //Download files
         [HttpPost]
@@ -408,7 +428,81 @@ namespace EnterpriseWeb.Controllers
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             return View(idea);
         }
+        public async Task<IActionResult> EditQA(int? id)
+        {
+            ViewBag.Layout = Layout1;
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var idea = await _context.Idea.FindAsync(id);
+            if (idea == null)
+            {
+                return NotFound();
+            }
+            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+            return View(idea);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditQA(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
+        {
+            if (id != idea.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (newfile != null)
+                    {
+                        string filename = Path.GetFileName(newfile.FileName);
+                        // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                        // string fullPath = Path.Combine(filePath, filename);
+
+                        using (var dataStream = new MemoryStream())
+                        {
+                            await newfile.CopyToAsync(dataStream);
+                            idea.DataFile = dataStream.ToArray();
+                        }
+                        idea.SupportingDocuments = filename;
+                    }
+                    idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    idea.SubmissionDate = DateTime.Now;
+                    _context.Update(idea);
+                    await _context.SaveChangesAsync();
+
+                    // Add idea categories
+                    foreach (var categoryId in selectedCategoryIds)
+                    {
+                        var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
+                        _context.IdeaCategory.Add(ideaCategory);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!IdeaExists(idea.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            return View(idea);
+        }
         // GET: Idea/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

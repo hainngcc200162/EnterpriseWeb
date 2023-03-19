@@ -54,6 +54,10 @@
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+
+      <!-- Messages Dropdown Menu -->
+      
+      <!-- Notifications Dropdown Menu -->
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -115,61 +119,9 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a asp-controller="Category" asp-action="ViewCategory" class="nav-link">
+                <a asp-controller="Idea" asp-action="ViewCategory" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-controller="Category" asp-action="Create" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Create</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-clock"></i>
-              <p>
-                ClosesureDate
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-controller="ClosureDate" asp-action="Index" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View</p>
-                </a>
-              </li> 
-              <li class="nav-item">
-                <a asp-controller="ClosureDate" asp-action="Create" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Create</p>
-                </a>
-              </li>  
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-city"></i>
-              <p>
-                Department
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-controller="Department" asp-action="Index" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-controller="Department" asp-action="Create" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Create</p>
                 </a>
               </li>
             </ul>
@@ -196,44 +148,7 @@
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Charts
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-controller="Idea" asp-action="Chart" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Store's Statiscal</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/inline.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inline</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/uplot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>uPlot</p>
-                </a>
-              </li>
-            </ul>
           </li>      
-          <li class="nav-item">
-            <a class="nav-link">
-              <i class="nav-icon fas fa-folder-open"></i>
-              <p>
-                Documentation
-              </p>
-            </a>
-          </li>
           <li class="nav-item" >
               <form id="logoutForm" class="nav-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button id="logout" type="submit" class="nav-link btn btn-item text-dark" style = "text-align: left;"><a><i class="nav-icon fas fa-sign-in-alt"></i> Logout</a>

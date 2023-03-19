@@ -25,10 +25,10 @@
       <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto">
         <div class="single-blog">
           <div>
-            @if(@item.IdeaUser.ProfilePicture==null){
+            @if(@item.IdeaUser != null && @item.IdeaUser.ProfilePicture==null){
               <img class="avatar-default"
               style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
-            }else{
+            }else if (@item.IdeaUser != null && @item.IdeaUser.ProfilePicture!=null){
               <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)" 
               style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
             }

@@ -13,6 +13,7 @@ namespace EnterpriseWeb.Controllers
     public class CategoryController : Controller
     {
         private string Layout = "_ViewAdmin";
+        private string Layout1 = "_QACoordinator";
 
         private readonly EnterpriseWebIdentityDbContext _context;
 
@@ -26,6 +27,26 @@ namespace EnterpriseWeb.Controllers
         {
             ViewBag.Layout = Layout;
             return View(await _context.Category.ToListAsync());
+        }
+        public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Category select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
@@ -145,6 +166,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = Layout;
             if (id == null)
             {
                 return NotFound();

@@ -140,6 +140,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Department/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = Layout;
             if (id == null)
             {
                 return NotFound();

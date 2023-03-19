@@ -68,7 +68,7 @@
                 </table>
                 <div class="card-footer clearfix">
                   <ul class="pagination pagination-sm m-0 float-left">
-                    <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                    <li class="page-item"><a class="page-link" asp-action="ViewQA"
                               asp-route-pageNumber="1"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                   <i class = "fas fa-angle-double-left"></i>                
@@ -77,7 +77,7 @@
                             int i = Model.PageIndex;
                             if(i >= 1 && i <= 2 && Model.TotalPages < 3){
                               for(i = 1; i <= Model.TotalPages; i ++){
-                                <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                                <li class="page-item"><a class="page-link" asp-action="ViewQA"
                                 asp-route-pageNumber="@(i)"
                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                     @(i)                
@@ -86,7 +86,7 @@
                             }
                             else if(i >= 0 && i <= 2 && Model.TotalPages >= 3){
                                   for(i = 1; i <= 3; i ++){
-                                    <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                                    <li class="page-item"><a class="page-link" asp-action="ViewQA"
                                     asp-route-pageNumber="@(i)"
                                     asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         @(i)                
@@ -94,7 +94,7 @@
                                     }
                             }else if (i < Model.TotalPages && i >= 2 && Model.TotalPages >= 2){
                               for(i = Model.PageIndex - 1; i < Model.PageIndex + 2; i++){
-                                  <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                                  <li class="page-item"><a class="page-link" asp-action="ViewQA"
                                 asp-route-pageNumber="@(i)"
                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                     @(i)                
@@ -103,7 +103,7 @@
                           } 
                           else if (Model.PageIndex >= Model.TotalPages){
                             for(i = Model.TotalPages - 2; i < Model.TotalPages + 1; i++){
-                                  <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                                  <li class="page-item"><a class="page-link" asp-action="ViewQA"
                                 asp-route-pageNumber="@(i)"
                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                     @(i)                
@@ -112,13 +112,13 @@
                           }
                           }
                       @if(Model.TotalPages > 0){
-                      <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                      <li class="page-item"><a class="page-link" asp-action="ViewQA"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
                             <i class = "fas fa-angle-double-right"></i>                
                         </a></li>
                       }else{
-                        <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                        <li class="page-item"><a class="page-link" asp-action="ViewQA"
                       asp-route-pageNumber="1"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
                             <i class = "fas fa-angle-double-right"></i>                
