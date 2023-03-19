@@ -11,6 +11,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Admin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Staff.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.QAManager.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.QACoordinator.ToString()));
         }
         public static async Task SeedSuperAdminAsync(UserManager<IdeaUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -84,6 +85,29 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 {
                     await userManager.CreateAsync(defaultUserQAManager, "Admin@123");
                     await userManager.AddToRoleAsync(defaultUserQAManager, Enums.Roles.QAManager.ToString());
+                }
+            }
+
+             var defaultUserQACoordinator = new IdeaUser
+            {
+                UserName = "QAcoor@gmail.com",
+                Email = "QAcoor@gmail.com",
+                Name = "QACoordinator",
+                Address = "Can Tho",
+                DOB = new DateTime(2008, 2, 8, 16, 5, 7, 123),
+                EmailConfirmed = true,
+                PhoneNumber = "0909090907",
+                PhoneNumberConfirmed = true,
+                ProfilePicture = await transferPic("././wwwroot/img/qamanager.jpg")
+
+            };
+            if (userManager.Users.All(u => u.Id != defaultUserQACoordinator.Id))
+            {
+                var user = await userManager.FindByEmailAsync(defaultUserQACoordinator.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultUserQACoordinator, "Admin@123");
+                    await userManager.AddToRoleAsync(defaultUserQACoordinator, Enums.Roles.QACoordinator.ToString());
                 }
             }
         }

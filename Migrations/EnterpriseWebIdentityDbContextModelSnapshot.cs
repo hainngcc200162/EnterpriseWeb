@@ -40,6 +40,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -87,6 +90,8 @@ namespace EnterpriseWeb.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -198,6 +203,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<int?>("QACoordinatorID")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QACoordinatorID");
@@ -304,10 +312,10 @@ namespace EnterpriseWeb.Migrations
                     b.Property<string>("IdeaUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RatingDown")
+                    b.Property<int?>("RatingDown")
                         .HasColumnType("int");
 
-                    b.Property<int>("RatingUp")
+                    b.Property<int?>("RatingUp")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SubmitionDate")
@@ -492,6 +500,15 @@ namespace EnterpriseWeb.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("EnterpriseWeb.Areas.Identity.Data.IdeaUser", b =>
+                {
+                    b.HasOne("EnterpriseWeb.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentID");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("EnterpriseWeb.Models.Comment", b =>

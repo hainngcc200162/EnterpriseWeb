@@ -21,9 +21,15 @@ public class IdeaUser : IdentityUser
     [PersonalData]
     public byte[] ProfilePicture { get; set; }
 
+    [PersonalData]
+    public int? DepartmentID { get; set; }
+    public Department? Department { get; set; }
+
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<Idea>? Ideas { get; set; }
     public ICollection<Rating>? Ratings { get; set; }
     public ICollection<Viewing>? Viewings { get; set; }
+
+
 }
 
