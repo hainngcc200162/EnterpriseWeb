@@ -55,16 +55,17 @@ namespace EnterpriseWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QACoordinator",
+                name: "Department",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QACoordinator", x => x.Id);
+                    table.PrimaryKey("PK_Department", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,27 +87,6 @@ namespace EnterpriseWeb.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Department",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QACoordinatorID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_QACoordinator_QACoordinatorID",
-                        column: x => x.QACoordinatorID,
-                        principalTable: "QACoordinator",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +217,7 @@ namespace EnterpriseWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -430,11 +411,6 @@ namespace EnterpriseWeb.Migrations
                 column: "IdeaUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Department_QACoordinatorID",
-                table: "Department",
-                column: "QACoordinatorID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Idea_ClosureDateID",
                 table: "Idea",
                 column: "ClosureDateID");
@@ -526,9 +502,6 @@ namespace EnterpriseWeb.Migrations
 
             migrationBuilder.DropTable(
                 name: "Department");
-
-            migrationBuilder.DropTable(
-                name: "QACoordinator");
         }
     }
 }

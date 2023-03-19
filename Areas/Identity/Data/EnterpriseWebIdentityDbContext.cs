@@ -35,7 +35,5 @@ public class EnterpriseWebIdentityDbContext : IdentityDbContext<IdeaUser>
 
         public DbSet<EnterpriseWeb.Models.Department> Department { get; set; }
 
-        public DbSet<EnterpriseWeb.Models.QACoordinator> QACoordinator { get; set; }
-
         public DbSet<EnterpriseWeb.Models.Viewing> Viewing { get; set; }
 }

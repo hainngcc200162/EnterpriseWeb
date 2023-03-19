@@ -126,6 +126,13 @@
             </div>
         </div>
         <div class = "form-group" style = "margin:0; padding:0; border: 0;">
+            <label asp-for="Input.Department" class="col-sm-2 control-label"></label>
+            <div class="col-sm-9">
+                <select asp-for="Input.Department" class="form-control" asp-items="ViewBag.DepartmentID"></select>
+                <span asp-validation-for="Input.Department" class="text-danger"></span>
+            </div>
+        </div>
+        <div class = "form-group" style = "margin:0; padding:0; border: 0;">
             <label asp-for="Input.Password" class="col-sm-2 control-label"></label>
             <div class="col-sm-9">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />

@@ -34,7 +34,7 @@ namespace EnterpriseWeb.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var department = from m in _context.Department.Include(d => d.QACoordinator) select m;
+            var department = from m in _context.Department select m;
             if (!String.IsNullOrEmpty(searchString))
             {
                 department = department.Where(s => s.Name.Contains(searchString));
@@ -53,7 +53,6 @@ namespace EnterpriseWeb.Controllers
             }
 
             var department = await _context.Department
-                .Include(d => d.QACoordinator)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (department == null)
             {
@@ -67,7 +66,6 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Create()
         {
             ViewBag.Layout = Layout;
-            ViewData["QACoordinatorID"] = new SelectList(_context.Set<QACoordinator>(), "Id", "Id");
             return View();
         }
 
@@ -76,7 +74,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,QACoordinatorID")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Department department)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +82,6 @@ namespace EnterpriseWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["QACoordinatorID"] = new SelectList(_context.Set<QACoordinator>(), "Id", "Id", department.QACoordinatorID);
             return View(department);
         }
 
@@ -102,7 +99,6 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["QACoordinatorID"] = new SelectList(_context.Set<QACoordinator>(), "Id", "Id", department.QACoordinatorID);
             return View(department);
         }
 
@@ -111,7 +107,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,QACoordinatorID")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Department department)
         {
             if (id != department.Id)
             {
@@ -138,7 +134,6 @@ namespace EnterpriseWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["QACoordinatorID"] = new SelectList(_context.Set<QACoordinator>(), "Id", "Id", department.QACoordinatorID);
             return View(department);
         }
 
@@ -151,7 +146,6 @@ namespace EnterpriseWeb.Controllers
             }
 
             var department = await _context.Department
-                .Include(d => d.QACoordinator)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (department == null)
             {

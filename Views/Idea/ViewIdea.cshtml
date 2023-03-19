@@ -46,6 +46,7 @@
                       <th>Description</th>
                       <th>Name</th>
                       <th>View</th>
+                      <th>Status</th>
                       <th>SubmissionDate</th>
                       <th>SupportingDocuments</th>
                       <th>Department</th>
@@ -63,6 +64,20 @@
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
                           <td>
                             @totalViews
+                          </td>
+                          <td>
+                            @if(item.Status == 0)
+                            {
+                              <span class="alert alert-info">Under review</span>
+                            }
+                            else if(item.Status == 1)
+                            {
+                              <span class="alert alert-success">Approved</span>
+                            }
+                            else
+                            {
+                              <span class="alert alert-danger">Rejected</span>
+                            }
                           </td>
                           <td>@Html.DisplayFor(modelItem => item.SubmissionDate)</td>
                           <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)</td>

@@ -59,6 +59,7 @@ namespace EnterpriseWeb.Controllers
             ViewData["CurrentFilter"] = searchString;
             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
                                         .Include(i => i.Department).Include(i => i.Viewings)
+                                        .Include(i => i.IdeaUser)
                         select m;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -189,8 +190,14 @@ namespace EnterpriseWeb.Controllers
         {
             ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "";
             ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostRating";
-            var enterpriseWebContext = from e in _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser).Include(i => i.Ratings).Include(i => i.Comments)
+            var enterpriseWebContext = from e in _context.Idea
+                           .Include(i => i.ClosureDate)
+                           .Include(i => i.Department)
+                           .Include(i => i.Viewings)
+                           .Include(i => i.IdeaUser)
+                           .Include(i => i.Ratings)
+                           .Include(i => i.Comments)
+                                       where e.Status == 1
                                        select e;
             switch (sortOrder)
             {
@@ -199,9 +206,9 @@ namespace EnterpriseWeb.Controllers
                     break;
                 case "mostRating":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Ratings
-                    .AsEnumerable() // Evaluate on the client side
-                    .GroupBy(u => u.IdeaID)
-                    .Sum(g => g.Sum(u => u.RatingUp)));
+                        .Where(r => r.IdeaID == e.Id)
+                        .AsEnumerable()
+                        .Sum(r => r.RatingUp));
                     break;
                 default:
                     break;
@@ -279,8 +286,6 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Create()
         {
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id");
-            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
@@ -289,10 +294,12 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,DepartmentID,ClosureDateID")] Idea idea, IFormFile myfile, int[] selectedCategoryIds)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,ClosureDateID")] Idea idea, IFormFile myfile)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
                 //Getting FileName
                 var fileName = Path.GetFileName(myfile.FileName);
                 //Getting file Extension
@@ -307,16 +314,11 @@ namespace EnterpriseWeb.Controllers
                 idea.SupportingDocuments = fileName;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
-                idea.IdeaUser = _userManager.Users.FirstOrDefault(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                idea.Department = user.Department;
+                idea.DepartmentID = user.DepartmentID;
+                idea.IdeaUser = user;
+                idea.Status = 0;
                 _context.Add(idea);
-                await _context.SaveChangesAsync();
-
-                // Add idea categories
-                foreach (var categoryId in selectedCategoryIds)
-                {
-                    var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
-                    _context.IdeaCategory.Add(ideaCategory);
-                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -342,6 +344,7 @@ namespace EnterpriseWeb.Controllers
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
             return View(idea);
         }
 
@@ -350,7 +353,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile")] Idea idea, IFormFile newfile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
         {
             if (id != idea.Id)
             {
@@ -377,6 +380,15 @@ namespace EnterpriseWeb.Controllers
                     idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
+                    await _context.SaveChangesAsync();
+
+                    // Add idea categories
+                    foreach (var categoryId in selectedCategoryIds)
+                    {
+                        var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
+                        _context.IdeaCategory.Add(ideaCategory);
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
