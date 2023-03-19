@@ -67,7 +67,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-       
+
 
         //Download files
         [HttpPost]
@@ -188,16 +188,20 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "";
-            ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostView";
-            var enterpriseWebContext =  from e in _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser).Include(i => i.Ratings)
-                                        select e;
-            switch (sortOrder){
+            ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostRating";
+            var enterpriseWebContext = from e in _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaUser).Include(i => i.Ratings).Include(i => i.Comments)
+                                       select e;
+            switch (sortOrder)
+            {
                 case "mostView":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
                     break;
                 case "mostRating":
-                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
+                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Ratings
+                    .AsEnumerable() // Evaluate on the client side
+                    .GroupBy(u => u.IdeaID)
+                    .Sum(g => g.Sum(u => u.RatingUp)));
                     break;
                 default:
                     break;
@@ -421,7 +425,7 @@ namespace EnterpriseWeb.Controllers
         {
             var idea = await _context.Idea.FindAsync(id);
             var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
-            foreach(var ideacategory in ideacategories)
+            foreach (var ideacategory in ideacategories)
             {
                 _context.IdeaCategory.Remove(ideacategory);
             }
@@ -655,7 +659,7 @@ namespace EnterpriseWeb.Controllers
                 PercentageIdea = _context.Idea
                     .Where(i => i.DepartmentID == d.Id)
                     .Select(i => i.Id)
-                    .Count()*100/ _context.Idea.Count()
+                    .Count() * 100 / _context.Idea.Count()
             })
             .ToList();
 

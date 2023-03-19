@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "LhzKyOk724LVGNE70/+hyq6ySt0swDA9kngJHXQQ0eg=",
+  "Hash": "3OtevkF6dQD3WA/Ob0tX6tcB+isHM9ThY61xxXdyFu0=",
   "Source": "EnterpriseWeb",
   "BasePath": "_content/EnterpriseWeb",
   "Mode": "Default",
@@ -1785,12 +1785,12 @@
       "OriginalItemSpec": "wwwroot\\img\\apple-touch-icon.png"
     },
     {
-      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\img\\avatardefault.webp",
+      "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\img\\avatardefault.png",
       "SourceId": "EnterpriseWeb",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\",
       "BasePath": "_content/EnterpriseWeb",
-      "RelativePath": "img/avatardefault.webp",
+      "RelativePath": "img/avatardefault.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1799,7 +1799,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\avatardefault.webp"
+      "OriginalItemSpec": "wwwroot\\img\\avatardefault.png"
     },
     {
       "Identity": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\wwwroot\\img\\background\\page-header.jpg",
