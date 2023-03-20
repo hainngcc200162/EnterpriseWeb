@@ -206,10 +206,12 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: Idea
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "";
             ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostRating";
+            ViewData["Department"] = sortOrder == "mostView" ? "mostRating" : "department";
+            ViewData["CurrentFilter"] = searchString;
             var enterpriseWebContext = from e in _context.Idea
                            .Include(i => i.ClosureDate)
                            .Include(i => i.Department)
@@ -217,8 +219,17 @@ namespace EnterpriseWeb.Controllers
                            .Include(i => i.IdeaUser)
                            .Include(i => i.Ratings)
                            .Include(i => i.Comments)
-                                       where e.Status == 1
+                                       where e.Status == 0
                                        select e;
+
+    if (!String.IsNullOrEmpty(searchString))
+    {
+        enterpriseWebContext = enterpriseWebContext.Where(e => e.Title.Contains(searchString)
+                                || e.Description.Contains(searchString)
+                                || e.Department.Name.Contains(searchString));
+
+    }
+
             switch (sortOrder)
             {
                 case "mostView":
@@ -230,6 +241,9 @@ namespace EnterpriseWeb.Controllers
                         .AsEnumerable()
                         .Sum(r => r.RatingUp));
                     break;
+                case "department":
+                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Department.Name);
+                    break;   
                 default:
                     break;
             }

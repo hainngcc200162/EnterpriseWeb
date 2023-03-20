@@ -3,16 +3,32 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<div class="dropdown" style="padding:20px; float:right">
-  <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Sort by
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["MostView"]">Sort by most Viewed</a></li>
-    <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["MostRating"]">Sort by Rating</a></li>
-  </ul>
+<div style="margin:auto; padding: 10px; text-align:center;">
+  <form asp-action="Index" method="get">
+      <div class="form-actions no-color">
+          <p style="display:inline">
+              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" style="width:500px"/>
+              <input type="submit" value="Search" class="btn btn-default"> |
+              <a asp-action="Index" class="btn btn-default">Back to Full List</a>
+              <div style="display:inline-flex">
+                <a class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Sort by
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["MostView"]">Sort by most Viewed</a></li>
+                  <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["MostRating"]">Sort by Rating</a></li>
+                  <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["Department"]">Sort by Department</a></li>
+                </ul>    
+              </div>        
+          </p>
+      </div>
+  </form>  
 </div>
+
+
+
+
+
 
 @foreach (var item in Model){
 
@@ -59,24 +75,37 @@
                 <b>&rdquo; &middot;</b>           
             </p>
           </div>
-            <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
-
+        
             <a>
-                <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
-                <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
-                <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
+              <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
+              <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
+              <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
+              <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
             </a>
             
-            <br><br>
-            <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
-        
-            @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a>  *@
+            <br><br>              
 
-            <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
-            @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a>  *@
+            <div>
+              <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
+              @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a>  *@
+              <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
+              @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a>  *@
+              <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+            </div>
+
+            <br>
+
+            <form asp-action="Comment" asp-route-id="@item.Id">
+              <div class="input-group" style="width:500px">              
+                <input class="form-control" name="commenttext" placeholder="Comment" />
+                <select name="incognito">
+                    <option value="no">Public</option>
+                    <option value="yes">Incognito Comment</option>
+                </select>                
+                <input type="submit" value="Comment" class="btn btn-dark" style="display:"/>
+              </div>                
+            </form>
             
-
-            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
         </div>
       </div>
     </div>

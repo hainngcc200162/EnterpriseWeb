@@ -10,7 +10,7 @@
 
 <h1>Details</h1>
 
-<div>
+<div style="margin:auto; width:70%">
     <h4>Idea</h4>
     <hr />
     <dl class="row">
@@ -68,7 +68,7 @@
             </form>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Department)
+            @Html.DisplayNameFor(model => model.Department.Name)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Department.Id)
@@ -77,7 +77,7 @@
             @Html.DisplayNameFor(model => model.ClosureDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ClosureDate.Id)
+            @Html.DisplayFor(model => model.ClosureDate.FinalDate)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Comments)
@@ -103,34 +103,38 @@
             }
         </dd>
     </dl>
+    <div class="col-md-4">
+        
+    
+        @if (Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now)
+        {
+            <a class="far fa-thumbs-up btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="true">Up</a>
+            <text>|</text>
+            <a class="far fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="false">Down</a>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                The closure date has passed.
+            </div>
+        }
+        <br>
+        <form asp-action="Comment" asp-route-id="@Model.Id">
+            <input class="form-control" name="commenttext" placeholder="Comment" />
+            <input type="submit" value="Comment" class="btn btn-primary" />
+            <select name="incognito">
+                <option value="no">Public</option>
+                <option value="yes">Incognito Comment</option>
+            </select>
+        </form>
+
+        <br>
+        <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>  
+    </div>    
 </div>
 
-<div class="col-md-4">
-    <form asp-action="Comment" asp-route-id="@Model.Id">
-        <input class="form-control" name="commenttext" placeholder="Comment" />
-        <input type="submit" value="Comment" class="btn btn-primary" />
-        <select name="incognito">
-            <option value="no">Public</option>
-            <option value="yes">Incognito Comment</option>
-        </select>
-    </form>
-</div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-<div>
-    @if (Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now)
-    {
-        <a asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="true">Up</a>
-        <text>|</text>
-        <a asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="false">Down</a>
-    }
-    else
-    {
-        <div class="alert alert-danger">
-            The closure date has passed.
-        </div>
-    }
-</div>
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
