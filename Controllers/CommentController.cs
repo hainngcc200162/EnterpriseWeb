@@ -26,6 +26,7 @@ namespace EnterpriseWeb.Controllers
 {
     public class CommentController : Controller
     {
+        private string Layout1 = "_QACoordinator";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public CommentController(EnterpriseWebIdentityDbContext context)
@@ -34,10 +35,25 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: Comment
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
-            var enterpriseWebContext = _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser);
-            return View(await enterpriseWebContext.ToListAsync());
+            ViewBag.Layout = Layout1;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var comment = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser) select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                comment = comment.Where(s => s.Idea.Title.Contains(searchString));
+            }
+            int pageSize = 20;
+            return View(await PaginatedList<Comment>.CreateAsync(comment.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Comment/Details/5
@@ -87,6 +103,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Comment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = Layout1;
             if (id == null)
             {
                 return NotFound();
@@ -140,6 +157,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Comment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = Layout1;
             if (id == null)
             {
                 return NotFound();

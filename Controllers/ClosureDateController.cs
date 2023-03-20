@@ -13,6 +13,7 @@ namespace EnterpriseWeb.Controllers
     public class ClosureDateController : Controller
     {
         private string Layout = "_ViewAdmin";
+        private string Layout2 = "_QAManager";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public ClosureDateController(EnterpriseWebIdentityDbContext context)
@@ -24,6 +25,26 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var closuredate = from m in _context.ClosureDate select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                closuredate = closuredate.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<ClosureDate>.CreateAsync(closuredate.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+        public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout2;
             if (searchString != null)
             {
                 pageNumber = 1;

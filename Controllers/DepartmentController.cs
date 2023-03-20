@@ -12,6 +12,7 @@ namespace EnterpriseWeb.Controllers
     public class DepartmentController : Controller
     {
         private string Layout = "_ViewAdmin";
+        private string Layout2 = "_QAManager";
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public DepartmentController(EnterpriseWebIdentityDbContext context)
@@ -23,6 +24,28 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
+            // var enterpriseWebContext = _context.Department.Include(d => d.QACoordinator);
+            // return View(await enterpriseWebContext.ToListAsync());
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var department = from m in _context.Department select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                department = department.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Department>.CreateAsync(department.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+        public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout2;
             // var enterpriseWebContext = _context.Department.Include(d => d.QACoordinator);
             // return View(await enterpriseWebContext.ToListAsync());
             if (searchString != null)

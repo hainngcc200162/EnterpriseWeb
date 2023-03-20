@@ -13,14 +13,43 @@
             }
             </a>
         </li>
-        <li>
-            <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserAsync(User).Result.Name</a>
-        </li>
-        <li>
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><a class="nav-link scrollto">Logout</a></button>
-            </form>
-        </li>
+        <li class="dropdown"><a href="#"><span>@UserManager.GetUserAsync(User).Result.Name</span></a>
+            <ul>
+              <li><a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a></li>
+                @if (this.User.IsInRole("Admin") && this.User.IsInRole("QAManager") && this.User.IsInRole("QACoordinator")){
+                    <li><a asp-controller="Category" asp-action="Index">Admin Page</a></li>
+                    <li><a asp-controller="Category" asp-action="ViewCategoryQA">QACoordinator Page</a></li>
+                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
+                }else if(this.User.IsInRole("Admin") && this.User.IsInRole("QAManager")){
+                    <li><a asp-controller="Category" asp-action="Index">Admin Page</a></li>
+                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
+                }
+                else if(this.User.IsInRole("Admin") && this.User.IsInRole("QACoordinator")){
+                    <li><a asp-controller="Category" asp-action="Index">Admin Page</a></li>
+                    <li><a asp-controller="Category" asp-action="ViewCategoryQA">QACoordinator Page</a></li>
+                }
+                else if(this.User.IsInRole("QAManager") && this.User.IsInRole("QACoordinator")){
+                    <li><a asp-controller="Category" asp-action="ViewCategoryQA">QACoordinator Page</a></li>
+                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
+                }               
+                else if (this.User.IsInRole("Admin")){
+                    <li><a asp-controller="Category" asp-action="Index">Admin Page</a></li>
+                }
+                else if (this.User.IsInRole("QAManager")){
+                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
+                }
+                else if (this.User.IsInRole("QACoordinator")){
+                    <li><a asp-controller="Category" asp-action="ViewCategoryQA">QAManager Page</a></li>
+                }else {
+
+                }
+                <li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><a class="nav-link scrollto">Logout</a></button>
+                    </form>
+                </li>
+            </ul>
+          </li>
     }
     else
     {

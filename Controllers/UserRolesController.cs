@@ -15,6 +15,7 @@ namespace EnterpriseWeb.Controllers
     [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller
     {
+        private string Layout = "_ViewAdmin";
         private readonly UserManager<IdeaUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -23,8 +24,9 @@ namespace EnterpriseWeb.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
+            ViewBag.Layout = Layout;
             var users = await _userManager.Users.ToListAsync();
             var userRolesViewModel = new List<UserRolesViewModel>();
             foreach (IdeaUser user in users)
@@ -96,6 +98,74 @@ namespace EnterpriseWeb.Controllers
         private async Task<List<string>> GetUserRoles(IdeaUser user)
         {
             return new List<string>(await _userManager.GetRolesAsync(user));
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            ViewBag.Layout = Layout;
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(user);
+        }
+        public async Task<IActionResult> Edit(string id)
+        {
+            ViewBag.Layout = Layout;
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("UserId,Name,DOB,Address,Gmail")] IdeaUser users)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user != null)
+                {
+                    var result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "User not found");
+                }
+            }
+            return View(users);
         }
     }
 }

@@ -101,12 +101,31 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a id="manage" class="nav-link scrollto" asp-area="Identity" 
-                    asp-page="/Account/Manage/Index" title="Manage"><i class="nav-icon far fa-id-card"></i>Account</a>
+                    asp-page="/Account/Manage/Index" title="Manage"><i class="nav-icon 	far fa-user-circle"></i>Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link scrollto" asp-controller="Home" asp-action="Index"><i class="nav-icon fas fa-reply-all"></i>Home Page</a>
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+            <a asp-action = "" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Admin Home
+              </p>
+            </a>
+          </li>
+          @* <li class="nav-item">
+            <a asp-controller = "Category" asp-action = "ViewCategory" class="nav-link">
+              <i class="nav-icon fas fas fa-tags"></i>
+              <p>
+                Category
+              </p>
+            </a>
+          </li> *@
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a asp-controller = "Category" asp-action = "ViewCategory" class="nav-link">
               <i class="nav-icon fas fa-tags"></i>
               <p>
                 Category
@@ -199,6 +218,29 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>
+                Users
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a asp-controller="UserRoles" asp-action="index" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a asp-area="Identity" asp-page="/Account/Register" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @* <li class="nav-item">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
                 Charts
@@ -225,15 +267,15 @@
                 </a>
               </li>
             </ul>
-          </li>      
-          <li class="nav-item">
+          </li>       *@
+          @* <li class="nav-item">
             <a class="nav-link">
               <i class="nav-icon fas fa-folder-open"></i>
               <p>
                 Documentation
               </p>
             </a>
-          </li>
+          </li> *@
           <li class="nav-item" >
               <form id="logoutForm" class="nav-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button id="logout" type="submit" class="nav-link btn btn-item text-dark" style = "text-align: left;"><a><i class="nav-icon fas fa-sign-in-alt"></i> Logout</a>

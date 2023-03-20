@@ -54,10 +54,6 @@
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-
-      <!-- Messages Dropdown Menu -->
-      
-      <!-- Notifications Dropdown Menu -->
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -105,7 +101,7 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a id="manage" class="nav-link scrollto" asp-area="Identity" 
-                    asp-page="/Account/Manage/Index" title="Manage"><i class="nav-icon far fa-id-card"></i>Account</a>
+                    asp-page="/Account/Manage/Index" title="Manage"><i class="nav-icon 	far fa-user-circle"></i>Account</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link scrollto" asp-controller="Home" asp-action="Index"><i class="nav-icon fas fa-reply-all"></i>Home Page</a>
@@ -113,23 +109,54 @@
               </ul>
             </li>
             <li class="nav-item">
-            <a asp-action = "" class="nav-link">
-              <i class="nav-icon fas fa-home"></i>
-              <p>
-                QACoordinator Home
-              </p>
-            </a>
+                <a class="nav-link">
+                <i class="nav-icon fas fa-home"></i>
+                <p>
+                    QAManager Home
+                </p>
+                </a>
           </li>
           <li class="nav-item">
-            <a asp-controller="Category" asp-action="ViewCategoryQA" class="nav-link">
+            <a class="nav-link">
               <i class="nav-icon fas fa-tags"></i>
               <p>
                 Category
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a asp-controller="Category" asp-action="ViewQA" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a asp-controller="Category" asp-action="CreateQA" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="ClosureDate" asp-action = "ViewQA" class="nav-link">
+              <i class="nav-icon far fa-clock"></i>
+              <p>
+                ClosesureDate
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a asp-controller="Idea" asp-action="ViewIdea" class="nav-link">
+            <a asp-controller="Department" asp-action = "ViewQA" class="nav-link">
+              <i class="nav-icon fas fa-city"></i>
+              <p>
+                Department
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Idea" asp-action = "ViewQA" class="nav-link">
               <i class="nav-icon far fa-comments"></i>
               <p>
                 Idea
@@ -137,13 +164,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a asp-controller="Comment" asp-action="Index" class="nav-link">
-              <i class="nav-icon far fa-comment"></i>
+            <a asp-controller = "Idea" asp-action = "Chart" class="nav-link">
+              <i class="nav-icon fa fa-pie-chart"></i>
               <p>
-                Comment
+                Charts
               </p>
             </a>
-          </li>      
+          </li>
           <li class="nav-item" >
               <form id="logoutForm" class="nav-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button id="logout" type="submit" class="nav-link btn btn-item text-dark" style = "text-align: left;"><a><i class="nav-icon fas fa-sign-in-alt"></i> Logout</a>

@@ -14,6 +14,7 @@ namespace EnterpriseWeb.Controllers
     {
         private string Layout = "_ViewAdmin";
         private string Layout1 = "_QACoordinator";
+        private string Layout2 = "_QAManager";
 
         private readonly EnterpriseWebIdentityDbContext _context;
 
@@ -30,7 +31,7 @@ namespace EnterpriseWeb.Controllers
         }
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -51,6 +52,26 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Category select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Name.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+        public async Task<IActionResult> ViewCategoryQA(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout2;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -162,6 +183,80 @@ namespace EnterpriseWeb.Controllers
             }
             return View(category);
         }
+        public IActionResult CreateQA()
+        {
+            ViewBag.Layout = Layout2;
+            return View();
+        }
+
+        // POST: Category/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateQA([Bind("Id,Name,Description,Status")] Category category)
+        {
+            ViewBag.Layout = Layout2;
+            if (ModelState.IsValid)
+            {
+                _context.Add(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ViewCategory));
+            }
+            return View(category);
+        }
+
+        // GET: Category/Edit/5
+        public async Task<IActionResult> EditQA(int? id)
+        {
+            ViewBag.Layout = Layout2;
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        // POST: Category/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditQA(int id, [Bind("Id,Name,Description,Status")] Category category)
+        {
+            if (id != category.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(category);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CategoryExists(category.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(ViewCategory));
+            }
+            return View(category);
+        }
 
         // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -186,6 +281,34 @@ namespace EnterpriseWeb.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var category = await _context.Category.FindAsync(id);
+            _context.Category.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ViewCategory));
+        }
+        public async Task<IActionResult> DeleteQA(int? id)
+        {
+            ViewBag.Layout = Layout2;
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Category
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        // POST: Category/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmedQA(int id)
         {
             var category = await _context.Category.FindAsync(id);
             _context.Category.Remove(category);

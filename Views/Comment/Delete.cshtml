@@ -4,48 +4,76 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Edit Comment</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Comment</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CommentText)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CommentText)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SubmitDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SubmitDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Idea)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Idea.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.status)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="card-body">
+                <div class="form-group">
+                <label asp-for="IdeaId" class="control-label"></label>
+                <input asp-for="IdeaId" class="form-control" />
+                <span asp-validation-for="IdeaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubmitDate" class="control-label"></label>
+                <input asp-for="SubmitDate" class="form-control" />
+                <span asp-validation-for="SubmitDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommentText" class="control-label"></label>
+                <input asp-for="CommentText" class="form-control" />
+                <span asp-validation-for="CommentText" class="text-danger"></span>
+            </div>  
+            <div class="form-group">
+                <label asp-for="status" class="control-label"></label>
+                <input asp-for="status" class="form-control" />
+                <span asp-validation-for="status" class="text-danger"></span>
+            </div>    
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-12">
+           <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <input type="submit" value="Delete" class="btn btn-danger float-right" />
+                
+            </form>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+

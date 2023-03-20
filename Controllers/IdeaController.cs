@@ -28,6 +28,7 @@ namespace EnterpriseWeb.Controllers
     {
         private string Layout = "_ViewAdmin";
         private string Layout1 = "_QACoordinator";
+        private string Layout2 = "_QAManager";
         private readonly EnterpriseWebIdentityDbContext _context;
         private readonly UserManager<IdeaUser> _userManager;
         private NotificationSender _notificationSender;
@@ -45,6 +46,29 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Blog()
         {
             return View();
+        }
+        public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout2;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings)
+                                        .Include(i => i.IdeaUser).Include(i => i.IdeaCategories)
+                        select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Title.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
         {
@@ -219,7 +243,7 @@ namespace EnterpriseWeb.Controllers
                            .Include(i => i.IdeaUser)
                            .Include(i => i.Ratings)
                            .Include(i => i.Comments)
-                                       where e.Status == 0
+                                       where e.Status == 1
                                        select e;
 
     if (!String.IsNullOrEmpty(searchString))

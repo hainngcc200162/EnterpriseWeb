@@ -1,72 +1,16 @@
-@model PaginatedList<EnterpriseWeb.Models.Comment>
-
+@model  PaginatedList<EnterpriseWeb.Models.Category>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Create";
 }
-
-@* <h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CommentText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmitDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdeaUser.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idea.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody> *@
-@* @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubmitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdeaUser.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idea.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table> *@
-
-
- <div class="content-wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <p>
-                <a asp-action="Create">Create Comment</a>
+                <a asp-action="Create">Create Category</a>
             </p>
           </div>
         </div>
@@ -80,10 +24,10 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All Comments</h3>
+                <h3 class="card-title">All Category</h3>
                 <div class="card-tools">
                     <div class="input-group-append">
-                        <form asp-action="Index" method="get">
+                        <form asp-action="ViewCategoryQA" method="get">
                           <p>
                               <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
                               <button class="btn btn-navbar" type="submit" value="Search"><i class="fas fa-search"></i></button>
@@ -98,22 +42,22 @@
                 <table class="table table-hover text-nowrap">
                   <thead>
                     <tr>
-                      <th>Title</th>
-                      <th>Comment Owner</th>
-                      <th>SubmitDate</th>
-                      <th>CommentText</th>
+                      <th>Id</th>
+                      <th>Name</th>
                       <th>Status</th>
+                      <th>Description</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                          <td>@Html.DisplayFor(modelItem => item.Idea.Title)</td>
-                          <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
-                          <td>@Html.DisplayFor(modelItem => item.SubmitDate)</td>
-                          <td>@Html.DisplayFor(modelItem => item.CommentText)</td>
-                          <td>@Html.DisplayFor(modelItem => item.status)</td>
+                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                          <td>
+                            <div class="sparkbar" data-color="#00a65a" data-height="20">@Html.DisplayFor(modelItem => item.Description)</div>
+                          </td>
                           <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
