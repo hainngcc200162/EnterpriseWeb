@@ -37,8 +37,8 @@
   var totalComment = item.Comments?.Count() ?? 0;
 
 
-    <div id="blog" class="flex-container" style="padding:30px">
-      <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto">
+    <div id="blog" class="flex-container" style="padding:30px; border: 0.5px outset; width:70%; margin:auto; margin-bottom:20px; border-radius:20px; background: rgb(247 247 247)">
+      <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
         <div class="single-blog">
           <div>
             @if(@item.IdeaUser != null && @item.IdeaUser.ProfilePicture==null){
