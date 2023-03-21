@@ -13,13 +13,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using EnterpriseWeb.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using EnterpriseWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using EnterpriseWeb.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Areas.Identity.Services;
@@ -152,6 +153,7 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                await _userManager.AddToRoleAsync(user, Enums.Roles.Staff.ToString());
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -187,14 +189,12 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
-            
-
+            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Name");
             // If we got this far, something failed, redisplay form
             return Page();
         }
 
-        private  IdeaUser CreateUser()
+        private IdeaUser CreateUser()
         {
             try
             {
@@ -204,7 +204,7 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                 user.Address = Input.Address;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.DepartmentID = Input.Department;
-                user.Department= _context.Department.FirstOrDefault(d => d.Id==Input.Department);
+                user.Department = _context.Department.FirstOrDefault(d => d.Id == Input.Department);
 
                 using var image = System.Drawing.Image.FromFile("././wwwroot/img/avatardefault.png");
                 using var mStream = new MemoryStream();

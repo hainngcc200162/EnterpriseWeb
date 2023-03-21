@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+
 namespace EnterpriseWeb.Controllers
 {
     public class DepartmentController : Controller
@@ -19,7 +22,7 @@ namespace EnterpriseWeb.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Department
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
@@ -43,6 +46,8 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Department>.CreateAsync(department.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        [Authorize(Roles = "QAManager")]
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -66,7 +71,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<Department>.CreateAsync(department.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-
+        [Authorize(Roles = "Admin, QAManager")]
         // GET: Department/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -85,6 +90,7 @@ namespace EnterpriseWeb.Controllers
             return View(department);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Department/Create
         public IActionResult Create()
         {
@@ -107,7 +113,7 @@ namespace EnterpriseWeb.Controllers
             }
             return View(department);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Department/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -160,6 +166,7 @@ namespace EnterpriseWeb.Controllers
             return View(department);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Department/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -178,7 +185,6 @@ namespace EnterpriseWeb.Controllers
 
             return View(department);
         }
-
         // POST: Department/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

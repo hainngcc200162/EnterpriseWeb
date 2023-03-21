@@ -4,9 +4,12 @@ using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EnterpriseWeb.Controllers;
 
+[Authorize(Roles = "Admin, Staff, QAManager, QACoordinator")]
 public class HomeController : Controller
 {
     private readonly EnterpriseWebIdentityDbContext _context;

@@ -7,10 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+
 namespace EnterpriseWeb.Controllers
 {
+    [Authorize(Roles = "Staff")]
     public class RatingController : Controller
-    {
+    {   
+        
         private readonly EnterpriseWebIdentityDbContext _context;
 
         public RatingController(EnterpriseWebIdentityDbContext context)

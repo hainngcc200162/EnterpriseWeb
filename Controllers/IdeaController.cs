@@ -43,10 +43,7 @@ namespace EnterpriseWeb.Controllers
             _notificationSender = notificationSender;
             hostEnvironment = environment;
         }
-        public IActionResult Blog()
-        {
-            return View();
-        }
+        [Authorize(Roles = "QAManager")]
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -70,6 +67,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+        [Authorize(Roles = "Staff, Admin, QAManager")]
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout1;
@@ -93,6 +91,8 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        [Authorize(Roles = "Admin, QAManager")]
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout1;
@@ -113,7 +113,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
+        [Authorize(Roles = "Admin, QAManager")]
         //Download files
         [HttpPost]
         public IActionResult Download(string fileName, byte[] dataFile)
@@ -137,7 +137,7 @@ namespace EnterpriseWeb.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin, QAManager")]
         public IActionResult ExportIdeaList()
         {
             List<Idea> ideas = _context.Idea.ToList<Idea>();
@@ -173,6 +173,7 @@ namespace EnterpriseWeb.Controllers
             return File(stream, contentType, fileName);
         }
 
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Comment(int id, string commenttext, string incognito)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -229,6 +230,7 @@ namespace EnterpriseWeb.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         // GET: Idea
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
@@ -273,6 +275,7 @@ namespace EnterpriseWeb.Controllers
             }
             return View(await enterpriseWebContext.AsNoTracking().ToListAsync());
         }
+        [Authorize(Roles = "Admin, QACoordinator, QAManager, Staff")]
         public async Task<IActionResult> Filter(string currentFilter, string searchString, int? pageNumber)
         {
             if (searchString != null)
@@ -292,6 +295,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+        [Authorize(Roles = "Admin, QACoordinator, QAManager, Staff")]
         public async Task<IActionResult> FilterCategory(string currentFilter, string searchString, int? pageNumber)
         {
             if (searchString != null)
@@ -312,6 +316,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         // GET: Idea/Details/5
         public async Task<IActionResult> Details(int id)
         {
@@ -319,8 +324,6 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-
-
             ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Name");
 
             var idea = await _context.Idea
@@ -340,6 +343,7 @@ namespace EnterpriseWeb.Controllers
             return View(idea);
         }
 
+        [Authorize(Roles = "Staff")]
         // GET: Idea/Create
         public IActionResult Create()
         {
@@ -387,6 +391,7 @@ namespace EnterpriseWeb.Controllers
             return View(idea);
         }
 
+        [Authorize(Roles = "Staff")]
         // GET: Idea/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -466,6 +471,8 @@ namespace EnterpriseWeb.Controllers
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             return View(idea);
         }
+
+        [Authorize(Roles = "QAManager")]
         public async Task<IActionResult> EditQA(int? id)
         {
             ViewBag.Layout = Layout1;
@@ -541,6 +548,8 @@ namespace EnterpriseWeb.Controllers
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             return View(idea);
         }
+
+        [Authorize(Roles = "Staff")]
         // GET: Idea/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -561,7 +570,7 @@ namespace EnterpriseWeb.Controllers
 
             return View(idea);
         }
-
+        [Authorize(Roles = "Staff")]
         // POST: Idea/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -583,6 +592,7 @@ namespace EnterpriseWeb.Controllers
             return _context.Idea.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "Staff")]
         //Thumbsup and thumbsdown in index view
         public async Task<IActionResult> CreateRating(int id, bool isUp)
         {
@@ -673,7 +683,7 @@ namespace EnterpriseWeb.Controllers
         }
 
 
-
+        [Authorize(Roles = "Staff,Admin,QAManager")]
         //Thumbsup and thumbsdown in detail view
         public async Task<IActionResult> DetailRating(int id, bool isUp)
         {
@@ -761,6 +771,7 @@ namespace EnterpriseWeb.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
+        [Authorize(Roles = "Admin, QAManager")]
         public async Task ViewingIdea(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
@@ -784,6 +795,7 @@ namespace EnterpriseWeb.Controllers
 
         }
 
+        [Authorize(Roles = "QAManager")]
         public IActionResult Chart()
         {
             ViewBag.Layout = Layout;
@@ -830,6 +842,7 @@ namespace EnterpriseWeb.Controllers
 
             return View(data);
         }
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Record()
         {
             var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate);

@@ -9,7 +9,8 @@ using EnterpriseWeb.Areas.Identity.Data;
 using EnterpriseWeb.Models;
 
 namespace EnterpriseWeb.Controllers
-{
+{   
+    
     public class ViewingController : Controller
     {
         private readonly EnterpriseWebIdentityDbContext _context;
