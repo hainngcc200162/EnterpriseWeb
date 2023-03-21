@@ -7,6 +7,7 @@
   <form asp-action="Index" method="get">
       <div class="form-actions no-color">
           <p style="display:inline">
+              <a asp-action="Create" class="btn btn-secondary" style="margin-right:15px">New Idea</a>
               <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" style="width:500px"/>
               <input type="submit" value="Search" class="btn btn-default"> |
               <a asp-action="Index" class="btn btn-default">Back to Full List</a>

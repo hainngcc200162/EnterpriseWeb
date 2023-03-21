@@ -18,11 +18,15 @@ namespace EnterpriseWeb.Controllers
         private string Layout = "_ViewAdmin";
         private readonly UserManager<IdeaUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly EnterpriseWebIdentityDbContext _context;
 
-        public UserRolesController(UserManager<IdeaUser> userManager, RoleManager<IdentityRole> roleManager)
+
+        public UserRolesController(UserManager<IdeaUser> userManager, RoleManager<IdentityRole> roleManager, EnterpriseWebIdentityDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
+
         }
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
@@ -119,6 +123,28 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
+            var comments = await _context.Comment.Where(o => o.IdeaUser == user).ToListAsync();
+            var views = await _context.Viewing.Where(o => o.IdeaUser == user).ToListAsync();
+            var ratings = await _context.Rating.Where(o => o.IdeaUser == user).ToListAsync();
+            var ideas = await _context.Idea.Where(o => o.IdeaUser == user).ToListAsync();
+
+            foreach (var comment in comments)
+            {
+                _context.Comment.Remove(comment);
+            }
+            foreach (var view in views)
+            {
+                _context.Viewing.Remove(view);
+            }
+            foreach (var rating in ratings)
+            {
+                _context.Rating.Remove(rating);
+            }     
+            foreach (var idea in ideas)
+            {
+                _context.Idea.Remove(idea);
+            }                               
+            await _context.SaveChangesAsync();
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {

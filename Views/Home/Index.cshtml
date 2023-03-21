@@ -1,8 +1,8 @@
-﻿@{
+﻿@model IEnumerable<EnterpriseWeb.Models.Idea>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-  <!-- ======= hero Section ======= -->
   <section id="hero">
     <div class="hero-container">
       <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
@@ -54,3 +54,94 @@
       </div>
     </div>
   </section>
+
+<div class="col-sm-8" style="margin:auto; margin-top:20px; display:flex">
+    <form asp-action="Index" method="get">
+      <select name="SearchString" class="form-select" asp-items="ViewBag.DepartmentID" value="@ViewData["CurrentFilter"]" style="width:70%; display:unset"></select>
+      <input type="submit" value="Filter" class="btn btn-default">
+    </form>
+
+</div>
+
+@foreach (var item in Model){
+
+  var ratingUp = @item.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+  var ratingDown = @item.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
+  var totalComment = item.Comments?.Count() ?? 0;
+
+
+    <div id="blog" class="flex-container" style="padding:30px; border: 0.5px outset; width:70%; margin:auto; margin-top:20px; border-radius:20px; background: rgb(247 247 247)">
+      <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
+        <div class="single-blog">
+          <div>
+            @if(@item.IdeaUser != null && @item.IdeaUser.ProfilePicture==null){
+              <img class="avatar-default"
+              style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
+            }else if (@item.IdeaUser != null && @item.IdeaUser.ProfilePicture!=null){
+              <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)" 
+              style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
+            }
+            <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(modelItem => item.IdeaUser.Name)
+            <br>
+            <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(modelItem => item.Department.Name) &gt;</span>
+            
+            </h4>
+          </div>
+          <div class="blog-meta">
+            <span class="date-type">
+              <i class="fa fa-calendar"></i>Submission Date: @Html.DisplayFor(modelItem => item.SubmissionDate)
+              <br>
+              <i class='fas fa-calendar-times' style="color:rgba(255, 0, 0, 0.751)"></i>Closure Date: 
+              @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
+            </span>            
+          </div>
+          <div class="blog-text">
+            <h4>
+                Title:
+                <b>@Html.DisplayFor(modelItem => item.Title)</b>
+            </h4>
+            <p>
+                <b>Description: &ldquo;</b>
+                <i>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </i>   
+                <b>&rdquo; &middot;</b>           
+            </p>
+          </div>
+        
+            <a>
+              <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
+              <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
+              <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
+              <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
+            </a>
+            
+            <br><br>              
+
+            <div>
+              <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
+              @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a>  *@
+              <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
+              @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a>  *@
+              <a asp-controller="Idea" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+            </div>
+
+            <br>
+
+            <form asp-action="Comment" asp-route-id="@item.Id">
+              <div class="input-group" style="width:500px">              
+                <input class="form-control" name="commenttext" placeholder="Comment" />
+                <select name="incognito">
+                    <option value="no">Public</option>
+                    <option value="yes">Incognito Comment</option>
+                </select>                
+                <input type="submit" value="Comment" class="btn btn-dark" style="display:"/>
+              </div>                
+            </form>
+            
+        </div>
+      </div>
+    </div>
+}
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>

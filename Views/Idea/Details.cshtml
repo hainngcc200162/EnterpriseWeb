@@ -2,137 +2,113 @@
 
 @{
     ViewData["Title"] = "Details";
-    var totalViews = Model.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
-    var ratingUp = Model.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingUp));
-    var ratingDown = Model.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingDown));
-
 }
 
-<h1>Details</h1>
+@{
+  var ratingUp = Model.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+  var ratingDown = Model.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
+  var totalComment = Model.Comments?.Count() ?? 0;    
+}
 
-<div style="margin:auto; width:70%">
-    <h4>Idea</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SubmissionDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SubmissionDate)
-        </dd>
-        <dt class="col-sm-2">
-            View
-        </dt>
-        <dd class="col-sm-10">
-            @totalViews
-        </dd>
-        <dt class="col-sm-2">
-            Thumb up
-        </dt>
-        <dd class="col-sm-10">
-            @ratingUp
-        </dd>
-        <dt class="col-sm-2">
-            Thumb down
-        </dt>
-        <dd class="col-sm-10">
-            @ratingDown
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SupportingDocuments)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SupportingDocuments)
-            <form method="post" action="@Url.Action("Download", "Idea")">
-                <input type="hidden" name="fileName" value="@Model.SupportingDocuments" />
-                <input type="hidden" name="dataFile" value="@System.Convert.ToBase64String(Model.DataFile)"/>
-                <button type="submit">Download</button>
-            </form>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Department.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Department.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ClosureDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ClosureDate.FinalDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var item in Model.Comments)
-            {
-                <strong>
-                    @if (item.status == 1)
-                    {
-                        @item.IdeaUser?.Name
-                        ;
-                    }
-                    else
-                    {
-                        <text>Anonymous</text>
-                    }:
-                </strong>
 
-                @Html.DisplayFor(modelItem => item.CommentText)
-                ;
-                <br>
+
+    <div id="blog" class="flex-container" style="padding:30px; border: 0.5px outset; width:70%; margin:auto; margin-bottom:20px; border-radius:20px; background: rgb(247 247 247); margin-top: 20px;">
+      <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
+        <div class="single-blog">
+          <div>
+            @if(Model.IdeaUser != null && Model.IdeaUser.ProfilePicture==null){
+              <img class="avatar-default"
+              style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
+            }else if (Model.IdeaUser != null && Model.IdeaUser.ProfilePicture!=null){
+              <img src="data:image;base64,@System.Convert.ToBase64String(Model.IdeaUser.ProfilePicture)" 
+              style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;"/>
             }
-        </dd>
-    </dl>
-    <div class="col-md-4">
+            <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(model => model.IdeaUser.Name)
+            <br>
+            <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(model => model.Department.Name) &gt;</span>
+            
+            </h4>
+          </div>
+          <div class="blog-meta">
+            <span class="date-type">
+              <i class="fa fa-calendar"></i>Submission Date: @Html.DisplayFor(model => model.SubmissionDate)
+              <br>
+              <i class='fas fa-calendar-times' style="color:rgba(255, 0, 0, 0.751)"></i>Closure Date: 
+              @Html.DisplayFor(model => model.ClosureDate.FinalDate)
+            </span>            
+          </div>
+          <div class="blog-text">
+            <h4>
+                Title:
+                <b>@Html.DisplayFor(model => model.Title)</b>
+            </h4>
+            <p>
+                <b>Description: &ldquo;</b>
+                <i>
+                    @Html.DisplayFor(model => model.Description)
+                </i>   
+                <b>&rdquo; &middot;</b>           
+            </p>
+          </div>
         
-    
-        @if (Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now)
-        {
-            <a class="far fa-thumbs-up btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="true">Up</a>
-            <text>|</text>
-            <a class="far fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id" asp-route-isUp="false">Down</a>
-        }
-        else
-        {
-            <div class="alert alert-danger">
-                The closure date has passed.
-            </div>
-        }
-        <br>
-        <form asp-action="Comment" asp-route-id="@Model.Id">
-            <input class="form-control" name="commenttext" placeholder="Comment" />
-            <input type="submit" value="Comment" class="btn btn-primary" />
-            <select name="incognito">
-                <option value="no">Public</option>
-                <option value="yes">Incognito Comment</option>
-            </select>
-        </form>
+            <a>
+              <i class="far fa-eye"></i> View: @Html.DisplayFor(model => model.Viewings.Count)
+              <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
+              <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
+              <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
+            </a>
+            
+            <br><br> 
+            <div>
+                <dl class="row">                 
+                        @foreach (var item in Model.Comments)
+                        {
+                            <dd class="col-sm-10">
+                            <strong>
+                                @if (item.status == 1)
+                                {
+                                    @Html.DisplayFor(modelItem => item.IdeaUser.Name)
+                                }
+                                else
+                                {
+                                    <text>Anonymous</text>
+                                }:
+                            </strong>
 
-        <br>
-        <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>  
-    </div>    
-</div>
+                            @Html.DisplayFor(modelItem => item.CommentText)
+                            <br>
+                            </dd>
+                        }
+                                                
+                </dl>              
+            </div>
+             
+
+            <div>
+              <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="Model.Id" asp-route-isUp="true"> Thumb Up</a> 
+              @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="Model.Id" asp-route-isUp="true"> Thumb Up</a>  *@
+              <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="Model.Id" asp-route-isUp="false"> Thumb Down</a> 
+              @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="Model.Id" asp-route-isUp="false"> Thumb Down</a>  *@
+            </div>
+
+            <br>
+
+            <form asp-action="Comment" asp-route-id="@Model.Id">
+              <div class="input-group" style="width:500px">              
+                <input class="form-control" name="commenttext" placeholder="Comment" />
+                <select name="incognito">
+                    <option value="no">Public</option>
+                    <option value="yes">Incognito Comment</option>
+                </select>                
+                <input type="submit" value="Comment" class="btn btn-dark" style="display:"/>
+              </div>                
+            </form>
+            
+        </div>
+      </div>
+    </div>
+
+
 
 
 

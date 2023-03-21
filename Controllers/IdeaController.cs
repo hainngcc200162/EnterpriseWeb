@@ -232,7 +232,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "";
+            ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "mostView";
             ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostRating";
             ViewData["Department"] = sortOrder == "mostView" ? "mostRating" : "department";
             ViewData["CurrentFilter"] = searchString;
@@ -326,9 +326,9 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
-                .Include(i => i.Comments)
                 .Include(i => i.Viewings)
                 .Include(i => i.Ratings)
+                .Include(i => i.Comments)
                 .ThenInclude(i => i.IdeaUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
@@ -343,7 +343,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id");
+            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Name");
             return View();
         }
 
