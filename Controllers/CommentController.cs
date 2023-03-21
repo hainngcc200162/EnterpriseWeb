@@ -22,6 +22,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.IO.Compression;
 
+
 namespace EnterpriseWeb.Controllers
 {
     public class CommentController : Controller
@@ -34,6 +35,7 @@ namespace EnterpriseWeb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "QACoordinator")]
         // GET: Comment
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
@@ -56,6 +58,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<Comment>.CreateAsync(comment.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
+        [Authorize(Roles = "QACoordinator")]
         // GET: Comment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -76,6 +79,7 @@ namespace EnterpriseWeb.Controllers
             return View(comment);
         }
 
+        [Authorize(Roles = "Staff")]
         // GET: Comment/Create
         public IActionResult Create()
         {
@@ -99,7 +103,7 @@ namespace EnterpriseWeb.Controllers
             ViewData["IdeaId"] = new SelectList(_context.Set<Idea>(), "Id", "Id", comment.IdeaId);
             return View(comment);
         }
-
+        [Authorize(Roles = "QACoordinator, Staff")]
         // GET: Comment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -154,6 +158,7 @@ namespace EnterpriseWeb.Controllers
             return View(comment);
         }
 
+        [Authorize(Roles = "QACoordinator, Staff")]
         // GET: Comment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -190,7 +195,7 @@ namespace EnterpriseWeb.Controllers
             return _context.Comment.Any(e => e.Id == id);
         }
 
-
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Commented()
         {
             var enterpriseWebContext = _context.Comment.Include(c => c.Idea)
@@ -204,7 +209,7 @@ namespace EnterpriseWeb.Controllers
                     Problem("Entity set 'EnterpriseWebContext'  is null.");
 
         }
-
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CommentedDetail(int id)
         {
             var enterpriseWebContext = _context.Comment.Where(e => e.Idea.Id == id).Include(b => b.IdeaUser);
