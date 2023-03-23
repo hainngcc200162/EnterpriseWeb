@@ -48,7 +48,6 @@
                       <th>AcademicYear</th>
                       <th>ClousureDate</th>
                       <th>FinalDate</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -58,11 +57,7 @@
                           <td>@Html.DisplayFor(modelItem => item.Name)</td>
                           <td>@Html.DisplayFor(modelItem => item.AcademicYear)</td>
                           <td>@Html.DisplayFor(modelItem => item.ClousureDate)</td>
-                          <td>@Html.DisplayFor(modelItem => item.FinalDate)</td>
-                          <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
-                          </td>         
+                          <td>@Html.DisplayFor(modelItem => item.FinalDate)</td>        
                         </tr>
                       }
                   </tbody>

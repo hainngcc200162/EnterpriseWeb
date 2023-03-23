@@ -43,7 +43,8 @@ namespace EnterpriseWeb.Controllers
             _notificationSender = notificationSender;
             hostEnvironment = environment;
         }
-        [Authorize(Roles = "QACoordinator")]
+        [Authorize(Roles = "QAManager")]
+        // ViewQA in Idea Controller is used by QA Manager to show Idea
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -68,6 +69,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         [Authorize(Roles = "Admin, QAManager, QACoordinator")]
+        // ViewIdea is used to accept or reject the idea of users, it is the page of QA Coordinator
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout1;
@@ -93,9 +95,10 @@ namespace EnterpriseWeb.Controllers
         }
 
         [Authorize(Roles = "Admin, QAManager")]
+        // ViewCategory is used to display category in Admin Page
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
-            ViewBag.Layout = Layout1;
+            ViewBag.Layout = Layout;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -343,7 +346,7 @@ namespace EnterpriseWeb.Controllers
             return View(idea);
         }
 
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, QACoordinator")]
         // GET: Idea/Create
         public IActionResult Create()
         {
@@ -393,6 +396,7 @@ namespace EnterpriseWeb.Controllers
 
         [Authorize(Roles = "Staff, QACoordinator")]
         // GET: Idea/Edit/5
+        // Edit is used by Staff
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -473,6 +477,7 @@ namespace EnterpriseWeb.Controllers
         }
 
         [Authorize(Roles = "QACoordinator")]
+        // EditQA is used by QA coordinator
         public async Task<IActionResult> EditQA(int? id)
         {
             ViewBag.Layout = Layout1;
@@ -495,6 +500,7 @@ namespace EnterpriseWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditQA(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
         {
+            ViewBag.Layout = Layout1;
             if (id != idea.Id)
             {
                 return NotFound();
@@ -542,15 +548,16 @@ namespace EnterpriseWeb.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ViewIdea));
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             return View(idea);
         }
 
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff , QACoordinator")]
         // GET: Idea/Delete/5
+        // it is used by staff
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -570,7 +577,7 @@ namespace EnterpriseWeb.Controllers
 
             return View(idea);
         }
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, QACoordinator")]
         // POST: Idea/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -585,6 +592,47 @@ namespace EnterpriseWeb.Controllers
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Staff , QACoordinator")]
+        // GET: Idea/Delete/5
+        // it is used by staff
+        public async Task<IActionResult> DeleteQA(int? id)
+        {
+            ViewBag.Layout = Layout1;
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var idea = await _context.Idea
+                .Include(i => i.ClosureDate)
+                .Include(i => i.Department)
+                // .Include(i => i.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (idea == null)
+            {
+                return NotFound();
+            }
+
+            return View(idea);
+        }
+        [Authorize(Roles = "Staff, QACoordinator")]
+        // POST: Idea/Delete/5
+        [HttpPost, ActionName("DeleteQA")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmedQA(int id)
+        {
+            ViewBag.Layout = Layout1;
+            var idea = await _context.Idea.FindAsync(id);
+            var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
+            foreach (var ideacategory in ideacategories)
+            {
+                _context.IdeaCategory.Remove(ideacategory);
+            }
+            _context.Idea.Remove(idea);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ViewIdea));
         }
 
         private bool IdeaExists(int id)

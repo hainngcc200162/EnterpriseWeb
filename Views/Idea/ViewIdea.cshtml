@@ -1,16 +1,15 @@
 @model PaginatedList<EnterpriseWeb.Models.Idea>
 <div class="content-wrapper">
-    <h1>Index</h1>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <p>
+            @* <p>
                 <a asp-action="Create" class="btn btn-primary">Create New</a>
                 <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
                 <a asp-action="Chart" class="btn btn-warning">Chart</a>
-            </p>
+            </p> *@
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -50,7 +49,6 @@
                       <th>SubmissionDate</th>
                       <th>SupportingDocuments</th>
                       <th>ClosureDate</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -82,10 +80,11 @@
                           <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)</td>
                           @* <td>@Html.DisplayFor(modelItem => item.Department.Name)</td> *@
                           <td>@Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)</td>
-                          <td>
+                           <td>
                             <a asp-action="EditQA" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
+                            <a asp-action="DeleteQA" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
                           </td>
+                          @*
                           <td>
                             @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
                             {
@@ -99,7 +98,7 @@
                                     The closure date has passed.
                                 </div>
                             }
-                        </td>         
+                        </td>          *@
                         </tr>
                       }
                   </tbody>

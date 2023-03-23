@@ -48,6 +48,7 @@ namespace EnterpriseWeb.Controllers
         }
 
         [Authorize(Roles = "QAManager")]
+        //ViewQA in this is sued by QA Manager 
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;

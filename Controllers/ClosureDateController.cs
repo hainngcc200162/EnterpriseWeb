@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EnterpriseWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class ClosureDateController : Controller
     {
         private string Layout = "_ViewAdmin";
@@ -25,6 +24,8 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: ClosureDate
+        // It is used by Admin Page
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
@@ -45,6 +46,9 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<ClosureDate>.CreateAsync(closuredate.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        [Authorize(Roles = "QAManager")]
+        // ViewQA in ClosureDate is used by QA Manager
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -67,6 +71,7 @@ namespace EnterpriseWeb.Controllers
         }
 
         // GET: ClosureDate/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -84,6 +89,7 @@ namespace EnterpriseWeb.Controllers
             return View(closureDate);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ClosureDate/Create
         public IActionResult Create()
         {
@@ -106,7 +112,7 @@ namespace EnterpriseWeb.Controllers
             }
             return View(closureDate);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: ClosureDate/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -159,6 +165,7 @@ namespace EnterpriseWeb.Controllers
             return View(closureDate);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ClosureDate/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

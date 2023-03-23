@@ -35,11 +35,11 @@
                 else if (this.User.IsInRole("Admin")){
                     <li><a asp-controller="Category" asp-action="Index">Admin Page</a></li>
                 }
-                else if (this.User.IsInRole("QAManager")){
-                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
-                }
                 else if (this.User.IsInRole("QACoordinator")){
                     <li><a asp-controller="Category" asp-action="ViewCategoryQA">QACoordinator Page</a></li>
+                }
+                else if (this.User.IsInRole("QAManager")){
+                    <li><a asp-controller="Category" asp-action="ViewQA">QAManager Page</a></li>
                 }else {
 
                 }

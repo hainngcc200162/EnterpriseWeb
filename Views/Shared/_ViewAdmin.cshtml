@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 
-  <link rel="shortcut icon" type="image/x-icon" href="~/img/logo.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="~/img/AdminLTELogo.png" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -48,9 +48,6 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a asp-controller="Category" asp-action = "Index" class="nav-link">Home</a>
-      </li>
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -71,9 +68,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a asp-controller = "Category" asp-action="ViewCategory" class="brand-link">
       <img src="~/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">InnovateUni</span>
     </a>
 
     <!-- Sidebar -->
@@ -129,23 +126,8 @@
               <i class="nav-icon fas fa-tags"></i>
               <p>
                 Category
-                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-controller="Category" asp-action="ViewCategory" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-controller="Category" asp-action="Create" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Create</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
@@ -194,27 +176,12 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a asp-controller="Idea" asp-action="ViewCategory"  class="nav-link">
               <i class="nav-icon far fa-comments"></i>
               <p>
                 Idea
-                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-controller="Idea" asp-action="ViewIdea" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-controller="Idea" asp-action="Create" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Create</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
@@ -291,11 +258,9 @@
 
  @RenderBody()
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
+  <footer class="main-footer" style = "text-align:center;">
+    <strong>Copyright &copy; 2023 InnovateUni</strong>
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
     </div>
   </footer>
 

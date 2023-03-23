@@ -32,7 +32,9 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout;
             return View(await _context.Category.ToListAsync());
         }
+
         [Authorize(Roles = "QAManager, QACoordinator")]
+        // ViewQA is Index of QA Manager 
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -55,6 +57,7 @@ namespace EnterpriseWeb.Controllers
         }
 
         [Authorize(Roles = "Admin, QAManager, QACoordinator")]
+        // ViewCategory is The Index of Admin Page
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
@@ -77,9 +80,10 @@ namespace EnterpriseWeb.Controllers
         }
 
         [Authorize(Roles = "QAManager, QACoordinator")]
+        // ViewCategoryQA is the index of QACoordinator
         public async Task<IActionResult> ViewCategoryQA(string currentFilter, string searchString, int? pageNumber)
         {
-            ViewBag.Layout = Layout2;
+            ViewBag.Layout = Layout1;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -119,9 +123,10 @@ namespace EnterpriseWeb.Controllers
 
         [Authorize(Roles = "QAManager")]
         // GET: Category/Create
+        // Create is in QA Manager
         public IActionResult Create()
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             return View();
         }
 
@@ -132,21 +137,22 @@ namespace EnterpriseWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Status")] Category category)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             if (ModelState.IsValid)
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ViewCategory));
+                return RedirectToAction(nameof(ViewQA));
             }
             return View(category);
         }
 
         [Authorize(Roles = "QAManager")]
         // GET: Category/Edit/5
+        // Edit is in QA Manager
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             if (id == null)
             {
                 return NotFound();
@@ -189,16 +195,17 @@ namespace EnterpriseWeb.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(ViewCategory));
+                return RedirectToAction(nameof(ViewQA));
             }
             return View(category);
         }
 
         [Authorize(Roles = "QAManager")]
         // GET: Category/Delete/5
+        //Delete is the page of QA Manager
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             if (id == null)
             {
                 return NotFound();
@@ -222,7 +229,7 @@ namespace EnterpriseWeb.Controllers
             var category = await _context.Category.FindAsync(id);
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(ViewCategory));
+            return RedirectToAction(nameof(ViewQA));
         }
         private bool CategoryExists(int id)
         {
