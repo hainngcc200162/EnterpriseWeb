@@ -63,7 +63,8 @@
       </a>
 
       <br><br>
-      <div>
+      <b>Comment:</b>
+      <div style="border-radius: 5px 20px 5px; border: 2px outset; padding:20px; overflow:auto; height:250px">
         <dl id="comments-list" class="row comment-list" style="margin-bottom: 0rem;">
           @for (var i = 0; i < Math.Min(Model.Comments.Count(), 5); i++)
           {
@@ -109,11 +110,10 @@
         </dl>
         @if (totalComment > 5)
         {
-          <button id="show-more" class="show-more">Show more</button>
+          <button id="show-more" class="btn btn-light" style="background: #f0f0f0;">Show more</button>
         }
       </div>
-
-
+      <br>
       <div>
         <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="DetailRating"
           asp-route-id="@Model.Id" asp-route-isUp="true"> Thumb Up</a>
@@ -136,6 +136,8 @@
           </select>
           <input type="submit" value="Comment" class="btn btn-dark" style="display:" />
         </div>
+        <br>
+        <a asp-action="Index" class="btn btn-secondary">Back to Full List</a>
       </form>
 
     </div>

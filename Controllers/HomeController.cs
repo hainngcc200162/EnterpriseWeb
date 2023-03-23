@@ -84,4 +84,24 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    [Authorize(Roles = "Admin")]
+    public IActionResult AdminHomePage()
+    {
+        ViewBag.Layout = "_ViewAdmin";
+        return View();
+    }
+
+    [Authorize(Roles = "QAManager")]
+    public IActionResult QAManagerHomePage()
+    {
+        ViewBag.Layout = "_QAManager";
+        return View();
+    }
+    [Authorize(Roles = "QACoordinator")]
+    public IActionResult QACoordinatorHomePage()
+    {
+        ViewBag.Layout = "_QACoordinator";
+        return View();
+    }    
 }
