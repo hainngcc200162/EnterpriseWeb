@@ -43,7 +43,7 @@ namespace EnterpriseWeb.Controllers
             _notificationSender = notificationSender;
             hostEnvironment = environment;
         }
-        [Authorize(Roles = "QAManager")]
+        [Authorize(Roles = "QACoordinator")]
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;

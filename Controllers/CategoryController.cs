@@ -32,7 +32,7 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout;
             return View(await _context.Category.ToListAsync());
         }
-        [Authorize(Roles = "QAManager")]
+        [Authorize(Roles = "QAManager, QACoordinator")]
         public async Task<IActionResult> ViewQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
@@ -54,7 +54,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, QAManager, QACoordinator")]
         public async Task<IActionResult> ViewCategory(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout;
@@ -76,7 +76,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        [Authorize(Roles = "QAManager")]
+        [Authorize(Roles = "QAManager, QACoordinator")]
         public async Task<IActionResult> ViewCategoryQA(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout2;
