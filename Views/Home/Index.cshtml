@@ -119,16 +119,16 @@
             <br><br>              
 
             <div>
-              <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
+              <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-controller="Idea" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a> 
               @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true"> Thumb Up</a>  *@
-              <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
+              <a class="far fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-controller="Idea" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a> 
               @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false"> Thumb Down</a>  *@
-              <a asp-controller="Idea" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+              <a asp-controller="Idea" asp-action="Details" asp-controller="Idea" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
             </div>
 
             <br>
 
-            <form asp-action="Comment" asp-route-id="@item.Id">
+            <form asp-controller="Idea" asp-action="Comment" asp-route-id="@item.Id">
               <div class="input-group" style="width:500px">              
                 <input class="form-control" name="commenttext" placeholder="Comment" />
                 <select name="incognito">

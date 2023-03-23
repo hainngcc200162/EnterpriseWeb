@@ -67,7 +67,7 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        [Authorize(Roles = "Staff, Admin, QAManager")]
+        [Authorize(Roles = "Admin, QAManager, QACoordinator")]
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.Layout = Layout1;
@@ -248,13 +248,12 @@ namespace EnterpriseWeb.Controllers
                                        where e.Status == 1
                                        select e;
 
-    if (!String.IsNullOrEmpty(searchString))
-    {
-        enterpriseWebContext = enterpriseWebContext.Where(e => e.Title.Contains(searchString)
-                                || e.Description.Contains(searchString)
-                                || e.Department.Name.Contains(searchString));
-
-    }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                enterpriseWebContext = enterpriseWebContext.Where(e => e.Title.Contains(searchString)
+                                        || e.Description.Contains(searchString)
+                                        || e.Department.Name.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -269,7 +268,7 @@ namespace EnterpriseWeb.Controllers
                     break;
                 case "department":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Department.Name);
-                    break;   
+                    break;
                 default:
                     break;
             }
@@ -316,7 +315,7 @@ namespace EnterpriseWeb.Controllers
             return View(await PaginatedList<IdeaCategory>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        [Authorize(Roles = "Admin, Staff")]
+        [Authorize(Roles = "Admin, Staff, QACoordinator")]
         // GET: Idea/Details/5
         public async Task<IActionResult> Details(int id)
         {
@@ -329,6 +328,7 @@ namespace EnterpriseWeb.Controllers
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
+                .Include(i => i.IdeaUser)
                 .Include(i => i.Viewings)
                 .Include(i => i.Ratings)
                 .Include(i => i.Comments)
@@ -391,7 +391,7 @@ namespace EnterpriseWeb.Controllers
             return View(idea);
         }
 
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, QACoordinator")]
         // GET: Idea/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -472,7 +472,7 @@ namespace EnterpriseWeb.Controllers
             return View(idea);
         }
 
-        [Authorize(Roles = "QAManager")]
+        [Authorize(Roles = "QACoordinator")]
         public async Task<IActionResult> EditQA(int? id)
         {
             ViewBag.Layout = Layout1;
@@ -594,7 +594,7 @@ namespace EnterpriseWeb.Controllers
 
         [Authorize(Roles = "Staff")]
         //Thumbsup and thumbsdown in index view
-        public async Task<IActionResult> CreateRating(int id, bool isUp)
+        public async Task<IActionResult> CreateRating(int id, int isUp)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
@@ -606,11 +606,11 @@ namespace EnterpriseWeb.Controllers
             //get email of author idea
             var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
 
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
+            var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
 
             if (rating == null)
             {
-                if (isUp)
+                if (isUp==0)
                 {
                     rating = new Rating
                     {
@@ -649,7 +649,7 @@ namespace EnterpriseWeb.Controllers
             }
             else
             {
-                if (isUp)
+                if (isUp==0)
                 {
                     if (rating.RatingUp == 1)
                     {
@@ -679,7 +679,15 @@ namespace EnterpriseWeb.Controllers
             }
             await ViewingIdea(id);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var ideaRatings = _context.Idea
+                            .Include(i => i.Ratings)
+                            .Where(i => i.Id == id)
+                            .Select(i => new
+                            {
+                                upvotes = i.Ratings.Sum(r => r.RatingUp),
+                                downvotes = i.Ratings.Sum(r => r.RatingDown)
+                            });
+            return Json(ideaRatings);
         }
 
 
@@ -697,7 +705,7 @@ namespace EnterpriseWeb.Controllers
             //get email of author idea
             var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
 
-            var rating = await _context.Rating.SingleOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
+            var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
                 if (isUp)
@@ -778,7 +786,7 @@ namespace EnterpriseWeb.Controllers
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
             var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
 
-            var viewing = await _context.Viewing.SingleOrDefaultAsync(r => r.IdeaId == id && r.UserId.Equals(userId));
+            var viewing = await _context.Viewing.FirstOrDefaultAsync(r => r.IdeaId == id && r.UserId.Equals(userId));
             if (viewing == null)
             {
                 viewing = new Viewing
