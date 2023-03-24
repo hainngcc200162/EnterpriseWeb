@@ -45,7 +45,7 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.ClosureDate)
                                 </th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,7 +56,8 @@
                                 var ratingDown = item.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingDown));
                                 <tr>
                                     <td>
-                                        <a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Title)</a>
+                                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem =>
+                                        item.Title)</a>
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Description)
@@ -80,29 +81,22 @@
                                         @ratingDown
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
+                                        @Html.DisplayFor(modelItem => item.ClosureDate.ClousureDate)
                                     </td>
-                                    @* <td>
-                                    @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
-                                    {
-                                    <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
-                                    <text>|</text>
-                                    <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
-                                    }
-                                    else
-                                    {
-                                    <div class="alert alert-danger">
-                                    The closure date has passed.
-                                    </div>
-                                    }
-                                    </td> *@
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark"><i
+                                                class="fas fa-eye"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i
+                                                class="fas fa-trash"></i></a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                <a href ="/Identity/Account/Manage" type="button" class="btn btn-secondary" >Back to List</a>
+                <a href="/Identity/Account/Manage" type="button" class="btn btn-secondary">Back to List</a>
             </div>
         </div>
     </div>
 </section>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>

@@ -227,6 +227,11 @@ namespace EnterpriseWeb.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Category.FindAsync(id);
+            var ideacategories = await _context.IdeaCategory.Where(o => o.Category == category).ToListAsync();
+            foreach (var ideacategory in ideacategories)
+            {
+                _context.IdeaCategory.Remove(ideacategory);
+            }
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(ViewQA));

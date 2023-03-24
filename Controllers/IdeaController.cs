@@ -384,7 +384,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserID,SupportingDocuments,ClosureDateID")] Idea idea, IFormFile myfile)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserId,SupportingDocuments,ClosureDateID")] Idea idea, IFormFile myfile)
         {
             if (ModelState.IsValid)
             {
@@ -406,7 +406,6 @@ namespace EnterpriseWeb.Controllers
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 idea.Department = department;
-                idea.Department = user.Department;
                 idea.DepartmentID = user.DepartmentID;
                 idea.IdeaUser = user;
                 idea.Status = 0;
@@ -464,7 +463,7 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
         {
             if (id != idea.Id)
             {
@@ -488,8 +487,6 @@ namespace EnterpriseWeb.Controllers
                         }
                         idea.SupportingDocuments = filename;
                     }
-                    idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
 
@@ -542,7 +539,7 @@ namespace EnterpriseWeb.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditQA(int id, [Bind("Id,Title,Description,UserID,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
+        public async Task<IActionResult> EditQA(int id, [Bind("Id,Title,Description,Status,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
         {
             ViewBag.Layout = Layout1;
             if (id != idea.Id)
@@ -567,8 +564,6 @@ namespace EnterpriseWeb.Controllers
                         }
                         idea.SupportingDocuments = filename;
                     }
-                    idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    idea.SubmissionDate = DateTime.Now;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
 
@@ -898,7 +893,7 @@ namespace EnterpriseWeb.Controllers
         [Authorize(Roles = "QAManager")]
         public IActionResult Chart()
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             var data = _context.Department
             .Select(d => new
             {
