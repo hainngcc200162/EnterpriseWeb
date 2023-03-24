@@ -422,9 +422,7 @@ namespace EnterpriseWeb.Controllers
                 foreach (var coor in coorlist)
                 {
                     if (await _userManager.IsInRoleAsync(coor, "QACoordinator"))
-                    {
-                        var hee = user.Department.Name;
-                        
+                    {                     
                         var email = await _userManager.GetEmailAsync(coor);
                         await _notificationSender.SendEmailAsync(
                             email,
