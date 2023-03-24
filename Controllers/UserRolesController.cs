@@ -142,6 +142,11 @@ namespace EnterpriseWeb.Controllers
             }     
             foreach (var idea in ideas)
             {
+                var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
+                foreach (var ideacategory in ideacategories)
+                {
+                    _context.IdeaCategory.Remove(ideacategory);
+                }
                 _context.Idea.Remove(idea);
             }                               
             await _context.SaveChangesAsync();

@@ -390,6 +390,7 @@ namespace EnterpriseWeb.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+                var department = await _context.Department.FindAsync(user.DepartmentID);
                 //Getting FileName
                 var fileName = Path.GetFileName(myfile.FileName);
                 //Getting file Extension
@@ -404,6 +405,7 @@ namespace EnterpriseWeb.Controllers
                 idea.SupportingDocuments = fileName;
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
+                idea.Department = department;
                 idea.Department = user.Department;
                 idea.DepartmentID = user.DepartmentID;
                 idea.IdeaUser = user;
@@ -411,6 +413,25 @@ namespace EnterpriseWeb.Controllers
                 _context.Add(idea);
 
                 await _context.SaveChangesAsync();
+                //Send email to QAcoor
+                var url = Url.Action("EditQA", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
+                //get email of author idea
+                var coorlist = _userManager.Users
+                             .Where(u => u.DepartmentID == idea.DepartmentID)
+                             .ToList();
+                foreach (var coor in coorlist)
+                {
+                    if (await _userManager.IsInRoleAsync(coor, "QACoordinator"))
+                    {
+                        var hee = user.Department.Name;
+                        
+                        var email = await _userManager.GetEmailAsync(coor);
+                        await _notificationSender.SendEmailAsync(
+                            email,
+                            "Idea Notification",
+                            $"<strong>{user.Name}</strong> posted a <a href='{url}'> new idea </a> at {idea.SubmissionDate} in the {idea.Department.Name}");
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
