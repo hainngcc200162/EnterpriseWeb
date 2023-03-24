@@ -68,6 +68,31 @@ namespace EnterpriseWeb.Controllers
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ViewIdeaAdmin(string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewBag.Layout = Layout;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
+                                        .Include(i => i.Department).Include(i => i.Viewings)
+                                        .Include(i => i.IdeaUser).Include(i => i.IdeaCategories)
+                        select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Title.Contains(searchString));
+            }
+            int pageSize = 5;
+            return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
         [Authorize(Roles = "Admin, QAManager, QACoordinator")]
         // ViewIdea is used to accept or reject the idea of users, it is the page of QA Coordinator
         public async Task<IActionResult> ViewIdea(string currentFilter, string searchString, int? pageNumber)
