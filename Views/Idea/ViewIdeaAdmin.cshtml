@@ -58,7 +58,12 @@
                         <tr>                          
                           <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
                           <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                          <td>
+                           
+                              <textarea>@Html.DisplayFor(modelItem => item.Description)</textarea>
+                           
+                          </td>
+                            
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
                           <td>
                             @totalViews
