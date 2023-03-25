@@ -55,7 +55,7 @@
                     @foreach (var item in Model) {
                          var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
                         <tr>                          
-                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Title)</td>
                           <td>@Html.DisplayFor(modelItem => item.Description)</td>
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>

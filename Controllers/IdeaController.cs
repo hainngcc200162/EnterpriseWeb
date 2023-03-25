@@ -168,17 +168,24 @@ namespace EnterpriseWeb.Controllers
         [Authorize(Roles = "Admin, QAManager")]
         public IActionResult ExportIdeaList()
         {
-            List<Idea> ideas = _context.Idea.ToList<Idea>();
+            List<Idea> ideas = _context.Idea.Include(i => i.Department)
+                                            .Include(i => i.ClosureDate)
+                                            .Include(i => i.Ratings)
+                                            .Include(i => i.Viewings)
+                                            .ToList<Idea>();
             var stream = new MemoryStream();
             using (var xlPackage = new ExcelPackage(stream))
             {
                 var worksheet = xlPackage.Workbook.Worksheets.Add("Ideas");
-                worksheet.Cells["A1"].Value = "List Idea";
+                worksheet.Cells["E1"].Value = "List Idea";
                 worksheet.Cells["A3"].Value = "Title";
                 worksheet.Cells["B3"].Value = "Description";
-                worksheet.Cells["C3"].Value = "Submission Date";
-                worksheet.Cells["D3"].Value = "Department";
-                worksheet.Cells["E3"].Value = "ClosureDate";
+                worksheet.Cells["C3"].Value = "Rating Up";
+                worksheet.Cells["D3"].Value = "Rating Down";
+                worksheet.Cells["E3"].Value = "View";
+                worksheet.Cells["F3"].Value = "Submission Date";
+                worksheet.Cells["G3"].Value = "Department";
+                worksheet.Cells["H3"].Value = "ClosureDate";
 
 
                 int row = 4;
@@ -186,9 +193,12 @@ namespace EnterpriseWeb.Controllers
                 {
                     worksheet.Cells[row, 1].Value = idea.Title;
                     worksheet.Cells[row, 2].Value = idea.Description;
-                    worksheet.Cells[row, 3].Value = idea.SubmissionDate;
-                    worksheet.Cells[row, 4].Value = idea.Department;
-                    worksheet.Cells[row, 5].Value = idea.ClosureDate;
+                    worksheet.Cells[row, 3].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+                    worksheet.Cells[row, 4].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingDown));
+                    worksheet.Cells[row, 5].Value = idea.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                    worksheet.Cells[row, 6].Value = idea.SubmissionDate.ToString();
+                    worksheet.Cells[row, 7].Value = idea.Department.Name;
+                    worksheet.Cells[row, 8].Value = idea.ClosureDate.ClousureDate.ToString();
 
 
                     row++;
