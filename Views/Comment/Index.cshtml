@@ -44,7 +44,7 @@
                       <th>Comment Owner</th>
                       <th>SubmitDate</th>
                       <th>CommentText</th>
-                      <th>Status</th>
+                      <th style = "text-align: center;">Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -54,7 +54,12 @@
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
                           <td>@Html.DisplayFor(modelItem => item.SubmitDate)</td>
                           <td>@Html.DisplayFor(modelItem => item.CommentText)</td>
-                          <td>@Html.DisplayFor(modelItem => item.status)</td>     
+                          @* <td>@Html.DisplayFor(modelItem => item.status)</td>      *@
+                          @if(item.status == 0){
+                            <td style = "text-align:center;"><span class="badge bg-dark">Anonymous</span></td>
+                          }else if(item.status == 1){
+                            <td style = "text-align:center;"><span class="badge bg-light">Public</span></td>
+                          }
                         </tr>
                       }
                   </tbody>

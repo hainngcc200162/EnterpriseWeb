@@ -50,7 +50,12 @@
                         <tr>
                           <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                          @* <td>@Html.DisplayFor(modelItem => item.Status)</td> *@
+                          @if(item.Status == "0"){
+                            <td><span class="badge bg-light">Not Use</span></td>
+                          }else if(item.Status == "1"){
+                            <td><span class="badge bg-danger">Used</span></td>
+                          }
                           <td>
                             <div class="sparkbar" data-color="#00a65a" data-height="20">@Html.DisplayFor(modelItem => item.Description)</div>
                           </td>        

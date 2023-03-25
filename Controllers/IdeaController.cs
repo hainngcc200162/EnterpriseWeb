@@ -542,7 +542,7 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "FinalDate", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
             return View(idea);
