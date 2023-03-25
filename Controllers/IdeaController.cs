@@ -402,17 +402,26 @@ namespace EnterpriseWeb.Controllers
                 var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
                 var department = await _context.Department.FindAsync(user.DepartmentID);
                 //Getting FileName
-                var fileName = Path.GetFileName(myfile.FileName);
-                //Getting file Extension
-                var fileExtension = Path.GetExtension(fileName);
-                // concatenating  FileName + FileExtension
-                var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
-                using (var target = new MemoryStream())
+                if (myfile != null && myfile.Length > 0)
                 {
-                    myfile.CopyTo(target);
-                    idea.DataFile = target.ToArray();
+
+
+                    var fileName = Path.GetFileName(myfile.FileName);
+                    using (var target = new MemoryStream())
+                    {
+                        myfile.CopyTo(target);
+                        idea.DataFile = target.ToArray();
+                    }
+                    idea.SupportingDocuments = fileName;
                 }
-                idea.SupportingDocuments = fileName;
+                else
+                {
+                    ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
+                    ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
+                    ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+                    ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+                    return View(idea);
+                }
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 idea.Department = department;
@@ -431,7 +440,7 @@ namespace EnterpriseWeb.Controllers
                 foreach (var coor in coorlist)
                 {
                     if (await _userManager.IsInRoleAsync(coor, "QACoordinator"))
-                    {                     
+                    {
                         var email = await _userManager.GetEmailAsync(coor);
                         await _notificationSender.SendEmailAsync(
                             email,
@@ -484,7 +493,7 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
-                    if (newfile != null)
+                    if (newfile != null && newfile.Length > 0)
                     {
                         string filename = Path.GetFileName(newfile.FileName);
                         // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
@@ -496,6 +505,14 @@ namespace EnterpriseWeb.Controllers
                             idea.DataFile = dataStream.ToArray();
                         }
                         idea.SupportingDocuments = filename;
+                    }
+                    else if ( newfile != null && newfile.Length <= 0)
+                    {
+                        ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
+                        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
+                        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+                        ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+                        return View(idea);
                     }
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
@@ -542,7 +559,7 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "FinalDate", idea.ClosureDateID);
+            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
             ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
             ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
             return View(idea);
@@ -561,7 +578,7 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
-                    if (newfile != null)
+                    if (newfile != null && newfile.Length > 0)
                     {
                         string filename = Path.GetFileName(newfile.FileName);
                         // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
@@ -573,6 +590,15 @@ namespace EnterpriseWeb.Controllers
                             idea.DataFile = dataStream.ToArray();
                         }
                         idea.SupportingDocuments = filename;
+                    }
+                    else if ( newfile != null && newfile.Length <= 0)
+                    {
+                        ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
+                        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
+                        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+                        ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+                        ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+                        return View(idea);
                     }
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
@@ -640,7 +666,7 @@ namespace EnterpriseWeb.Controllers
             }
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Record));
         }
 
         [Authorize(Roles = "Staff , QACoordinator")]
@@ -707,7 +733,7 @@ namespace EnterpriseWeb.Controllers
 
             if (rating == null)
             {
-                if (isUp==0)
+                if (isUp == 0)
                 {
                     rating = new Rating
                     {
@@ -746,7 +772,7 @@ namespace EnterpriseWeb.Controllers
             }
             else
             {
-                if (isUp==0)
+                if (isUp == 0)
                 {
                     if (rating.RatingUp == 1)
                     {

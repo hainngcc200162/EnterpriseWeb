@@ -58,15 +58,14 @@
                     <div class="form-group" hidden>
                         <label asp-for="SupportingDocuments" class="control-label"></label>
                         <input asp-for="SupportingDocuments" class="form-control" />
-                        <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
                     </div>
                     <div class="form-group mt-3" style = "color:black;">
-                    <input asp-for="SupportingDocuments" type="file" name="newfile" />
+                    <input asp-for="DataFile" type="file" name="newfile" />
+                    <span asp-validation-for="DataFile" class="text-danger"></span>
                   </div>
                     <div class="form-group" hidden>
                         <label asp-for="DataFile" class="control-label"></label>
-                        <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
-                        <span asp-validation-for="DataFile" class="text-danger"></span>
+                        <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)"/>
                     </div>
                     <div class="form-group" hidden>
                         <label asp-for="DepartmentID" class="control-label"></label>

@@ -17,7 +17,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <form asp-action="EditQA">
+        <form asp-action="EditQA" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
       <div class="row">
@@ -35,12 +35,12 @@
             <div class="card-body">
                 <div class="form-group">
                     <label asp-for="Title" class="control-label"></label>
-                    <input asp-for="Title" class="form-control" />
+                    <input asp-for="Title" class="form-control" disabled/>
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
+                    <input asp-for="Description" class="form-control" disabled/>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -90,16 +90,16 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Upload file</label>
-                    <input asp-for="SupportingDocuments" type="file" name="newfile" />
+                    <input asp-for="DataFile" type="file" name="newfile" disabled/>
+                    <span asp-validation-for="DataFile" class="text-danger"></span>
                 </div>
                 <div class="form-group" hidden>
                     <label asp-for="DataFile" class="control-label"></label>
                     <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
-                    <span asp-validation-for="DataFile" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                 <label asp-for="ClosureDateID" class="control-label"></label>
-                <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
+                <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID" disabled></select>
                 <span asp-validation-for="ClosureDateID" class="text-danger"></span>
             </div>
             </div>

@@ -86,11 +86,16 @@
                     <input asp-for="SubmissionDate" class="form-password" />
                     <span asp-validation-for="SubmissionDate" class="text-danger"></span>
                 </div>
+                <div class="form-group" hidden>
+                    <label asp-for="SupportingDocuments" class="control-label"></label>
+                    <input asp-for="SupportingDocuments" class="form-password" />
+                    <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+                </div>
                   <p>SupportingDocuments</p>
                   <div class="form-group mt-3" style = "color:black;">
-                    <input asp-for="SupportingDocuments" type="file" name="myfile" class="form-control" required />
-                    <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+                    <input asp-for="DataFile" type="file" name="myfile" class="form-control" required />
                   </div>
+                  <span asp-validation-for="DataFile" class="text-danger"></span>
                   @* <p>Department</p>
                   <div class="form-group mt-3" style = "color:black;">
                     <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
