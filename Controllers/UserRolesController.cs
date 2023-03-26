@@ -48,6 +48,7 @@ namespace EnterpriseWeb.Controllers
         }
         public async Task<IActionResult> Manage(string userId)
         {
+            ViewBag.Layout = Layout;
             ViewBag.userId = userId;
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)

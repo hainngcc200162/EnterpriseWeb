@@ -1,29 +1,16 @@
 @model PaginatedList<EnterpriseWeb.Models.Idea>
 <div class="content-wrapper">
-    <h1>Index</h1>
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <p>
-                <a asp-action="Create" class="btn btn-primary">Create New</a>
-                <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
-                <a asp-action="Chart" class="btn btn-warning">Chart</a>
-            </p>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
+
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top:2%">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All QACoordinator</h3>
+                <h3 class="card-title">All Idea</h3>
                 <div class="card-tools">
                     <div class="input-group-append">
                         <form asp-action="ViewQA" method="get">
