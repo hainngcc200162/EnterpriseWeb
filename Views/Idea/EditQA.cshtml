@@ -36,8 +36,16 @@
             <div class="card-body">
               <div class="input-group" style="width:500px">
                 <select name="istatus" readonly>
-                  <option value="no">Public Idea</option>
-                  <option value="yes">Anonymous Idea</option>
+                  @if (Model.IdeaStatus == 1)
+                  {
+                    <option value="no" selected>Public Idea</option>
+                    <option value="yes">Anonymous Idea</option>
+                  }
+                  else
+                  {
+                    <option value="no">Public Idea</option>
+                    <option value="yes" selected>Anonymous Idea</option>
+                  }
                 </select>
               </div>
               <div class="form-group" hidden>
