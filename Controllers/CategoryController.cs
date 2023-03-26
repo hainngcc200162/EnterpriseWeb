@@ -24,7 +24,7 @@ namespace EnterpriseWeb.Controllers
         {
             _context = context;
         }
-        
+
         [Authorize(Roles = "Admin")]
         // GET: Category
         public async Task<IActionResult> Index()
@@ -47,14 +47,25 @@ namespace EnterpriseWeb.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
+
+            // Retrieve message from TempData, if any
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
+
             var ideas = from m in _context.Category select m;
             if (!String.IsNullOrEmpty(searchString))
             {
                 ideas = ideas.Where(s => s.Name.Contains(searchString));
             }
             int pageSize = 5;
+
+            // Pass message and messageClass to View
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
+
             return View(await PaginatedList<Category>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
 
         [Authorize(Roles = "Admin, QAManager, QACoordinator")]
         // ViewCategory is The Index of Admin Page
@@ -221,21 +232,37 @@ namespace EnterpriseWeb.Controllers
             return View(category);
         }
 
-        // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = Layout2;
             var category = await _context.Category.FindAsync(id);
             var ideacategories = await _context.IdeaCategory.Where(o => o.Category == category).ToListAsync();
+
+            // Check if the category is being used by any idea
+            if (ideacategories.Any())
+            {
+                TempData["message"] = "This category cannot be deleted because it has been used by one or more ideas.";
+                TempData["messageClass"] = "alert-danger";
+                return RedirectToAction(nameof(ViewQA));
+            }
+
             foreach (var ideacategory in ideacategories)
             {
                 _context.IdeaCategory.Remove(ideacategory);
             }
+
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();
+
+            TempData["message"] = "Category deleted successfully.";
+            TempData["messageClass"] = "alert-success";
             return RedirectToAction(nameof(ViewQA));
         }
+
+
+
         private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.Id == id);
