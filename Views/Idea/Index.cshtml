@@ -56,12 +56,20 @@
             <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)"
               style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
           }
-          <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(modelItem => item.IdeaUser.Name)
+          <h4 style="display: inline-block; padding-left:20px;">
+            @if (item.IdeaStatus == 1)
+            {
+              @item.IdeaUser.Name
+            }
+            else
+            {
+              <text>Anonymous</text>
+            }:
             <br>
             <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(modelItem =>
             item.Department.Name) &gt;</span>
-
           </h4>
+
         </div>
         <div class="blog-meta">
           <span class="date-type">
@@ -88,8 +96,7 @@
         <a>
           <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
           <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
-          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span
-            id="rating-up">@ratingUp</span>
+          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span id="rating-up">@ratingUp</span>
           <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span
             id="rating-down">@ratingDown</span>
 
@@ -99,11 +106,11 @@
 
         <div>
           <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light" data-id="@item.Id" data-isup=0
-          asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
+            asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
           @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id"
         asp-route-isUp="true"> Thumb Up</a> *@
           <a class=" thumb-down-btn far fa-thumbs-down btn btn-light" data-id="@item.Id" data-isup=1
-          asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
+            asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
           @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id"
         asp-route-isUp="false"> Thumb Down</a> *@
           <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>

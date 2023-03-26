@@ -225,6 +225,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("IdeaStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("IdeaUserId")
                         .HasColumnType("nvarchar(450)");
 

@@ -1,108 +1,131 @@
 @model EnterpriseWeb.Models.Idea
 
 @{
-    ViewData["Title"] = "Edit";
+  ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
 
-<div class="col-md-6" style = "width: 600px; margin: auto;">
-              <div class="form contact-form">
-                <form asp-action="Edit" id="" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="Id" />
-                  <p>Title</p>
-                  <div class="form-group" style = "color:black;">
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                  </div>
-                  <p>Description</p>
-                  <div class="form-group mt-3" style = "color:black;">
-                    <textarea asp-for="Description" class="form-control"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                  </div>
-                  @* <p>Status</p>
-                  <div class="form-group mt-3" style = "color:black;"> *@
-                    @* <button type="button" class="btn btn-success @if(Model.Status == 1) { <text>active</text> }" value="1" onclick="document.getElementById('Status').value = this.value; toggleActive(this)">Approve</button>
-                    <button type="button" class="btn btn-danger @if(Model.Status == 2) { <text>active</text> }" value="2" onclick="document.getElementById('Status').value = this.value; toggleActive(this)">Reject</button>
-                    <input asp-for="Status" id="Status" class="form-control" style="display:none" /> *@
-                    @* <select asp-for="Status" class="form-control">
-                        <option value=0>In Process</option>
-                        <option value=1>Accecpt</option>
-                        <option value=2>Reject</option>
-                    </select>
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                  </div>
-                  <p>Categories</p>
-                  <div class="form-group mt-3" style = "color:black;">
-                    <select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
-                    multiple></select>
-                  </div> *@
-                  <div class="form-group" hidden>
-                    <label asp-for="UserId" class="control-label"></label>
-                    <input asp-for="UserId" class="form-control" />
-                    <span asp-validation-for="UserId" class="text-danger"></span>
-                </div>
-                <div class="form-group" hidden>
-                    <label asp-for="Status" class="control-label"></label>
-                    <input asp-for="Status" class="form-control" />
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                </div>
-                <div class="form-group" hidden>
-                    <label asp-for="SubmissionDate" class="control-label"></label>
-                    <input asp-for="SubmissionDate" class="form-control" />
-                    <span asp-validation-for="SubmissionDate" class="text-danger"></span>
-                </div>
-                <p>Current file:
-                    @Html.DisplayFor(model => model.SupportingDocuments)</p>
-                    <div class="form-group" hidden>
-                        <label asp-for="SupportingDocuments" class="control-label"></label>
-                        <input asp-for="SupportingDocuments" class="form-control" />
-                    </div>
-                    <div class="form-group mt-3" style = "color:black;">
-                    <input asp-for="DataFile" type="file" name="newfile" />
-                    <span asp-validation-for="DataFile" class="text-danger"></span>
-                  </div>
-                    <div class="form-group" hidden>
-                        <label asp-for="DataFile" class="control-label"></label>
-                        <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)"/>
-                    </div>
-                    <div class="form-group" hidden>
-                        <label asp-for="DepartmentID" class="control-label"></label>
-                        <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
-                        <span asp-validation-for="DepartmentID" class="text-danger"></span>
-                    </div>
-                  <p>ClosureDate</p>
-                  <div class="form-group mt-3" style = "color:black;">
-                    <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
-                    <span asp-validation-for="ClosureDateID" class="text-danger"></span>
-                  </div>
-                  <div class="form-group" style = "color:black;">
-                    <label>
-                        <input type="checkbox" name="agree" id="agree-checkbox" required>
-                        I agree to the terms and conditions.
-                    </label>
-                </div>
-                  <div class="text-center">
-                    <input type="submit" value="Save" class="btn btn-dark" />
-                    </div>
-                </form>
-              </div>
-            </div>
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script>
-        function toggleActive(button) {
-            // Remove active class from all buttons
-            var buttons = document.querySelectorAll('.btn');
-            buttons.forEach(function (btn) {
-                btn.classList.remove('active');
-            });
+<div class="col-md-6" style="width: 600px; margin: auto;">
+  <div class="form contact-form">
+    <form asp-action="Edit" id="" enctype="multipart/form-data">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <input type="hidden" asp-for="Id" />
 
-            // Add active class to clicked button
-            button.classList.add('active');
-        }
-    </script>
+      <p>Idea Status</p>
+      <div class="input-group" style="width:500px">
+        <select name="istatus" asp-for="IdeaStatus">
+          @if(Model.IdeaStatus == 1)
+          {
+            <option value="no" selected>Public Idea</option>
+            <option value="yes" >Anonymous Idea</option>
+          }else{
+            <option value="no" >Public Idea</option>
+            <option value="yes" selected>Anonymous Idea</option>
+          }
+        </select>
+      </div>
+      <div class="form-group" hidden>
+        <label asp-for="IdeaStatus" class="control-label"></label>
+        <input asp-for="IdeaStatus" class="form-control" />
+        <span asp-validation-for="IdeaStatus" class="text-danger"></span>
+      </div>
+      
+      <p>Title</p>
+      <div class="form-group" style="color:black;">
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+      </div>
+      <p>Description</p>
+      <div class="form-group mt-3" style="color:black;">
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+      </div>
+      @* <p>Status</p>
+      <div class="form-group mt-3" style = "color:black;"> *@
+      @* <button type="button" class="btn btn-success @if(Model.Status == 1) { <text>active</text> }" value="1"
+      onclick="document.getElementById('Status').value = this.value; toggleActive(this)">Approve</button>
+      <button type="button" class="btn btn-danger @if(Model.Status == 2) { <text>active</text> }" value="2"
+      onclick="document.getElementById('Status').value = this.value; toggleActive(this)">Reject</button>
+      <input asp-for="Status" id="Status" class="form-control" style="display:none" /> *@
+      @* <select asp-for="Status" class="form-control">
+      <option value=0>In Process</option>
+      <option value=1>Accecpt</option>
+      <option value=2>Reject</option>
+      </select>
+      <span asp-validation-for="Status" class="text-danger"></span>
+      </div>
+      <p>Categories</p>
+      <div class="form-group mt-3" style = "color:black;">
+      <select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
+      multiple></select>
+      </div> *@
+      <div class="form-group" hidden>
+        <label asp-for="UserId" class="control-label"></label>
+        <input asp-for="UserId" class="form-control" />
+        <span asp-validation-for="UserId" class="text-danger"></span>
+      </div>
+      <div class="form-group" hidden>
+        <label asp-for="Status" class="control-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+      </div>
+      
+      <div class="form-group" hidden>
+        <label asp-for="SubmissionDate" class="control-label"></label>
+        <input asp-for="SubmissionDate" class="form-control" />
+        <span asp-validation-for="SubmissionDate" class="text-danger"></span>
+      </div>
+      <p>Current file:
+        @Html.DisplayFor(model => model.SupportingDocuments)</p>
+      <div class="form-group" hidden>
+        <label asp-for="SupportingDocuments" class="control-label"></label>
+        <input asp-for="SupportingDocuments" class="form-control" />
+      </div>
+      <div class="form-group mt-3" style="color:black;">
+        <input asp-for="DataFile" type="file" name="newfile" />
+        <span asp-validation-for="DataFile" class="text-danger"></span>
+      </div>
+      <div class="form-group" hidden>
+        <label asp-for="DataFile" class="control-label"></label>
+        <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
+      </div>
+      <div class="form-group" hidden>
+        <label asp-for="DepartmentID" class="control-label"></label>
+        <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
+        <span asp-validation-for="DepartmentID" class="text-danger"></span>
+      </div>
+      <p>ClosureDate</p>
+      <div class="form-group mt-3" style="color:black;">
+        <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
+        <span asp-validation-for="ClosureDateID" class="text-danger"></span>
+      </div>
+      <div class="form-group" style="color:black;">
+        <label>
+          <input type="checkbox" name="agree" id="agree-checkbox" required>
+          I agree to the terms and conditions.
+        </label>
+      </div>
+      <div class="text-center">
+        <input type="submit" value="Save" class="btn btn-dark" />
+      </div>
+    </form>
+  </div>
+</div>
+@section Scripts {
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  }
+  <script>
+    function toggleActive(button) {
+      // Remove active class from all buttons
+      var buttons = document.querySelectorAll('.btn');
+      buttons.forEach(function (btn) {
+        btn.classList.remove('active');
+      });
+
+      // Add active class to clicked button
+      button.classList.add('active');
+    }
+  </script>
 }

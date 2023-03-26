@@ -394,13 +394,16 @@ namespace EnterpriseWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserId,SupportingDocuments,ClosureDateID")] Idea idea, IFormFile myfile)
-        {
+        public async Task<IActionResult> Create([Bind("IdeaStatus,Id,Title,Description,UserId,SupportingDocuments,ClosureDateID")] Idea idea, IFormFile myfile, string istatus)
+        {   
+
             if (ModelState.IsValid)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
                 var department = await _context.Department.FindAsync(user.DepartmentID);
+
+                
                 //Getting FileName
                 if (myfile != null && myfile.Length > 0)
                 {
@@ -422,575 +425,597 @@ namespace EnterpriseWeb.Controllers
                     ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
                     return View(idea);
                 }
+                
                 idea.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 idea.SubmissionDate = DateTime.Now;
                 idea.Department = department;
                 idea.DepartmentID = user.DepartmentID;
                 idea.IdeaUser = user;
                 idea.Status = 0;
-                _context.Add(idea);
 
-                await _context.SaveChangesAsync();
-                //Send email to QAcoor
-                var url = Url.Action("EditQA", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
-                //get email of author idea
-                var coorlist = _userManager.Users
-                             .Where(u => u.DepartmentID == idea.DepartmentID)
-                             .ToList();
-                foreach (var coor in coorlist)
+                //Getting IdeaStatus
+                if (istatus.Equals("no"))
                 {
-                    if (await _userManager.IsInRoleAsync(coor, "QACoordinator"))
+                    idea.IdeaStatus = 1;
+                }
+                else if (istatus.Equals("yes"))
+                {
+                    idea.IdeaStatus = 0;
+                }
+                _context.Add(idea);
+                await _context.SaveChangesAsync();
+            //Send email to QAcoor
+            var url = Url.Action("EditQA", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
+            //get email of author idea
+            var coorlist = _userManager.Users
+                         .Where(u => u.DepartmentID == idea.DepartmentID)
+                         .ToList();
+            foreach (var coor in coorlist)
+            {
+                if (await _userManager.IsInRoleAsync(coor, "QACoordinator"))
+                {
+                    var email = await _userManager.GetEmailAsync(coor);
+                    if (idea.Department != null)
                     {
-                        var email = await _userManager.GetEmailAsync(coor);
                         await _notificationSender.SendEmailAsync(
                             email,
                             "Idea Notification",
                             $"<strong>{user.Name}</strong> posted a <a href='{url}'> new idea </a> at {idea.SubmissionDate} in the {idea.Department.Name}");
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+            return RedirectToAction(nameof(Index));
+        }
+        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+        ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
             return View(idea);
+    }
+
+    [Authorize(Roles = "Staff, QACoordinator")]
+    // GET: Idea/Edit/5
+    // Edit is used by Staff
+    public async Task<IActionResult> Edit(int? id, [Bind("IdeaStatus,Id,Title,Description,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] IFormFile newfile,string istatus , int[] selectedCategoryIds)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        [Authorize(Roles = "Staff, QACoordinator")]
-        // GET: Idea/Edit/5
-        // Edit is used by Staff
-        public async Task<IActionResult> Edit(int? id)
+        var idea = await _context.Idea.FindAsync(id);
+        if (idea == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        
+        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+        ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+        return View(idea);
+    }
 
-            var idea = await _context.Idea.FindAsync(id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
-            return View(idea);
+    // POST: Idea/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("IdeaStatus,Id,Title,Description,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile,string istatus , int[] selectedCategoryIds)
+    {
+        if (id != idea.Id)
+        {
+            return NotFound();
         }
 
-        // POST: Idea/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
+        if (ModelState.IsValid)
         {
-            if (id != idea.Id)
+            try
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (newfile != null && newfile.Length > 0)
                 {
-                    if (newfile != null && newfile.Length > 0)
-                    {
-                        string filename = Path.GetFileName(newfile.FileName);
-                        // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                        // string fullPath = Path.Combine(filePath, filename);
+                    string filename = Path.GetFileName(newfile.FileName);
+                    // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                    // string fullPath = Path.Combine(filePath, filename);
 
-                        using (var dataStream = new MemoryStream())
-                        {
-                            await newfile.CopyToAsync(dataStream);
-                            idea.DataFile = dataStream.ToArray();
-                        }
-                        idea.SupportingDocuments = filename;
-                    }
-                    else if ( newfile != null && newfile.Length <= 0)
+                    using (var dataStream = new MemoryStream())
                     {
-                        ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
-                        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
-                        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-                        ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
-                        return View(idea);
+                        await newfile.CopyToAsync(dataStream);
+                        idea.DataFile = dataStream.ToArray();
                     }
-                    _context.Update(idea);
-                    await _context.SaveChangesAsync();
-
-                    // Add idea categories
-                    foreach (var categoryId in selectedCategoryIds)
-                    {
-                        var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
-                        _context.IdeaCategory.Add(ideaCategory);
-                    }
-
-                    await _context.SaveChangesAsync();
+                    idea.SupportingDocuments = filename;
                 }
-                catch (DbUpdateConcurrencyException)
+                else if (newfile != null && newfile.Length <= 0)
                 {
-                    if (!IdeaExists(idea.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
+                    ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
+                    ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+                    ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+                    return View(idea);
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            return View(idea);
-        }
-
-        [Authorize(Roles = "QACoordinator")]
-        // EditQA is used by QA coordinator
-        public async Task<IActionResult> EditQA(int? id)
-        {
-            ViewBag.Layout = Layout1;
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea.FindAsync(id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
-            return View(idea);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditQA(int id, [Bind("Id,Title,Description,Status,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile, int[] selectedCategoryIds)
-        {
-            ViewBag.Layout = Layout1;
-            if (id != idea.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (istatus.Equals("no"))
                 {
-                    if (newfile != null && newfile.Length > 0)
-                    {
-                        string filename = Path.GetFileName(newfile.FileName);
-                        // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
-                        // string fullPath = Path.Combine(filePath, filename);
-
-                        using (var dataStream = new MemoryStream())
-                        {
-                            await newfile.CopyToAsync(dataStream);
-                            idea.DataFile = dataStream.ToArray();
-                        }
-                        idea.SupportingDocuments = filename;
-                    }
-                    else if ( newfile != null && newfile.Length <= 0)
-                    {
-                        ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
-                        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
-                        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-                        ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
-                        ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
-                        return View(idea);
-                    }
-                    _context.Update(idea);
-                    await _context.SaveChangesAsync();
-
-                    // Add idea categories
-                    foreach (var categoryId in selectedCategoryIds)
-                    {
-                        var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
-                        _context.IdeaCategory.Add(ideaCategory);
-                    }
-
-                    await _context.SaveChangesAsync();
+                    idea.IdeaStatus = 1;
                 }
-                catch (DbUpdateConcurrencyException)
+                else if (istatus.Equals("yes"))
                 {
-                    if (!IdeaExists(idea.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    idea.IdeaStatus = 0;
                 }
-                return RedirectToAction(nameof(ViewIdea));
-            }
-            ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
-            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
-            return View(idea);
-        }
+                _context.Update(idea);
+                await _context.SaveChangesAsync();
 
-        [Authorize(Roles = "Staff , QACoordinator")]
-        // GET: Idea/Delete/5
-        // it is used by staff
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea
-                .Include(i => i.ClosureDate)
-                .Include(i => i.Department)
-                // .Include(i => i.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-
-            return View(idea);
-        }
-        [Authorize(Roles = "Staff, QACoordinator")]
-        // POST: Idea/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var idea = await _context.Idea.FindAsync(id);
-            var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
-            foreach (var ideacategory in ideacategories)
-            {
-                _context.IdeaCategory.Remove(ideacategory);
-            }
-            _context.Idea.Remove(idea);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Record));
-        }
-
-        [Authorize(Roles = "Staff , QACoordinator")]
-        // GET: Idea/Delete/5
-        // it is used by staff
-        public async Task<IActionResult> DeleteQA(int? id)
-        {
-            ViewBag.Layout = Layout1;
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea
-                .Include(i => i.ClosureDate)
-                .Include(i => i.Department)
-                // .Include(i => i.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-
-            return View(idea);
-        }
-        [Authorize(Roles = "Staff, QACoordinator")]
-        // POST: Idea/Delete/5
-        [HttpPost, ActionName("DeleteQA")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmedQA(int id)
-        {
-            ViewBag.Layout = Layout1;
-            var idea = await _context.Idea.FindAsync(id);
-            var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
-            foreach (var ideacategory in ideacategories)
-            {
-                _context.IdeaCategory.Remove(ideacategory);
-            }
-            _context.Idea.Remove(idea);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(ViewIdea));
-        }
-
-        private bool IdeaExists(int id)
-        {
-            return _context.Idea.Any(e => e.Id == id);
-        }
-
-        [Authorize(Roles = "Staff")]
-        //Thumbsup and thumbsdown in index view
-        public async Task<IActionResult> CreateRating(int id, int isUp)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
-
-            //get url to detail idea
-            var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
-
-            //get email of author idea
-            var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
-
-            var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
-
-            if (rating == null)
-            {
-                if (isUp == 0)
+                // Add idea categories
+                foreach (var categoryId in selectedCategoryIds)
                 {
-                    rating = new Rating
-                    {
-                        IdeaID = id,
-                        UserId = userId,
-                        IdeaUser = user,
-                        RatingUp = 1,
-                        RatingDown = 0,
-                        SubmitionDate = DateTime.Now
-                    };
-                    _context.Rating.Add(rating);
-                    //Send notification to author of idea
-                    await _notificationSender.SendEmailAsync(
-                        email,
-                        "Rating Notification",
-                        $"<strong>{user.Name}</strong> liked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
+                    var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
+                    _context.IdeaCategory.Add(ideaCategory);
                 }
-                else
-                {
-                    rating = new Rating
-                    {
-                        IdeaID = id,
-                        UserId = userId,
-                        IdeaUser = user,
-                        RatingUp = 0,
-                        RatingDown = 1,
-                        SubmitionDate = DateTime.Now
-                    };
-                    _context.Rating.Add(rating);
-                    //Send notification to author of idea
-                    await _notificationSender.SendEmailAsync(
-                        email,
-                        "Rating Notification",
-                        $"<strong>{user.Name}</strong> disliked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
-                }
-            }
-            else
-            {
-                if (isUp == 0)
-                {
-                    if (rating.RatingUp == 1)
-                    {
-                        rating.RatingUp = 0;
-                        // _context.Rating.Remove(rating);
-                    }
-                    else
-                    {
-                        rating.RatingUp = 1;
-                        rating.RatingDown = 0;
-                    }
-                }
-                else
-                {
-                    if (rating.RatingDown == 1)
-                    {
-                        rating.RatingDown = 0;
-                        // _context.Rating.Remove(rating);
-                    }
-                    else
-                    {
-                        rating.RatingDown = 1;
-                        rating.RatingUp = 0;
-                    }
-                }
-                rating.SubmitionDate = DateTime.Now;
-            }
-            await ViewingIdea(id);
-            await _context.SaveChangesAsync();
-            var ideaRatings = _context.Idea
-                            .Include(i => i.Ratings)
-                            .Where(i => i.Id == id)
-                            .Select(i => new
-                            {
-                                upvotes = i.Ratings.Sum(r => r.RatingUp),
-                                downvotes = i.Ratings.Sum(r => r.RatingDown)
-                            });
-            return Json(ideaRatings);
-        }
 
-
-        [Authorize(Roles = "Staff,Admin,QAManager")]
-        //Thumbsup and thumbsdown in detail view
-        public async Task<IActionResult> DetailRating(int id, bool isUp)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
-
-            //get url to detail idea
-            var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
-
-            //get email of author idea
-            var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
-
-            var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
-            if (rating == null)
-            {
-                if (isUp)
-                {
-                    rating = new Rating
-                    {
-                        IdeaID = id,
-                        UserId = userId,
-                        IdeaUser = user,
-                        RatingUp = 1,
-                        RatingDown = 0,
-                        SubmitionDate = DateTime.Now
-                    };
-                    _context.Rating.Add(rating);
-                    //Send notification to author of idea
-                    await _notificationSender.SendEmailAsync(
-                        email,
-                        "Rating Notification",
-                        $"<strong>{user.Name}</strong> liked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
-                }
-                else
-                {
-                    rating = new Rating
-                    {
-                        IdeaID = id,
-                        UserId = userId,
-                        IdeaUser = user,
-                        RatingUp = 0,
-                        RatingDown = 1,
-                        SubmitionDate = DateTime.Now
-                    };
-                    _context.Rating.Add(rating);
-                    //Send notification to author of idea
-                    await _notificationSender.SendEmailAsync(
-                        email,
-                        "Rating Notification",
-                        $"<strong>{user.Name}</strong> disliked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
-                }
-            }
-            else
-            {
-                if (isUp)
-                {
-                    if (rating.RatingUp == 1)
-                    {
-                        rating.RatingUp = 0;
-                        // _context.Rating.Remove(rating);
-                    }
-                    else
-                    {
-                        rating.RatingUp = 1;
-                        rating.RatingDown = 0;
-                    }
-                }
-                else
-                {
-                    if (rating.RatingDown == 1)
-                    {
-                        rating.RatingDown = 0;
-                        // _context.Rating.Remove(rating);
-                    }
-                    else
-                    {
-                        rating.RatingDown = 1;
-                        rating.RatingUp = 0;
-                    }
-                }
-                rating.SubmitionDate = DateTime.Now;
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", new { id = id });
-        }
-
-        [Authorize(Roles = "Admin, QAManager")]
-        public async Task ViewingIdea(int id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
-
-            var viewing = await _context.Viewing.FirstOrDefaultAsync(r => r.IdeaId == id && r.UserId.Equals(userId));
-            if (viewing == null)
-            {
-                viewing = new Viewing
-                {
-                    IdeaId = id,
-                    UserId = userId,
-                    IdeaUser = user,
-                    Count = 1,
-                    ViewDate = DateTime.Now
-                };
-                _context.Viewing.Add(viewing);
                 await _context.SaveChangesAsync();
             }
-
-        }
-
-        [Authorize(Roles = "QAManager")]
-        public IActionResult Chart()
-        {
-            ViewBag.Layout = Layout2;
-            var data = _context.Department
-            .Select(d => new
+            catch (DbUpdateConcurrencyException)
             {
-                DepartmentName = d.Name,
-                ContributorCount = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.UserId)
-                    .Distinct()
-                    .Count(),
-                NumberIdea = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.Id)
-                    .Count(),
-                PercentageIdea = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.Id)
-                    .Count() * 100 / _context.Idea.Count()
-            })
-            .ToList();
-
-            string[] labels = new string[data.Count];
-            string[] numberidea = new string[data.Count];
-            string[] percentageidea = new string[data.Count];
-
-            string[] counts = new string[data.Count];
-
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                labels[i] = data[i].DepartmentName;
-                numberidea[i] = data[i].NumberIdea.ToString();
-                percentageidea[i] = data[i].PercentageIdea.ToString();
-                counts[i] = data[i].ContributorCount.ToString();
-
+                if (!IdeaExists(idea.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
-
-            ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
-            ViewData["counts"] = String.Join(",", counts);
-            ViewData["numberidea"] = String.Join(",", numberidea);
-            ViewData["percentageidea"] = String.Join(",", percentageidea);
-
-            return View(data);
+            return RedirectToAction(nameof(Index));
         }
-        [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> Record()
+        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+        return View(idea);
+    }
+
+    [Authorize(Roles = "QACoordinator")]
+    // EditQA is used by QA coordinator
+    public async Task<IActionResult> EditQA(int? id)
+    {
+        ViewBag.Layout = Layout1;
+        if (id == null)
         {
-            var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate);
-            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return NotFound();
+        }
 
-            ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+        var idea = await _context.Idea.FindAsync(id);
+        if (idea == null)
+        {
+            return NotFound();
+        }
+        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+        ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+        return View(idea);
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditQA(int id, [Bind("IdeaStatus,Id,Title,Description,Status,UserId,DepartmentID,ClosureDateID,SupportingDocuments,DataFile,Status,SubmissionDate")] Idea idea, IFormFile newfile,string istatus, int[] selectedCategoryIds)
+    {
+        ViewBag.Layout = Layout1;
+        if (id != idea.Id)
+        {
+            return NotFound();
+        }
 
-            return _context.Idea != null ?
-                        View(await _context.Idea.Include(i => i.ClosureDate)
-                                                .Include(i => i.Department)
-                                                .Include(i => i.Viewings)
-                                                .Include(i => i.IdeaUser)
-                                                .Include(i => i.Ratings)
-                                                .Where(o => o.UserId == userID)
-                                                .ToListAsync()) :
-                        Problem("Entity set 'EnterpriseWebContext.Order'  is null.");
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                if (newfile != null && newfile.Length > 0)
+                {
+                    string filename = Path.GetFileName(newfile.FileName);
+                    // var filePath = Path.Combine(hostEnvironment.WebRootPath, "uploads");
+                    // string fullPath = Path.Combine(filePath, filename);
+
+                    using (var dataStream = new MemoryStream())
+                    {
+                        await newfile.CopyToAsync(dataStream);
+                        idea.DataFile = dataStream.ToArray();
+                    }
+                    idea.SupportingDocuments = filename;
+                }
+                else if (newfile != null && newfile.Length <= 0)
+                {
+                    ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
+                    ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);
+                    ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+                    ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Id", idea.UserId);
+                    ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+                    return View(idea);
+                }
+                _context.Update(idea);
+                await _context.SaveChangesAsync();
+
+                // Add idea categories
+                foreach (var categoryId in selectedCategoryIds)
+                {
+                    var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
+                    _context.IdeaCategory.Add(ideaCategory);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!IdeaExists(idea.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(ViewIdea));
+        }
+        ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "Id", idea.ClosureDateID);
+        ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Id", idea.DepartmentID);
+        return View(idea);
+    }
+
+    [Authorize(Roles = "Staff , QACoordinator")]
+    // GET: Idea/Delete/5
+    // it is used by staff
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var idea = await _context.Idea
+            .Include(i => i.ClosureDate)
+            .Include(i => i.Department)
+            // .Include(i => i.User)
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (idea == null)
+        {
+            return NotFound();
+        }
+
+        return View(idea);
+    }
+    [Authorize(Roles = "Staff, QACoordinator")]
+    // POST: Idea/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var idea = await _context.Idea.FindAsync(id);
+        var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
+        foreach (var ideacategory in ideacategories)
+        {
+            _context.IdeaCategory.Remove(ideacategory);
+        }
+        _context.Idea.Remove(idea);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Record));
+    }
+
+    [Authorize(Roles = "Staff , QACoordinator")]
+    // GET: Idea/Delete/5
+    // it is used by staff
+    public async Task<IActionResult> DeleteQA(int? id)
+    {
+        ViewBag.Layout = Layout1;
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var idea = await _context.Idea
+            .Include(i => i.ClosureDate)
+            .Include(i => i.Department)
+            // .Include(i => i.User)
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (idea == null)
+        {
+            return NotFound();
+        }
+
+        return View(idea);
+    }
+    [Authorize(Roles = "Staff, QACoordinator")]
+    // POST: Idea/Delete/5
+    [HttpPost, ActionName("DeleteQA")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmedQA(int id)
+    {
+        ViewBag.Layout = Layout1;
+        var idea = await _context.Idea.FindAsync(id);
+        var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
+        foreach (var ideacategory in ideacategories)
+        {
+            _context.IdeaCategory.Remove(ideacategory);
+        }
+        _context.Idea.Remove(idea);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(ViewIdea));
+    }
+
+    private bool IdeaExists(int id)
+    {
+        return _context.Idea.Any(e => e.Id == id);
+    }
+
+    [Authorize(Roles = "Staff")]
+    //Thumbsup and thumbsdown in index view
+    public async Task<IActionResult> CreateRating(int id, int isUp)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+
+        //get url to detail idea
+        var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
+
+        //get email of author idea
+        var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
+
+        var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
+
+        if (rating == null)
+        {
+            if (isUp == 0)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    RatingUp = 1,
+                    RatingDown = 0,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Rating Notification",
+                    $"<strong>{user.Name}</strong> liked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
+            }
+            else
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    RatingUp = 0,
+                    RatingDown = 1,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Rating Notification",
+                    $"<strong>{user.Name}</strong> disliked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
+            }
+        }
+        else
+        {
+            if (isUp == 0)
+            {
+                if (rating.RatingUp == 1)
+                {
+                    rating.RatingUp = 0;
+                    // _context.Rating.Remove(rating);
+                }
+                else
+                {
+                    rating.RatingUp = 1;
+                    rating.RatingDown = 0;
+                }
+            }
+            else
+            {
+                if (rating.RatingDown == 1)
+                {
+                    rating.RatingDown = 0;
+                    // _context.Rating.Remove(rating);
+                }
+                else
+                {
+                    rating.RatingDown = 1;
+                    rating.RatingUp = 0;
+                }
+            }
+            rating.SubmitionDate = DateTime.Now;
+        }
+        await ViewingIdea(id);
+        await _context.SaveChangesAsync();
+        var ideaRatings = _context.Idea
+                        .Include(i => i.Ratings)
+                        .Where(i => i.Id == id)
+                        .Select(i => new
+                        {
+                            upvotes = i.Ratings.Sum(r => r.RatingUp),
+                            downvotes = i.Ratings.Sum(r => r.RatingDown)
+                        });
+        return Json(ideaRatings);
+    }
+
+
+    [Authorize(Roles = "Staff,Admin,QAManager")]
+    //Thumbsup and thumbsdown in detail view
+    public async Task<IActionResult> DetailRating(int id, bool isUp)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+
+        //get url to detail idea
+        var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
+
+        //get email of author idea
+        var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
+
+        var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
+        if (rating == null)
+        {
+            if (isUp)
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    RatingUp = 1,
+                    RatingDown = 0,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Rating Notification",
+                    $"<strong>{user.Name}</strong> liked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
+            }
+            else
+            {
+                rating = new Rating
+                {
+                    IdeaID = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    RatingUp = 0,
+                    RatingDown = 1,
+                    SubmitionDate = DateTime.Now
+                };
+                _context.Rating.Add(rating);
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Rating Notification",
+                    $"<strong>{user.Name}</strong> disliked on <a href='{url}'> your idea </a> at {rating.SubmitionDate}.");
+            }
+        }
+        else
+        {
+            if (isUp)
+            {
+                if (rating.RatingUp == 1)
+                {
+                    rating.RatingUp = 0;
+                    // _context.Rating.Remove(rating);
+                }
+                else
+                {
+                    rating.RatingUp = 1;
+                    rating.RatingDown = 0;
+                }
+            }
+            else
+            {
+                if (rating.RatingDown == 1)
+                {
+                    rating.RatingDown = 0;
+                    // _context.Rating.Remove(rating);
+                }
+                else
+                {
+                    rating.RatingDown = 1;
+                    rating.RatingUp = 0;
+                }
+            }
+            rating.SubmitionDate = DateTime.Now;
+        }
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Details", new { id = id });
+    }
+
+    [Authorize(Roles = "Admin, QAManager")]
+    public async Task ViewingIdea(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+
+        var viewing = await _context.Viewing.FirstOrDefaultAsync(r => r.IdeaId == id && r.UserId.Equals(userId));
+        if (viewing == null)
+        {
+            viewing = new Viewing
+            {
+                IdeaId = id,
+                UserId = userId,
+                IdeaUser = user,
+                Count = 1,
+                ViewDate = DateTime.Now
+            };
+            _context.Viewing.Add(viewing);
+            await _context.SaveChangesAsync();
         }
 
     }
+
+    [Authorize(Roles = "QAManager")]
+    public IActionResult Chart()
+    {
+        ViewBag.Layout = Layout2;
+        var data = _context.Department
+        .Select(d => new
+        {
+            DepartmentName = d.Name,
+            ContributorCount = _context.Idea
+                .Where(i => i.DepartmentID == d.Id)
+                .Select(i => i.UserId)
+                .Distinct()
+                .Count(),
+            NumberIdea = _context.Idea
+                .Where(i => i.DepartmentID == d.Id)
+                .Select(i => i.Id)
+                .Count(),
+            PercentageIdea = _context.Idea
+                .Where(i => i.DepartmentID == d.Id)
+                .Select(i => i.Id)
+                .Count() * 100 / _context.Idea.Count()
+        })
+        .ToList();
+
+        string[] labels = new string[data.Count];
+        string[] numberidea = new string[data.Count];
+        string[] percentageidea = new string[data.Count];
+
+        string[] counts = new string[data.Count];
+
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            labels[i] = data[i].DepartmentName;
+            numberidea[i] = data[i].NumberIdea.ToString();
+            percentageidea[i] = data[i].PercentageIdea.ToString();
+            counts[i] = data[i].ContributorCount.ToString();
+
+        }
+
+        ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
+        ViewData["counts"] = String.Join(",", counts);
+        ViewData["numberidea"] = String.Join(",", numberidea);
+        ViewData["percentageidea"] = String.Join(",", percentageidea);
+
+        return View(data);
+    }
+    [Authorize(Roles = "Staff")]
+    public async Task<IActionResult> Record()
+    {
+        var enterpriseWebContext = _context.Idea.Include(i => i.ClosureDate);
+        var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        ViewBag.Categories = new SelectList(_context.Category, "Id", "Name");
+
+        return _context.Idea != null ?
+                    View(await _context.Idea.Include(i => i.ClosureDate)
+                                            .Include(i => i.Department)
+                                            .Include(i => i.Viewings)
+                                            .Include(i => i.IdeaUser)
+                                            .Include(i => i.Ratings)
+                                            .Where(o => o.UserId == userID)
+                                            .ToListAsync()) :
+                    Problem("Entity set 'EnterpriseWebContext.Order'  is null.");
+    }
+
+}
 }

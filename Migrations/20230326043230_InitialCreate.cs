@@ -218,6 +218,7 @@ namespace EnterpriseWeb.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
+                    IdeaStatus = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdeaUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),

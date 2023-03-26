@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {}
+    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb-1\\EnterpriseWeb.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj": {
+    "C:\\Users\\nguye\\Desktop\\EnterpriseWeb-1\\EnterpriseWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+        "projectUniqueName": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb-1\\EnterpriseWeb.csproj",
         "projectName": "EnterpriseWeb",
-        "projectPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
-        "packagesPath": "C:\\Users\\Inspiron\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Inspiron\\OneDrive\\Desktop\\EnterpriseWeb\\obj\\",
+        "projectPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb-1\\EnterpriseWeb.csproj",
+        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb-1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Inspiron\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -94,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
