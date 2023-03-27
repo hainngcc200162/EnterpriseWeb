@@ -107,7 +107,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Comment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.Layout = Layout1;
+            // ViewBag.Layout = Layout1;
             if (id == null)
             {
                 return NotFound();

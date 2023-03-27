@@ -104,20 +104,27 @@
 
         <br><br>
 
+        @if(item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now){
         <div>
           <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light" data-id="@item.Id" data-isup=0
             asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
-          @* <a class="fas fa-thumbs-up btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id"
-        asp-route-isUp="true"> Thumb Up</a> *@
           <a class=" thumb-down-btn far fa-thumbs-down btn btn-light" data-id="@item.Id" data-isup=1
             asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
-          @* <a class="fas fa-thumbs-down btn btn-light" asp-action="CreateRating" asp-route-id="@item.Id"
-        asp-route-isUp="false"> Thumb Down</a> *@
           <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
         </div>
-
+        }else{
+            <div class="col-md-8" style = "display: flex; justify-content: center;">
+              <div>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+                </div>
+            </div>
+            <br>
+            <div class="col-md-8 alert alert-danger">
+              The closure date has passed. 
+            </div>
+        }
         <br>
-
+        @if(item.ClosureDate != null && item.ClosureDate.FinalDate > DateTime.Now){
         <form asp-action="Comment" asp-route-id="@item.Id">
           <div class="input-group" style="width:500px">
             <input class="form-control" name="commenttext" placeholder="Comment" />
@@ -128,6 +135,11 @@
             <input type="submit" value="Comment" class="btn btn-dark" style="display:" />
           </div>
         </form>
+        }else{
+          <div class="col-md-8 alert alert-danger">
+              The Final date has passed. 
+            </div>
+        }
 
       </div>
     </div>

@@ -114,6 +114,7 @@
         }
       </div>
       <br>
+      @if(Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now){
       <div>
         <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="DetailRating"
           asp-route-id="@Model.Id" asp-route-isUp="true"> Thumb Up</a>
@@ -124,9 +125,13 @@
         @* <a class="fas fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="Model.Id"
         asp-route-isUp="false"> Thumb Down</a> *@
       </div>
-
+      }else{
+            <div class="alert alert-danger">
+              The closure date has passed.
+            </div>
+        }
       <br>
-
+      @if(Model.ClosureDate != null && Model.ClosureDate.FinalDate > DateTime.Now){
       <form asp-action="Comment" asp-route-id="@Model.Id">
         <div class="input-group" style="width:500px">
           <input class="form-control" name="commenttext" placeholder="Comment" />
@@ -139,6 +144,11 @@
         <br>
         <a asp-action="Index" class="btn btn-secondary">Back to Full List</a>
       </form>
+      }else{
+          <div class="alert alert-danger">
+              The Final date has passed. 
+            </div>
+        }
 
     </div>
   </div>

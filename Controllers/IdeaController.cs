@@ -108,9 +108,13 @@ namespace EnterpriseWeb.Controllers
             }
 
             ViewData["CurrentFilter"] = searchString;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            var department = await _context.Department.FindAsync(user.DepartmentID);
+
             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings)
-                                        .Include(i => i.IdeaUser).Include(i => i.IdeaCategories)
+                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
+                                        .Include(i => i.IdeaUser).Where(u => u.DepartmentID == department.Id)
                         select m;
             if (!String.IsNullOrEmpty(searchString))
             {
