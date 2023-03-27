@@ -74,7 +74,7 @@
                               <form method="post" action="@Url.Action("Download", "Idea")">
                                   <input type="hidden" name="fileName" value="@item.SupportingDocuments" />
                                   <input type="hidden" name="dataFile" value="@System.Convert.ToBase64String(item.DataFile)"/>
-                                  <button type="submit">Download</button>
+                                  <button id="downloadBtn" type="submit">Download</button>
                               </form>                             
                           </td>
                           @* <td>@Html.DisplayFor(modelItem => item.Department.Name)</td> *@
@@ -158,3 +158,11 @@
     </section>
     <!-- /.content -->
   </div>
+
+@section scripts {
+    <script>
+        document.getElementById("downloadBtn").addEventListener("click", function() {
+            alert("Your download will begin shortly...");
+        });
+    </script>
+}

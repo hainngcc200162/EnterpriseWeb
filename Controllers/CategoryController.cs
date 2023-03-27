@@ -151,6 +151,8 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout2;
             if (ModelState.IsValid)
             {
+                TempData["message"] = "Create successfully.";
+                TempData["messageClass"] = "alert-success";
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ViewQA));
@@ -192,6 +194,8 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
+                    TempData["message"] = "Edit successfully.";
+                    TempData["messageClass"] = "alert-success";
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

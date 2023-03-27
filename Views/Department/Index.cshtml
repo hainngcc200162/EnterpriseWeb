@@ -7,10 +7,13 @@
 
 <div class="content-wrapper">
 
-  @if (TempData["message"] != null && TempData["messageClass"] != null)
+  @if (ViewData["message"] != null)
   {
-      <div class="alert @TempData["messageClass"]">
-          <p>@TempData["message"]</p>
+      <div class="alert @ViewData["messageClass"] alert-dismissible fade show" role="alert">
+          @ViewData["message"]
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
       </div>
   }
 

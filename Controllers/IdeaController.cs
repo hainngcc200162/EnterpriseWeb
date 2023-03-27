@@ -133,6 +133,10 @@ namespace EnterpriseWeb.Controllers
                 default:
                     break;
             }
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
             int pageSize = 5;
             return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
@@ -328,6 +332,10 @@ namespace EnterpriseWeb.Controllers
                 default:
                     break;
             }
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
             return View(await enterpriseWebContext.AsNoTracking().ToListAsync());
         }
         [Authorize(Roles = "Admin, QACoordinator, QAManager, Staff")]
@@ -652,6 +660,8 @@ namespace EnterpriseWeb.Controllers
                         var ideaCategory = new IdeaCategory { IdeaID = idea.Id, CategoryID = categoryId };
                         _context.IdeaCategory.Add(ideaCategory);
                     }
+                    TempData["message"] = "Edit successfully.";
+                    TempData["messageClass"] = "alert-success";
 
                     await _context.SaveChangesAsync();
                 }
@@ -748,6 +758,8 @@ namespace EnterpriseWeb.Controllers
             {
                 _context.IdeaCategory.Remove(ideacategory);
             }
+            TempData["message"] = "Delete successfully.";
+            TempData["messageClass"] = "alert-success";
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(ViewIdea));

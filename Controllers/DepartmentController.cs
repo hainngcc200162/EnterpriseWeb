@@ -115,6 +115,8 @@ namespace EnterpriseWeb.Controllers
             {
                 _context.Add(department);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "Create successfully.";
+                TempData["messageClass"] = "alert-success";
                 return RedirectToAction(nameof(Index));
             }
             return View(department);
@@ -155,6 +157,8 @@ namespace EnterpriseWeb.Controllers
                 {
                     _context.Update(department);
                     await _context.SaveChangesAsync();
+                    TempData["message"] = "Edit successfully.";
+                    TempData["messageClass"] = "alert-success";
                 }
                 catch (DbUpdateConcurrencyException)
                 {

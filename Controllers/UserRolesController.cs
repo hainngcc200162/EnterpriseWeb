@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EnterpriseWeb.Controllers
-{   
+{
     [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller
     {
@@ -33,6 +33,8 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout;
             var users = await _userManager.Users.ToListAsync();
             var userRolesViewModel = new List<UserRolesViewModel>();
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
             foreach (IdeaUser user in users)
             {
                 var thisViewModel = new UserRolesViewModel();
@@ -44,6 +46,10 @@ namespace EnterpriseWeb.Controllers
                 thisViewModel.Roles = await GetUserRoles(user);
                 userRolesViewModel.Add(thisViewModel);
             }
+
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
+
             return View(userRolesViewModel);
         }
         public async Task<IActionResult> Manage(string userId)
@@ -92,6 +98,9 @@ namespace EnterpriseWeb.Controllers
                 ModelState.AddModelError("", "Cannot remove user existing roles");
                 return View(model);
             }
+            TempData["message"] = "Update successfully.";
+            TempData["messageClass"] = "alert-success";
+
             result = await _userManager.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
             if (!result.Succeeded)
             {
@@ -124,6 +133,8 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
+            TempData["message"] = "Delete successfully.";
+            TempData["messageClass"] = "alert-success";
             var comments = await _context.Comment.Where(o => o.IdeaUser == user).ToListAsync();
             var views = await _context.Viewing.Where(o => o.IdeaUser == user).ToListAsync();
             var ratings = await _context.Rating.Where(o => o.IdeaUser == user).ToListAsync();
@@ -140,7 +151,7 @@ namespace EnterpriseWeb.Controllers
             foreach (var rating in ratings)
             {
                 _context.Rating.Remove(rating);
-            }     
+            }
             foreach (var idea in ideas)
             {
                 var ideacategories = await _context.IdeaCategory.Where(o => o.Idea == idea).ToListAsync();
@@ -149,7 +160,7 @@ namespace EnterpriseWeb.Controllers
                     _context.IdeaCategory.Remove(ideacategory);
                 }
                 _context.Idea.Remove(idea);
-            }                               
+            }
             await _context.SaveChangesAsync();
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
