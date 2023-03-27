@@ -6,6 +6,14 @@
 
 
 <div class="content-wrapper">
+
+  @if (TempData["message"] != null && TempData["messageClass"] != null)
+  {
+      <div class="alert @TempData["messageClass"]">
+          <p>@TempData["message"]</p>
+      </div>
+  }
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">

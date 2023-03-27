@@ -38,6 +38,11 @@ namespace EnterpriseWeb.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
+            // Retrieve message from TempData, if any
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
             var department = from m in _context.Department select m;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -171,7 +176,7 @@ namespace EnterpriseWeb.Controllers
         // GET: Department/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.Layout = Layout;
+            ViewBag.Layout = Layout2;
             if (id == null)
             {
                 return NotFound();
@@ -186,16 +191,31 @@ namespace EnterpriseWeb.Controllers
 
             return View(department);
         }
-        // POST: Department/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = Layout2;
             var department = await _context.Department.FindAsync(id);
+            var users = await _context.Users.Where(o => o.Department == department).ToListAsync();
+
+            // Check if the department is being used by any user
+            if (users.Any())
+            {
+                TempData["message"] = "This department cannot be deleted because it has been assigned to one or more users.";
+                TempData["messageClass"] = "alert-danger";
+                return RedirectToAction(nameof(Index));
+            }
+
             _context.Department.Remove(department);
             await _context.SaveChangesAsync();
+
+            TempData["message"] = "Department deleted successfully.";
+            TempData["messageClass"] = "alert-success";
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool DepartmentExists(int id)
         {
