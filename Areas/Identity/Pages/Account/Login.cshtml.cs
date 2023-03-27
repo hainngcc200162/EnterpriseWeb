@@ -116,7 +116,24 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    var roles = await _signInManager.UserManager.GetRolesAsync(user);
+                    if (roles.Contains("Admin"))
+                    {
+                        return LocalRedirect("~/Home/AdminHomePage");
+                    }
+                    else if (roles.Contains("QAManager"))
+                    {
+                        return LocalRedirect("~/Home/QAManagerHomePage");
+                    }
+                    else if (roles.Contains("QACoordinator"))
+                    {
+                        return LocalRedirect("~/Home/QACoordinatorHomePage");
+                    }
+                    else
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
