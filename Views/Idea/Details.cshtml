@@ -71,7 +71,7 @@
         <dl id="comments-list" class="row comment-list" style="margin-bottom: 0rem;">
           @for (var i = 0; i < Math.Min(Model.Comments.Count(), 5); i++)
           {
-            Comment[] commentArray = Model.Comments.ToArray();
+            var commentArray = Model.Comments.ToArray();
             <dd class="col-sm-10">
               <strong>
                 @if (commentArray[i].status == 1)
@@ -93,7 +93,7 @@
         <dl id="comments-list-hidden" class="row comment-list" style="display:none">
           @for (var i = 5; i < totalComment; i++)
           {
-            Comment[] commentArray = Model.Comments.ToArray();
+            var commentArray = Model.Comments.ToArray();
             <dd class="col-sm-10">
               <strong>
                 @if (commentArray[i].status == 1)
