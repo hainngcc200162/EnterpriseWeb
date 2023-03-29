@@ -79,11 +79,14 @@
                           </td>
                           <td>@Html.DisplayFor(modelItem => item.SubmissionDate)</td>
                           <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)
+                            @if(item.DataFile!=null)
+                            {
                               <form method="post" action="@Url.Action("Download", "Idea")">
                                   <input type="hidden" name="fileName" value="@item.SupportingDocuments" />
                                   <input type="hidden" name="dataFile" value="@System.Convert.ToBase64String(item.DataFile)"/>
                                   <button id="downloadBtn" type="submit">Download</button>
-                              </form>                            
+                              </form>
+                            }                            
                           </td>
                           @* <td>@Html.DisplayFor(modelItem => item.Department.Name)</td> *@
                           <td>@Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)</td>

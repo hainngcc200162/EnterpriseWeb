@@ -448,7 +448,7 @@ namespace EnterpriseWeb.Controllers
                     }
                     idea.SupportingDocuments = fileName;
                 }
-                else
+                else if (myfile != null && myfile.Length <= 0)
                 {
                     ModelState.AddModelError("DataFile", "The file is empty. Please select a new file!");
                     ViewData["ClosureDateID"] = new SelectList(_context.Set<ClosureDate>(), "Id", "ClousureDate", idea.ClosureDateID);

@@ -116,7 +116,10 @@
               </div>
               <div class="form-group" hidden>
                 <label asp-for="DataFile" class="control-label"></label>
-                <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
+                @if (Model.DataFile != null)
+                {
+                  <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
+                }
               </div>
               <div class="form-group">
                 <label asp-for="ClosureDateID" class="control-label"></label>

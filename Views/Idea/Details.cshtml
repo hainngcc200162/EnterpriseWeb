@@ -9,6 +9,7 @@
   var ratingDown = Model.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
   var totalComment = Model.Comments?.Count() ?? 0;
   var isLiked = Model.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingUp==1);
+  var isDisliked = Model.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingDown==1);
 }
 
 
@@ -122,12 +123,8 @@
         <div>
           <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light @(isLiked ? "active" : "")" asp-action="DetailRating"
             asp-route-id="@Model.Id" asp-route-isUp="true" data-id="@Model.Id" data-isup=0> Thumb Up</a>
-          @* <a class="fas fa-thumbs-up btn btn-light" asp-action="DetailRating" asp-route-id="Model.Id"
-        asp-route-isUp="true"> Thumb Up</a> *@
-          <a class="thumb-down-btn far fa-thumbs-down btn btn-light @(isLiked ? "" : "active")" asp-action="DetailRating" asp-route-id="@Model.Id"
+          <a class="thumb-down-btn far fa-thumbs-down btn btn-light @(isDisliked ? "active" : "")" asp-action="DetailRating" asp-route-id="@Model.Id"
             asp-route-isUp="false" data-id="@Model.Id" data-isup=1> Thumb Down</a>
-          @* <a class="fas fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="Model.Id"
-        asp-route-isUp="false"> Thumb Down</a> *@
         </div>
       }
       else

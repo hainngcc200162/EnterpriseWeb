@@ -73,6 +73,7 @@
   var ratingDown = @item.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
   var totalComment = item.Comments?.Count() ?? 0;
   var isLiked = item.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingUp==1);
+  var isDisliked = item.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingDown==1);
 
 
   <div id="blog" class="flex-container"
@@ -135,7 +136,7 @@
           <div>
             <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light @(isLiked ? "active" : "")" data-id="@item.Id" data-isup=0
               asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
-            <a class=" thumb-down-btn far fa-thumbs-down btn btn-light @(isLiked ? "" : "active")" data-id="@item.Id" data-isup=1
+            <a class=" thumb-down-btn far fa-thumbs-down btn btn-light @(isDisliked ? "active" : "")" data-id="@item.Id" data-isup=1
               asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
             <a asp-controller="Idea" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea
               Detail</a>
