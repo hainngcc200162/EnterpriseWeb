@@ -863,19 +863,21 @@ namespace EnterpriseWeb.Controllers
             await _context.SaveChangesAsync();
             var ideaRatings = _context.Idea
                             .Include(i => i.Ratings)
+                            .Include(i => i.Viewings)
                             .Where(i => i.Id == id)
                             .Select(i => new
                             {
                                 upvotes = i.Ratings.Sum(r => r.RatingUp),
-                                downvotes = i.Ratings.Sum(r => r.RatingDown)
-                            });
-            return Json(ideaRatings);
+                                downvotes = i.Ratings.Sum(r => r.RatingDown),
+                                views = i.Viewings.Count()
+                            }).FirstOrDefault();
+            return new JsonResult(ideaRatings);
         }
 
 
         [Authorize(Roles = "Staff,Admin,QAManager")]
         //Thumbsup and thumbsdown in detail view
-        public async Task<IActionResult> DetailRating(int id, bool isUp)
+        public async Task<IActionResult> DetailRating(int id, int isUp)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // replace with code to get the current user ID
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
@@ -890,7 +892,7 @@ namespace EnterpriseWeb.Controllers
             var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
-                if (isUp)
+                if (isUp==0)
                 {
                     rating = new Rating
                     {
@@ -929,7 +931,7 @@ namespace EnterpriseWeb.Controllers
             }
             else
             {
-                if (isUp)
+                if (isUp==0)
                 {
                     if (rating.RatingUp == 1)
                     {
@@ -958,7 +960,17 @@ namespace EnterpriseWeb.Controllers
                 rating.SubmitionDate = DateTime.Now;
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", new { id = id });
+            var ideaRatings = _context.Idea
+                            .Include(i => i.Ratings)
+                            .Include(i => i.Viewings)
+                            .Where(i => i.Id == id)
+                            .Select(i => new
+                            {
+                                upvotes = i.Ratings.Sum(r => r.RatingUp),
+                                downvotes = i.Ratings.Sum(r => r.RatingDown),
+                                views = i.Viewings.Count()
+                            }).FirstOrDefault();
+            return new JsonResult(ideaRatings);
         }
 
         [Authorize(Roles = "Admin, QAManager")]

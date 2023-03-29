@@ -58,8 +58,8 @@
       <a>
         <i class="far fa-eye"></i> View: @Html.DisplayFor(model => model.Viewings.Count)
         <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
-        <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: @ratingUp
-        <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: @ratingDown
+        <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span id="rating-up-@Model.Id">@ratingUp</span>
+        <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span id="rating-down-@Model.Id">@ratingDown</span>
       </a>
 
       <br><br>
@@ -116,12 +116,12 @@
       <br>
       @if(Model.ClosureDate != null && Model.ClosureDate.ClousureDate > DateTime.Now){
       <div>
-        <a style="padding-left: 0" class="far fa-thumbs-up btn btn-light" asp-action="DetailRating"
-          asp-route-id="@Model.Id" asp-route-isUp="true"> Thumb Up</a>
+        <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light" asp-action="DetailRating"
+          asp-route-id="@Model.Id" asp-route-isUp="true" data-id="@Model.Id" data-isup=0> Thumb Up</a>
         @* <a class="fas fa-thumbs-up btn btn-light" asp-action="DetailRating" asp-route-id="Model.Id"
         asp-route-isUp="true"> Thumb Up</a> *@
-        <a class="far fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id"
-          asp-route-isUp="false"> Thumb Down</a>
+        <a class="thumb-down-btn far fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="@Model.Id"
+          asp-route-isUp="false" data-id="@Model.Id" data-isup=1> Thumb Down</a>
         @* <a class="fas fa-thumbs-down btn btn-light" asp-action="DetailRating" asp-route-id="Model.Id"
         asp-route-isUp="false"> Thumb Down</a> *@
       </div>
@@ -175,5 +175,31 @@
         showMoreBtn.text('Show less');
       }
     });
+    $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
+    e.preventDefault();
+    var button = $(this);
+    var ideaId = button.data("id");
+    var isUp = button.data("isup");
+    var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
+    $.ajax({
+      type: "POST",
+      url: url,
+      dataType: "json",
+      contentType: "application/json",
+      success: function (data) {
+        button.addClass("active");
+        var viewing = data.views;
+        var ratingUp = data.upvotes;
+        var ratingDown = data.downvotes;
+        button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
+        $("#views-" + ideaId).text(viewing);
+        $("#rating-up-" + ideaId).text(ratingUp);
+        $("#rating-down-" + ideaId).text(ratingDown);
+      },
+      error: function () {
+        Swal.fire("Oops...", "Something went wrong!", "error");
+      }
+    });
+  });
   });
 </script>

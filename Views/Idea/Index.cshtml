@@ -94,11 +94,10 @@
         </div>
 
         <a>
-          <i class="far fa-eye"></i> View: @Html.DisplayFor(modelItem => item.Viewings.Count)
+          <i class="far fa-eye"></i> View: <span id="views-@item.Id">@Html.DisplayFor(modelItem => item.Viewings.Count)</span>
           <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
-          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span id="rating-up">@ratingUp</span>
-          <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span
-            id="rating-down">@ratingDown</span>
+          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span id="rating-up-@item.Id">@ratingUp</span>
+          <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span id="rating-down-@item.Id">@ratingDown</span>
 
         </a>
 
@@ -153,26 +152,33 @@
 
 <script>
   $(document).ready(function () {
-    $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
-      e.preventDefault();
-      var button = $(this);
-      var ideaId = button.data("id");
-      var isUp = button.data("isup");
-      var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
-      $.post(url)
-        .done(function (data) {
-          button.addClass("active");
-          var ratingUp = data.upvotes;
-          var ratingDown = data.downvotes;
-          button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
-          $("#rating-up").text(ratingUp);
-          $("#rating-down").text(ratingDown);
-        })
-        .fail(function () {
-          Swal.fire("Oops...", "Something went wrong!", "error");
-        });
+  $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
+    e.preventDefault();
+    var button = $(this);
+    var ideaId = button.data("id");
+    var isUp = button.data("isup");
+    var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
+    $.ajax({
+      type: "POST",
+      url: url,
+      dataType: "json",
+      contentType: "application/json",
+      success: function (data) {
+        button.addClass("active");
+        var viewing = data.views;
+        var ratingUp = data.upvotes;
+        var ratingDown = data.downvotes;
+        button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
+        $("#views-" + ideaId).text(viewing);
+        $("#rating-up-" + ideaId).text(ratingUp);
+        $("#rating-down-" + ideaId).text(ratingDown);
+      },
+      error: function () {
+        Swal.fire("Oops...", "Something went wrong!", "error");
+      }
     });
   });
+});
 
 </script>
 
