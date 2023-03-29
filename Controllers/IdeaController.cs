@@ -340,6 +340,7 @@ namespace EnterpriseWeb.Controllers
             var messageClass = TempData["messageClass"]?.ToString();
             ViewData["message"] = message;
             ViewData["messageClass"] = messageClass;
+            ViewBag.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(await enterpriseWebContext.AsNoTracking().ToListAsync());
         }
         [Authorize(Roles = "Admin, QACoordinator, QAManager, Staff")]
@@ -407,7 +408,7 @@ namespace EnterpriseWeb.Controllers
                 return NotFound();
             }
             await ViewingIdea(id);
-
+            ViewBag.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(idea);
         }
 

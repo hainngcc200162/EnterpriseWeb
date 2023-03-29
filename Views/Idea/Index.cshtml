@@ -40,6 +40,8 @@
   var ratingUp = @item.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
   var ratingDown = @item.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
   var totalComment = item.Comments?.Count() ?? 0;
+  var isLiked = item.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingUp==1);
+
 
 
   <div id="blog" class="flex-container"
@@ -94,50 +96,59 @@
         </div>
 
         <a>
-          <i class="far fa-eye"></i> View: <span id="views-@item.Id">@Html.DisplayFor(modelItem => item.Viewings.Count)</span>
+          <i class="far fa-eye"></i> View: <span id="views-@item.Id">@Html.DisplayFor(modelItem =>
+          item.Viewings.Count)</span>
           <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
-          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span id="rating-up-@item.Id">@ratingUp</span>
-          <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span id="rating-down-@item.Id">@ratingDown</span>
+          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span
+            id="rating-up-@item.Id">@ratingUp</span>
+          <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span
+            id="rating-down-@item.Id">@ratingDown</span>
 
         </a>
 
         <br><br>
 
-        @if(item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now){
-        <div>
-          <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light" data-id="@item.Id" data-isup=0
-            asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
-          <a class=" thumb-down-btn far fa-thumbs-down btn btn-light" data-id="@item.Id" data-isup=1
-            asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
-          <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
-        </div>
-        }else{
-            <div class="col-md-8" style = "display: flex; justify-content: center;">
-              <div>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
-                </div>
+        @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
+        {
+          <div>
+            <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light @(isLiked ? "active" : "")" data-id="@item.Id" data-isup=0
+              asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
+            <a class=" thumb-down-btn far fa-thumbs-down btn btn-light @(isLiked ? "" : "active")" data-id="@item.Id" data-isup=1
+              asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+          </div>
+        }
+        else
+        {
+          <div class="col-md-8" style="display: flex; justify-content: center;">
+            <div>
+              <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
             </div>
-            <br>
-            <div class="col-md-8 alert alert-danger">
-              The closure date has passed. 
-            </div>
+          </div>
+          <br>
+          <div class="col-md-8 alert alert-danger">
+            The closure date has passed.
+          </div>
         }
         <br>
-        @if(item.ClosureDate != null && item.ClosureDate.FinalDate > DateTime.Now){
-        <form asp-action="Comment" asp-route-id="@item.Id">
-          <div class="input-group" style="width:500px">
-            <input class="form-control" name="commenttext" placeholder="Comment" />
-            <select name="incognito">
-              <option value="no">Public</option>
-              <option value="yes">Incognito Comment</option>
-            </select>
-            <input type="submit" value="Comment" class="btn btn-dark" style="display:" />
-          </div>
-        </form>
-        }else{
-          <div class="col-md-8 alert alert-danger">
-              The Final date has passed. 
+        @if (item.ClosureDate != null && item.ClosureDate.FinalDate > DateTime.Now)
+        {
+          <form asp-action="Comment" asp-route-id="@item.Id">
+            <div class="input-group" style="width:500px">
+              <input class="form-control" name="commenttext" placeholder="Comment" />
+              <select name="incognito">
+                <option value="no">Public</option>
+                <option value="yes">Incognito Comment</option>
+              </select>
+              <input type="submit" value="Comment" class="btn btn-dark" style="display:" />
             </div>
+          </form>
+        }
+        else
+        {
+          <div class="col-md-8 alert alert-danger">
+            The Final date has passed.
+          </div>
         }
 
       </div>
@@ -152,33 +163,37 @@
 
 <script>
   $(document).ready(function () {
-  $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
-    e.preventDefault();
-    var button = $(this);
-    var ideaId = button.data("id");
-    var isUp = button.data("isup");
-    var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
-    $.ajax({
-      type: "POST",
-      url: url,
-      dataType: "json",
-      contentType: "application/json",
-      success: function (data) {
-        button.addClass("active");
-        var viewing = data.views;
-        var ratingUp = data.upvotes;
-        var ratingDown = data.downvotes;
-        button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
-        $("#views-" + ideaId).text(viewing);
-        $("#rating-up-" + ideaId).text(ratingUp);
-        $("#rating-down-" + ideaId).text(ratingDown);
-      },
-      error: function () {
-        Swal.fire("Oops...", "Something went wrong!", "error");
-      }
+    $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
+      e.preventDefault();
+      var button = $(this);
+      var ideaId = button.data("id");
+      var isUp = button.data("isup");
+      var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          if (button.hasClass("active")) {
+            button.removeClass("active");
+          } else {
+            button.addClass("active");
+            button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
+          }
+          var viewing = data.views;
+          var ratingUp = data.upvotes;
+          var ratingDown = data.downvotes;
+          $("#views-" + ideaId).text(viewing);
+          $("#rating-up-" + ideaId).text(ratingUp);
+          $("#rating-down-" + ideaId).text(ratingDown);
+        },
+        error: function () {
+          Swal.fire("Oops...", "Something went wrong!", "error");
+        }
+      });
     });
   });
-});
 
 </script>
 

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 
 namespace EnterpriseWeb.Controllers;
 
@@ -63,6 +65,7 @@ public class HomeController : Controller
                 break;
         }
         ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Name", "Name");
+        ViewBag.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return View(await enterpriseWebContext.AsNoTracking().ToListAsync());
     }
     public IActionResult About()
