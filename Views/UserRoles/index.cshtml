@@ -8,7 +8,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="padding-top:20px">
     @if (ViewData["message"] != null)
     {
         <div class="alert @ViewData["messageClass"] alert-dismissible fade show" role="alert">
@@ -18,18 +18,6 @@
             </button>
         </div>
     }
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <p>
-                <a asp-action="Create" class="btn btn-primary">Create User</a>
-            </p>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -38,18 +26,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All Category</h3>
-                <div class="card-tools">
-                    <div class="input-group-append">
-                        <form asp-action="ViewCategory" method="get">
-                          <p>
-                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                              <button class="btn btn-navbar" type="submit" value="Search"><i class="fas fa-search"></i></button>
-                          </p>
-                    </form>
-                
-                  </div>
-                </div>
+                <h3 class="card-title">All User</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
