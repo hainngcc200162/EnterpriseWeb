@@ -110,46 +110,46 @@ namespace EnterpriseWeb.Controllers
             ViewData["CurrentFilter"] = searchString;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
-                                            .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
-                                            .Include(i => i.IdeaUser)
-                            select m;
+            var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
+                                           .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
+                                           .Include(i => i.IdeaUser)
+                        select m;
             var department = await _context.Department.FindAsync(user.DepartmentID);
             if (department != null)
             {
                 var ideas2 = from m in _context.Idea.Include(i => i.ClosureDate)
                                             .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
                                             .Include(i => i.IdeaUser).Where(u => u.DepartmentID == department.Id)
-                            select m;
-                ideas=ideas2;
-           }
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    ideas = ideas.Where(s => s.Title.Contains(searchString));
-                }
-                switch (filterIdea)
-                {
-                    case "all":
-                        // no filtering by status
-                        break;
-                    case "approve":
-                        ideas = ideas.Where(i => i.Status == 1);
-                        break;
-                    case "reject":
-                        ideas = ideas.Where(i => i.Status == 2);
-                        break;
-                    case "underreview":
-                        ideas = ideas.Where(i => i.Status == 0);
-                        break;
-                    default:
-                        break;
-                }
-                var message = TempData["message"]?.ToString();
-                var messageClass = TempData["messageClass"]?.ToString();
-                ViewData["message"] = message;
-                ViewData["messageClass"] = messageClass;
-                int pageSize = 5;
-                return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
+                             select m;
+                ideas = ideas2;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ideas = ideas.Where(s => s.Title.Contains(searchString));
+            }
+            switch (filterIdea)
+            {
+                case "all":
+                    // no filtering by status
+                    break;
+                case "approve":
+                    ideas = ideas.Where(i => i.Status == 1);
+                    break;
+                case "reject":
+                    ideas = ideas.Where(i => i.Status == 2);
+                    break;
+                case "underreview":
+                    ideas = ideas.Where(i => i.Status == 0);
+                    break;
+                default:
+                    break;
+            }
+            var message = TempData["message"]?.ToString();
+            var messageClass = TempData["messageClass"]?.ToString();
+            ViewData["message"] = message;
+            ViewData["messageClass"] = messageClass;
+            int pageSize = 5;
+            return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         [Authorize(Roles = "Admin, QAManager")]
@@ -1070,32 +1070,33 @@ namespace EnterpriseWeb.Controllers
         public IActionResult Chart()
         {
             ViewBag.Layout = Layout2;
+            var totalIdeas = _context.Idea.Count();
             var data = _context.Department
-            .Select(d => new
-            {
-                DepartmentName = d.Name,
-                ContributorCount = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.UserId)
-                    .Distinct()
-                    .Count(),
-                NumberIdea = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.Id)
-                    .Count(),
-                PercentageIdea = _context.Idea
-                    .Where(i => i.DepartmentID == d.Id)
-                    .Select(i => i.Id)
-                    .Count() * 100 / _context.Idea.Count()
-            })
-            .ToList();
+                .Select(d => new
+                {
+                    DepartmentName = d.Name,
+                    ContributorCount = _context.Idea
+                        .Where(i => i.DepartmentID == d.Id)
+                        .Select(i => i.UserId)
+                        .Distinct()
+                        .Count(),
+                    NumberIdea = _context.Idea
+                        .Where(i => i.DepartmentID == d.Id)
+                        .Select(i => i.Id)
+                        .Count(),
+                    PercentageIdea = totalIdeas > 0
+                        ? _context.Idea
+                            .Where(i => i.DepartmentID == d.Id)
+                            .Select(i => i.Id)
+                            .Count() * 100 / totalIdeas
+                        : 0
+                })
+                .ToList();
 
             string[] labels = new string[data.Count];
             string[] numberidea = new string[data.Count];
             string[] percentageidea = new string[data.Count];
-
             string[] counts = new string[data.Count];
-
 
             for (int i = 0; i < data.Count; i++)
             {
@@ -1103,7 +1104,6 @@ namespace EnterpriseWeb.Controllers
                 numberidea[i] = data[i].NumberIdea.ToString();
                 percentageidea[i] = data[i].PercentageIdea.ToString();
                 counts[i] = data[i].ContributorCount.ToString();
-
             }
 
             ViewData["labels"] = string.Format("'{0}'", String.Join("','", labels));
@@ -1112,6 +1112,7 @@ namespace EnterpriseWeb.Controllers
             ViewData["percentageidea"] = String.Join(",", percentageidea);
 
             return View(data);
+
         }
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Record()
