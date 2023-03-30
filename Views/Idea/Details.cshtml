@@ -136,7 +136,7 @@
       <br>
       @if (Model.ClosureDate != null && Model.ClosureDate.FinalDate > DateTime.Now)
       {
-        <form asp-action="Comment" asp-route-id="@Model.Id">
+        <form asp-action="CommentDetail" asp-route-id="@Model.Id">
           <div class="input-group" style="width:500px">
             <input class="form-control" name="commenttext" placeholder="Comment" />
             <select name="incognito">
@@ -181,6 +181,8 @@
         showMoreBtn.text('Show less');
       }
     });
+
+
     $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
       e.preventDefault();
       var button = $(this);
@@ -210,5 +212,8 @@
         }
       });
     });
+    
+
+
   });
 </script>

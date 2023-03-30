@@ -54,9 +54,12 @@ namespace EnterpriseWeb.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
             var department = await _context.Department.FindAsync(user.DepartmentID);
-
-            var comment = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser).Where(u => u.Idea.DepartmentID == department.Id) select m;
-
+            var comment = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser) select m;
+            if (department != null)
+            {
+                var comment2 = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser).Where(u => u.Idea.DepartmentID == department.Id) select m;
+                comment = comment2;
+            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 comment = comment.Where(s => s.Idea.Title.Contains(searchString));

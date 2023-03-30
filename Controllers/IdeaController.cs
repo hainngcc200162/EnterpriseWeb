@@ -110,39 +110,46 @@ namespace EnterpriseWeb.Controllers
             ViewData["CurrentFilter"] = searchString;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+             var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
+                                            .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
+                                            .Include(i => i.IdeaUser)
+                            select m;
             var department = await _context.Department.FindAsync(user.DepartmentID);
-
-            var ideas = from m in _context.Idea.Include(i => i.ClosureDate)
-                                        .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
-                                        .Include(i => i.IdeaUser).Where(u => u.DepartmentID == department.Id)
-                        select m;
-            if (!String.IsNullOrEmpty(searchString))
+            if (department != null)
             {
-                ideas = ideas.Where(s => s.Title.Contains(searchString));
-            }
-            switch (filterIdea)
-            {
-                case "all":
-                    // no filtering by status
-                    break;
-                case "approve":
-                    ideas = ideas.Where(i => i.Status == 1);
-                    break;
-                case "reject":
-                    ideas = ideas.Where(i => i.Status == 2);
-                    break;
-                case "underreview":
-                    ideas = ideas.Where(i => i.Status == 0);
-                    break;
-                default:
-                    break;
-            }
-            var message = TempData["message"]?.ToString();
-            var messageClass = TempData["messageClass"]?.ToString();
-            ViewData["message"] = message;
-            ViewData["messageClass"] = messageClass;
-            int pageSize = 5;
-            return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
+                var ideas2 = from m in _context.Idea.Include(i => i.ClosureDate)
+                                            .Include(i => i.Department).Include(i => i.Viewings).Include(i => i.IdeaCategories)
+                                            .Include(i => i.IdeaUser).Where(u => u.DepartmentID == department.Id)
+                            select m;
+                ideas=ideas2;
+           }
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    ideas = ideas.Where(s => s.Title.Contains(searchString));
+                }
+                switch (filterIdea)
+                {
+                    case "all":
+                        // no filtering by status
+                        break;
+                    case "approve":
+                        ideas = ideas.Where(i => i.Status == 1);
+                        break;
+                    case "reject":
+                        ideas = ideas.Where(i => i.Status == 2);
+                        break;
+                    case "underreview":
+                        ideas = ideas.Where(i => i.Status == 0);
+                        break;
+                    default:
+                        break;
+                }
+                var message = TempData["message"]?.ToString();
+                var messageClass = TempData["messageClass"]?.ToString();
+                ViewData["message"] = message;
+                ViewData["messageClass"] = messageClass;
+                int pageSize = 5;
+                return View(await PaginatedList<Idea>.CreateAsync(ideas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         [Authorize(Roles = "Admin, QAManager")]
@@ -293,6 +300,67 @@ namespace EnterpriseWeb.Controllers
 
             return RedirectToAction("Details", new { id = id });
         }
+
+
+
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> CommentDetail(int id, string commenttext, string incognito)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+
+            //get url to detail idea
+            var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
+
+            //get email of author idea
+            var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
+
+            if (incognito.Equals("no"))
+            {
+                var comment = new Comment
+                {
+                    CommentText = commenttext,
+                    IdeaId = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    SubmitDate = DateTime.Now,
+                    status = 1,
+                };
+                _context.Comment.Add(comment);
+                await _context.SaveChangesAsync();
+
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Comment Notification",
+                    $"<strong>{user.Name}</strong> commented on <a href='{url}'> your idea </a> at {comment.SubmitDate}:<br><strong>{comment.CommentText}</strong>");
+            }
+            else if (incognito.Equals("yes"))
+            {
+                var comment = new Comment
+                {
+                    CommentText = commenttext,
+                    IdeaId = id,
+                    UserId = userId,
+                    IdeaUser = user,
+                    SubmitDate = DateTime.Now,
+                    status = 0,
+                };
+                _context.Comment.Add(comment);
+                await _context.SaveChangesAsync();
+
+                //Send notification to author of idea
+                await _notificationSender.SendEmailAsync(
+                    email,
+                    "Comment Notification",
+                    $"<strong>Someone</strong> commented on <a href='{url}'> your idea </a> at {comment.SubmitDate}:<br><strong>{comment.CommentText}</strong>");
+            }
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+
 
         [Authorize(Roles = "Admin,Staff")]
         // GET: Idea
@@ -893,7 +961,7 @@ namespace EnterpriseWeb.Controllers
             var rating = await _context.Rating.FirstOrDefaultAsync(r => r.IdeaID == id && r.UserId.Equals(userId));
             if (rating == null)
             {
-                if (isUp==0)
+                if (isUp == 0)
                 {
                     rating = new Rating
                     {
@@ -932,7 +1000,7 @@ namespace EnterpriseWeb.Controllers
             }
             else
             {
-                if (isUp==0)
+                if (isUp == 0)
                 {
                     if (rating.RatingUp == 1)
                     {
