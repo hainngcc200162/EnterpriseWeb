@@ -28,11 +28,13 @@ namespace EnterpriseWeb.Controllers
     public class CommentController : Controller
     {
         private string Layout1 = "_QACoordinator";
+        private readonly UserManager<IdeaUser> _userManager;
         private readonly EnterpriseWebIdentityDbContext _context;
 
-        public CommentController(EnterpriseWebIdentityDbContext context)
+        public CommentController(EnterpriseWebIdentityDbContext context, UserManager<IdeaUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "QACoordinator")]
@@ -49,7 +51,12 @@ namespace EnterpriseWeb.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var comment = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser) select m;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            var department = await _context.Department.FindAsync(user.DepartmentID);
+
+            var comment = from m in _context.Comment.Include(c => c.Idea).Include(i => i.IdeaUser).Where(u => u.Idea.DepartmentID == department.Id) select m;
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 comment = comment.Where(s => s.Idea.Title.Contains(searchString));
