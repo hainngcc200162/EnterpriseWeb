@@ -94,8 +94,10 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             [Display(Name = "Full name")]
             public string Name { get; set; }
 
-            [Required]
+            [PersonalData]
             [Display(Name = "Date of Birth")]
+            [Required(ErrorMessage = "Please enter your date of birth.")]
+            [DOB18YearsOld(ErrorMessage = "You must be at least 18 years old.")]
             [DataType(DataType.DateTime)]
             public DateTime DOB { get; set; }
 
@@ -137,7 +139,27 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             public int Department { get; set; }
         }
 
+        public class DOB18YearsOldAttribute : ValidationAttribute
+        {
+            public override bool IsValid(object value)
+            {
+                if (value == null)
+                {
+                    return false;
+                }
 
+                DateTime dateOfBirth = (DateTime)value;
+                DateTime today = DateTime.Today;
+                int age = today.Year - dateOfBirth.Year;
+
+                if (dateOfBirth > today.AddYears(-age))
+                {
+                    age--;
+                }
+
+                return age >= 18;
+            }
+        }
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;

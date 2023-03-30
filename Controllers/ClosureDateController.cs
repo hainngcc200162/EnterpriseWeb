@@ -118,6 +118,28 @@ namespace EnterpriseWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.Layout = Layout;
+                // Check if name is unique
+                if (_context.ClosureDate.Any(x => x.Name == closureDate.Name))
+                {
+                    ModelState.AddModelError("Name", "Name must be unique.");
+                    return View(closureDate);
+                }
+
+                // Check if closure date is greater than current date
+                if (closureDate.ClousureDate < DateTime.Now)
+                {
+                    ModelState.AddModelError("ClousureDate", "Closure date must be greater than the current date.");
+                    return View(closureDate);
+                }
+
+                // Check if final date is smaller than closure date
+                if (closureDate.FinalDate < closureDate.ClousureDate)
+                {
+                    ModelState.AddModelError("FinalDate", "Final date must be greater than closure date.");
+                    return View(closureDate);
+                }
+
                 _context.Add(closureDate);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "Create successfully.";
@@ -126,6 +148,7 @@ namespace EnterpriseWeb.Controllers
             }
             return View(closureDate);
         }
+
         [Authorize(Roles = "Admin")]
         // GET: ClosureDate/Edit/5
         public async Task<IActionResult> Edit(int? id)

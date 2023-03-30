@@ -113,12 +113,22 @@ namespace EnterpriseWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existingDepartment = _context.Department.FirstOrDefault(i => i.Name == department.Name);
+
+                if (existingDepartment != null)
+                {
+                    ModelState.AddModelError("Name", "Department with this name already exists.");
+                    ViewBag.Layout = Layout;
+                    return View(department);
+                }
+
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "Create successfully.";
                 TempData["messageClass"] = "alert-success";
                 return RedirectToAction(nameof(Index));
             }
+
             return View(department);
         }
         [Authorize(Roles = "Admin")]
@@ -155,6 +165,15 @@ namespace EnterpriseWeb.Controllers
             {
                 try
                 {
+                    var existingDepartment = _context.Department.FirstOrDefault(i => i.Name == department.Name && i.Id != department.Id);
+
+                    if (existingDepartment != null)
+                    {
+                        ModelState.AddModelError("Name", "Department with this name already exists.");
+                        ViewBag.Layout = Layout;
+                        return View(department);
+                    }
+
                     _context.Update(department);
                     await _context.SaveChangesAsync();
                     TempData["message"] = "Edit successfully.";

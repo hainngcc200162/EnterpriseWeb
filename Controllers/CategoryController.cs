@@ -151,12 +151,21 @@ namespace EnterpriseWeb.Controllers
             ViewBag.Layout = Layout2;
             if (ModelState.IsValid)
             {
+                var existingCategory = _context.Category.FirstOrDefault(c => c.Name == category.Name);
+
+                if (existingCategory != null)
+                {
+                    ModelState.AddModelError("Name", "Category with this name already exists.");
+                    return View(category);
+                }
+
                 TempData["message"] = "Create successfully.";
                 TempData["messageClass"] = "alert-success";
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ViewQA));
             }
+
             return View(category);
         }
 
