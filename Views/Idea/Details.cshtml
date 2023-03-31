@@ -19,16 +19,22 @@
   <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
     <div class="single-blog">
       <div>
-        @if (Model.IdeaUser != null && Model.IdeaUser.ProfilePicture == null)
+        @if (Model.IdeaUser != null && Model.IdeaStatus == 0)
         {
           <img class="avatar-default" style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
         }
-        else if (Model.IdeaUser != null && Model.IdeaUser.ProfilePicture != null)
+        else if (Model.IdeaUser != null && Model.IdeaStatus ==1)
         {
           <img src="data:image;base64,@System.Convert.ToBase64String(Model.IdeaUser.ProfilePicture)"
             style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
         }
-        <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(model => model.IdeaUser.Name)
+        <h4 style="display: inline-block; padding-left:20px;">
+          @if(Model.IdeaStatus == 1){
+            @Html.DisplayFor(model => model.IdeaUser.Name)
+          }else{
+            <text>Anonymous</text>
+          }    
+          
           <br>
           <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(model =>
             model.Department.Name) &gt;</span>
@@ -48,7 +54,7 @@
           Title:
           <b>@Html.DisplayFor(model => model.Title)</b>
         </h4>
-        <p>
+        <p style="text-align: justify;">
           <b>Description: &ldquo;</b>
           <i>
             @Html.DisplayFor(model => model.Description)
@@ -68,7 +74,7 @@
 
       <br><br>
       <b>Comment:</b>
-      <div style="border-radius: 5px 20px 5px; border: 2px outset; padding:20px; overflow:auto; height:250px">
+      <div style="border-radius: 5px 20px 5px; border: 2px outset; padding:20px; overflow:auto; max-height:250px">
         <dl id="comments-list" class="row comment-list" style="margin-bottom: 0rem;">
           @for (var i = 0; i < Math.Min(Model.Comments.Count(), 5); i++)
           {
@@ -136,10 +142,10 @@
       <br>
       @if (Model.ClosureDate != null && Model.ClosureDate.FinalDate > DateTime.Now)
       {
-        <form asp-action="CommentDetail" asp-route-id="@Model.Id">
-          <div class="input-group" style="width:500px">
-            <input class="form-control" name="commenttext" placeholder="Comment" />
-            <select name="incognito">
+        <form asp-action="Comment" asp-route-id="@Model.Id">
+          <div class="input-group" style="max-width:80%;">
+            <input class="form-control comment-box" name="commenttext" placeholder="Comment" />
+            <select name="incognito" style="min-with:20%; max-width:30%;">
               <option value="no">Public</option>
               <option value="yes">Incognito Comment</option>
             </select>

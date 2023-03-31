@@ -57,8 +57,9 @@
   </div>
 </section>
 
-<div class="col-sm-8" style="margin:auto; margin-top:20px; display:flex">
-  <form asp-action="Index" method="get">
+<div class="col-sm-8" style="margin:auto; margin-top:20px;">
+  <h4>Department</h4>
+  <form style="display:flex;" asp-action="Index" method="get">
     <select name="SearchString" class="form-select" asp-items="ViewBag.DepartmentID" value="@ViewData["CurrentFilter"]"
       style="width:70%; display:unset"></select>
     <input type="submit" value="Filter" class="btn btn-default">
@@ -81,20 +82,27 @@
     <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
       <div class="single-blog">
         <div>
-          @if (@item.IdeaUser != null && @item.IdeaUser.ProfilePicture == null)
+          @if (@item.IdeaUser != null && @item.IdeaStatus == 0)
           {
             <img class="avatar-default" style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
           }
-          else if (@item.IdeaUser != null && @item.IdeaUser.ProfilePicture != null)
+          else if (@item.IdeaUser != null && @item.IdeaStatus == 1)
           {
             <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)"
               style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
           }
-          <h4 style="display: inline-block; padding-left:20px;">@Html.DisplayFor(modelItem => item.IdeaUser.Name)
+          <h4 style="display: inline-block; padding-left:20px;">
+            @if (item.IdeaStatus == 1)
+            {
+              @item.IdeaUser.Name
+            }
+            else
+            {
+              <text>Anonymous</text>
+            }:
             <br>
             <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(modelItem =>
             item.Department.Name) &gt;</span>
-
           </h4>
         </div>
         <div class="blog-meta">
@@ -110,7 +118,7 @@
             Title:
             <b>@Html.DisplayFor(modelItem => item.Title)</b>
           </h4>
-          <p>
+          <p style="text-align: justify;">
             <b>Description: &ldquo;</b>
             <i>
               @Html.DisplayFor(modelItem => item.Description)
@@ -159,14 +167,14 @@
         <br>
         @if (item.ClosureDate != null && item.ClosureDate.FinalDate > DateTime.Now)
         {
-          <form asp-controller="Idea" asp-action="Comment" asp-route-id="@item.Id">
-            <div class="input-group" style="width:500px">
-              <input class="form-control" name="commenttext" placeholder="Comment" />
-              <select name="incognito">
+          <form asp-action="Comment" asp-route-id="@item.Id">
+            <div class="input-group" style="max-width:80%;">
+              <input class="form-control comment-box" name="commenttext" placeholder="Comment"/>
+              <select name="incognito" style="min-with:20%; max-width:30%;">
                 <option value="no">Public</option>
                 <option value="yes">Incognito Comment</option>
               </select>
-              <input type="submit" value="Comment" class="btn btn-dark" style="display:" />
+              <input type="submit" value="Comment" class="btn btn-dark" style=""/>
             </div>
           </form>
         }

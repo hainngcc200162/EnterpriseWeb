@@ -81,7 +81,9 @@
                         <tr>                          
                           <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                          <td>
+                            <textarea readonly>@Html.DisplayFor(modelItem => item.Description)</textarea>
+                          </td>
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
                           <td>
                             @totalViews

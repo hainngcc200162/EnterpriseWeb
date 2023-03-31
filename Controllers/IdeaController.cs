@@ -201,7 +201,8 @@ namespace EnterpriseWeb.Controllers
         [Authorize(Roles = "Admin, QAManager")]
         public IActionResult ExportIdeaList()
         {
-            List<Idea> ideas = _context.Idea.Include(i => i.Department)
+            List<Idea> ideas = _context.Idea.Include(i => i.IdeaUser)
+                                            .Include(i => i.Department)
                                             .Include(i => i.ClosureDate)
                                             .Include(i => i.Ratings)
                                             .Include(i => i.Viewings)
@@ -211,27 +212,29 @@ namespace EnterpriseWeb.Controllers
             {
                 var worksheet = xlPackage.Workbook.Worksheets.Add("Ideas");
                 worksheet.Cells["E1"].Value = "List Idea";
-                worksheet.Cells["A3"].Value = "Title";
-                worksheet.Cells["B3"].Value = "Description";
-                worksheet.Cells["C3"].Value = "Rating Up";
-                worksheet.Cells["D3"].Value = "Rating Down";
-                worksheet.Cells["E3"].Value = "View";
-                worksheet.Cells["F3"].Value = "Submission Date";
-                worksheet.Cells["G3"].Value = "Department";
-                worksheet.Cells["H3"].Value = "ClosureDate";
+                worksheet.Cells["A3"].Value = "User Name";
+                worksheet.Cells["B3"].Value = "Title";
+                worksheet.Cells["C3"].Value = "Description";
+                worksheet.Cells["D3"].Value = "Rating Up";
+                worksheet.Cells["E3"].Value = "Rating Down";
+                worksheet.Cells["F3"].Value = "View";
+                worksheet.Cells["G3"].Value = "Submission Date";
+                worksheet.Cells["H3"].Value = "Department";
+                worksheet.Cells["I3"].Value = "ClosureDate";
 
 
                 int row = 4;
                 foreach (var idea in ideas)
                 {
-                    worksheet.Cells[row, 1].Value = idea.Title;
-                    worksheet.Cells[row, 2].Value = idea.Description;
-                    worksheet.Cells[row, 3].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
-                    worksheet.Cells[row, 4].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingDown));
-                    worksheet.Cells[row, 5].Value = idea.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
-                    worksheet.Cells[row, 6].Value = idea.SubmissionDate.ToString();
-                    worksheet.Cells[row, 7].Value = idea.Department.Name;
-                    worksheet.Cells[row, 8].Value = idea.ClosureDate.ClousureDate.ToString();
+                    worksheet.Cells[row, 1].Value = idea.IdeaUser.Name;
+                    worksheet.Cells[row, 2].Value = idea.Title;
+                    worksheet.Cells[row, 3].Value = idea.Description;
+                    worksheet.Cells[row, 4].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+                    worksheet.Cells[row, 5].Value = idea.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingDown));
+                    worksheet.Cells[row, 6].Value = idea.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                    worksheet.Cells[row, 7].Value = idea.SubmissionDate.ToString();
+                    worksheet.Cells[row, 8].Value = idea.Department.Name;
+                    worksheet.Cells[row, 9].Value = idea.ClosureDate.ClousureDate.ToString();
 
 
                     row++;
@@ -303,79 +306,20 @@ namespace EnterpriseWeb.Controllers
 
 
 
-        [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> CommentDetail(int id, string commenttext, string incognito)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
-
-            //get url to detail idea
-            var url = Url.Action("Details", "Idea", new { id = idea.Id }, protocol: HttpContext.Request.Scheme);
-
-            //get email of author idea
-            var email = await _userManager.GetEmailAsync(_userManager.Users.FirstOrDefault(u => u.Id == idea.UserId));
-
-            if (incognito.Equals("no"))
-            {
-                var comment = new Comment
-                {
-                    CommentText = commenttext,
-                    IdeaId = id,
-                    UserId = userId,
-                    IdeaUser = user,
-                    SubmitDate = DateTime.Now,
-                    status = 1,
-                };
-                _context.Comment.Add(comment);
-                await _context.SaveChangesAsync();
-
-                //Send notification to author of idea
-                await _notificationSender.SendEmailAsync(
-                    email,
-                    "Comment Notification",
-                    $"<strong>{user.Name}</strong> commented on <a href='{url}'> your idea </a> at {comment.SubmitDate}:<br><strong>{comment.CommentText}</strong>");
-            }
-            else if (incognito.Equals("yes"))
-            {
-                var comment = new Comment
-                {
-                    CommentText = commenttext,
-                    IdeaId = id,
-                    UserId = userId,
-                    IdeaUser = user,
-                    SubmitDate = DateTime.Now,
-                    status = 0,
-                };
-                _context.Comment.Add(comment);
-                await _context.SaveChangesAsync();
-
-                //Send notification to author of idea
-                await _notificationSender.SendEmailAsync(
-                    email,
-                    "Comment Notification",
-                    $"<strong>Someone</strong> commented on <a href='{url}'> your idea </a> at {comment.SubmitDate}:<br><strong>{comment.CommentText}</strong>");
-            }
-
-            return RedirectToAction("Details", new { id = id });
-        }
-
+    
 
 
         [Authorize(Roles = "Admin,Staff")]
         // GET: Idea
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            ViewData["MostView"] = String.IsNullOrEmpty(sortOrder) ? "mostView" : "mostView";
-            ViewData["MostRating"] = sortOrder == "mostView" ? "mostRating" : "mostRating";
-            ViewData["Department"] = sortOrder == "mostView" ? "mostRating" : "department";
             ViewData["CurrentFilter"] = searchString;
             var enterpriseWebContext = from e in _context.Idea
                            .Include(i => i.ClosureDate)
                            .Include(i => i.Department)
                            .Include(i => i.Viewings)
                            .Include(i => i.IdeaUser)
-                           .Include(i => i.Ratings)
+                           .Include(i => i.Ratings)                           
                            .Include(i => i.Comments)
                                        where e.Status == 1
                                        select e;
@@ -389,6 +333,8 @@ namespace EnterpriseWeb.Controllers
 
             switch (sortOrder)
             {
+                case "all": 
+                    break;
                 case "mostView":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
                     break;
@@ -401,6 +347,9 @@ namespace EnterpriseWeb.Controllers
                 case "department":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Department.Name);
                     break;
+                case "lasted":
+                    enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.SubmissionDate);
+                    break;                    
                 default:
                     break;
             }
