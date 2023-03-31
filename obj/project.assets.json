@@ -11605,19 +11605,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nguye\\.nuget\\packages\\": {}
+    "C:\\Users\\GF63\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
+      "projectUniqueName": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
       "projectName": "EnterpriseWeb",
-      "projectPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\EnterpriseWeb.csproj",
-      "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nguye\\Desktop\\EnterpriseWeb\\obj\\",
+      "projectPath": "E:\\Website1640\\EnterpriseWeb\\EnterpriseWeb.csproj",
+      "packagesPath": "C:\\Users\\GF63\\.nuget\\packages\\",
+      "outputPath": "E:\\Website1640\\EnterpriseWeb\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\GF63\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

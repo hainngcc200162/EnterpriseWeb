@@ -1,4 +1,4 @@
-@model EnterpriseWeb.Models.Idea
+ @* @model EnterpriseWeb.Models.Idea
 
 
 @{
@@ -7,62 +7,81 @@
 
 <h1 style="text-align:center;">What are you thinking?</h1>
 
-@* <h4>Idea</h4>
-<hr />
-<div class="row">
-<div class="col-md-4">
-<form asp-action="Create" id="create-idea-form" enctype="multipart/form-data">
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="form-group">
-<label asp-for="Title" class="control-label"></label>
-<input asp-for="Title" class="form-password" />
-<span asp-validation-for="Title" class="text-danger"></span>
+<div class="col-md-6" style="width: 600px; margin: auto;">
+    <div class="form contact-form">
+        <form asp-action="Create" id="create-idea-form" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <p>Idea Status</p>
+            <div class="input-group" style="width:500px">
+                <select name="istatus">
+                    <option value="no">Public Idea</option>
+                    <option value="yes">Anonymous Idea</option>
+                </select>
+            </div>
+            <p>Title</p>
+            <div class="form-group" style="color:black;">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <p>Description</p>
+            <div class="form-group mt-3" style="color:black;">
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="SubmissionDate" class="control-label"></label>
+                <input asp-for="SubmissionDate" class="form-password" />
+                <span asp-validation-for="SubmissionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="SupportingDocuments" class="control-label"></label>
+                <input asp-for="SupportingDocuments" class="form-password" />
+                <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+            </div>
+            <p>SupportingDocuments</p>
+            <div class="form-group mt-3" style="color:black;">
+                <input asp-for="DataFile" type="file" name="myfile" class="form-control" />
+            </div>
+            <span asp-validation-for="DataFile" class="text-danger"></span>
+            <p>ClosureDate</p>
+            <div class="form-group mt-3" style="color:black;">
+                <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"></select>
+            </div>
+            <div class="form-group" style="color:black;">
+                <label>
+                    <input type="checkbox" name="agree" id="agree-checkbox" required>
+                    I agree to the terms and conditions.
+                </label>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Send Message" class="btn btn-dark">
+            </div>
+        </form>
+    </div>
 </div>
-<div class="form-group">
-<label asp-for="Description" class="control-label"></label>
-<input asp-for="Description" class="form-password" />
-<span asp-validation-for="Description" class="text-danger"></span>
-</div>
-<div class="form-group" hidden>
-<label asp-for="UserId" class="control-label"></label>
-<input asp-for="UserId" class="form-password" />
-<span asp-validation-for="UserId" class="text-danger"></span>
-</div>
-<div class="form-group" hidden>
-<label asp-for="SubmissionDate" class="control-label"></label>
-<input asp-for="SubmissionDate" class="form-password" />
-<span asp-validation-for="SubmissionDate" class="text-danger"></span>
-</div>
-<div class="form-group">
-<label asp-for="SupportingDocuments" class="control-label"></label>
-<input asp-for="SupportingDocuments" type="file" name="myfile" required />
-<span asp-validation-for="SupportingDocuments" class="text-danger"></span>
-</div>
-<div class="form-group">
-<label class="control-label">Categories</label>
-<select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
-multiple></select>
-</div>
-<div class="form-group">
-<label asp-for="DepartmentID" class="control-label"></label>
-<select asp-for="DepartmentID" class="form-password" asp-items="ViewBag.DepartmentID"></select>
-</div>
-<div class="form-group">
-<label asp-for="ClosureDateID" class="control-label"></label>
-<select asp-for="ClosureDateID" class="form-password" asp-items="ViewBag.ClosureDateID"></select>
-</div>
-<div class="form-group">
-<label>
-<input type="checkbox" name="agree" id="agree-checkbox" required>
-I agree to the terms and conditions.
-</label>
-</div>
-<div class="form-group">
-<input type="submit" value="Create" class="btn btn-primary" />
-</div>
-</form>
-</div>
-</div> *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var form = document.getElementById('create-idea-form');
+        var checkbox = document.getElementById('agree-checkbox');
+        form.addEventListener('submit', function (event) {
+            if (!checkbox.checked) {
+                event.preventDefault();
+                alert('Please agree to the terms and conditions before submitting the form.');
+            }
+        });
+    </script>
+} *@
+@model EnterpriseWeb.Models.Idea
+<div class="d" id = "d">
+<h1 style="text-align:center;">What are you thinking?</h1>
+
 <div class="col-md-6" style="width: 600px; margin: auto;">
     <div class="form contact-form">
         <form asp-action="Create" id="create-idea-form" enctype="multipart/form-data">
@@ -113,8 +132,55 @@ I agree to the terms and conditions.
             </div>
             <div class="form-group" style="color:black;">
                 <label>
-                    <input type="checkbox" name="agree" id="agree-checkbox" required>
-                    I agree to the terms and conditions.
+                    <input type="checkbox" name="agree" id="agree-checkbox" onclick="OpenPopup()" required> Read Terms & Conditions
+                    <div class="sty">
+                    <div class="terms-box" id = "terms-box">
+                        <div class="temrs-text" autofocus>
+                            <h3 style ="color:#fff; text-align:center;">Terms and Conditions</h3>
+                            <br>
+                            <p style ="color:#fff;">Welcome to the Idea Submission and Review Platform. The Platform is provided by 
+                                Greenwich University for the purpose of encouraging and gathering ideas from all 
+                                academic and support staff. By accessing and using the Platform, you agree to the 
+                                following terms and conditions:</p>
+                            <p style ="color:#fff;">1, Idea Submission and Review Process: The University has a Quality Assurance Manager to oversee the process, 
+                                and each department has a QA coordinator who is responsible for managing the process for their department and encouraging 
+                                staff to contribute. All staff (academic and support) have the opportunity to submit one or more ideas. All ideas can be 
+                                categorised from a list of categories at the point when they are submitted. 
+                                The QA Manager can add additional categories at any time and can delete categories, but only if they have not been used.</p>
+                            <p style ="color:#fff;">2, Submission Requirements: All staff must agree to these terms and conditions before they can submit an idea. All staff can 
+                                optionally upload documents to support their ideas.</p>
+                            <p style ="color:#fff;">3, Anonymity: Ideas and comments can be posted anonymously, although the author's details will be stored in the database so 
+                                that any inappropriate ideas can be investigated.</p>
+                            <p style ="color:#fff;">4, Voting and Commenting: All staff can see all submitted ideas and can comment on any idea. They can also give a Thumbs Up 
+                                or Thumbs Down for any idea, but only once for any idea. The author of an idea receives an automatic email notification 
+                                whenever a comment is submitted to any of their ideas.</p>
+                            <p style ="color:#fff;">5, Closure: All new ideas are disabled after a closure date for new ideas, but comments can continue to be done until a final 
+                                closure date.</p>
+                            <p style ="color:#fff;">6, Data Download: The University QA Manager needs to be able to download all the data after the final closure date in a CSV file for transfer 
+                                out of the system. Any uploaded documents need to be downloaded in a ZIP file.</p>
+                            <p style ="color:#fff;">7, Administration: An administrator is needed to maintain any system data, e.g. closure dates for each academic year, staff details.</p>
+                            <p style ="color:#fff;">8, Statistical Analysis: Statistical analysis (e.g. number of ideas per department) needs to be available.</p>
+                            <p style ="color:#fff;">9, Interface: The interface must be suitable for all devices (e.g. mobile phones, tablets, desktops).</p>
+                            <p style ="color:#fff;">10, Liability: The University is not liable for any loss or damage arising out of or in connection with the use of the Platform.</p>
+                            <p style ="color:#fff;">11, Modification: The University reserves the right to modify or discontinue the Platform at any time without prior notice.</p>
+                            <p style ="color:#fff;">12, Governing Law: These terms and conditions shall be governed by and construed in accordance with the laws of [Jurisdiction], 
+                                and any disputes arising out of or in connection with these terms and conditions shall be subject to the exclusive jurisdiction 
+                                of the courts of [Jurisdiction].
+                            </p>
+                            <p style ="color:#fff;">13, Entire Agreement: These terms and conditions constitute the entire agreement between you and the University with respect to 
+                                the Platform and supersede all prior or contemporaneous communications and proposals, whether oral or written, between you and 
+                                the University.
+                            </p>
+                            <p style ="color:#fff;">By using the Platform, you agree to comply with these terms and conditions. If you do not agree to these terms and conditions, 
+                                you may not use the Platform.</p>
+                            <h4 style ="color:#fff;">
+                                <input type="checkbox" name="agree" id="agree-box" onclick="ClosePopup()" required>
+                                I Agree to the <span>Terms and Conditions Of Service</span></h4>
+                                <div class="buttons-terms">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 </label>
             </div>
             <div class="text-center">
@@ -123,12 +189,19 @@ I agree to the terms and conditions.
         </form>
     </div>
 </div>
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+</div>
+<script>
+    var terms = document.getElementById('terms-box');
+    function OpenPopup(){
+        terms.classList.add("open-terms-box");
+        terms.addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
     }
-    <script>
-        var form = document.getElementById('create-idea-form');
+    function ClosePopup(){
+        terms.classList.remove("open-terms-box");
+    }
+    var form = document.getElementById('create-idea-form');
         var checkbox = document.getElementById('agree-checkbox');
         form.addEventListener('submit', function (event) {
             if (!checkbox.checked) {
@@ -136,5 +209,13 @@ I agree to the terms and conditions.
                 alert('Please agree to the terms and conditions before submitting the form.');
             }
         });
+        var form = document.getElementById('create-idea-form');
+        var checkbox = document.getElementById('agree-box');
+        form.addEventListener('submit', function (event) {
+            if (!checkbox.checked) {
+                event.preventDefault();
+                alert('Please agree to the terms and conditions before submitting the form.');
+            }
+        });
     </script>
-}
+
