@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Identity;
+using EnterpriseWeb.Models;
+using EnterpriseWeb.Controllers;
 using EnterpriseWeb.Enums;
 
 namespace EnterpriseWeb.Areas.Identity.Data
@@ -26,7 +28,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 EmailConfirmed = true,
                 PhoneNumber = "0909090909",
                 PhoneNumberConfirmed = true,
-                ProfilePicture = await transferPic("././wwwroot/img/admin.jpg")
+                ProfilePicture = await transferPic("././wwwroot/img/admin.jpg"),
 
             };
             if (userManager.Users.All(u => u.Id != defaultUserAdmin.Id))
@@ -88,7 +90,7 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 }
             }
 
-             var defaultUserQACoordinator = new IdeaUser
+            var defaultUserQACoordinator = new IdeaUser
             {
                 UserName = "QAcoor@gmail.com",
                 Email = "QAcoor@gmail.com",
@@ -98,7 +100,9 @@ namespace EnterpriseWeb.Areas.Identity.Data
                 EmailConfirmed = true,
                 PhoneNumber = "0909090907",
                 PhoneNumberConfirmed = true,
-                ProfilePicture = await transferPic("././wwwroot/img/qamanager.jpg")
+                ProfilePicture = await transferPic("././wwwroot/img/qamanager.jpg"),
+                DepartmentID = 1, // DefaultID of Department
+                Department = new Department { Name = "Default Department" , Description = "Default Department"}
 
             };
             if (userManager.Users.All(u => u.Id != defaultUserQACoordinator.Id))
