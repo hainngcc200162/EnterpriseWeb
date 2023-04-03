@@ -333,8 +333,6 @@ namespace EnterpriseWeb.Controllers
 
             switch (sortOrder)
             {
-                case "all": 
-                    break;
                 case "mostView":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Viewings.Count);
                     break;

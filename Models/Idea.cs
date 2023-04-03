@@ -12,9 +12,7 @@ namespace EnterpriseWeb.Models
         public int? IdeaStatus { get; set; }
         public string? UserId { get; set; }
         public IdeaUser? IdeaUser { get; set; }
-
-
-
+        
         [DataType(DataType.Date)]
         public DateTime SubmissionDate { get; set; }
         [DataType(DataType.Upload)]
