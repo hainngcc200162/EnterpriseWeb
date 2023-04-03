@@ -306,7 +306,7 @@ namespace EnterpriseWeb.Controllers
 
 
 
-    
+
 
 
         [Authorize(Roles = "Admin,Staff")]
@@ -319,7 +319,7 @@ namespace EnterpriseWeb.Controllers
                            .Include(i => i.Department)
                            .Include(i => i.Viewings)
                            .Include(i => i.IdeaUser)
-                           .Include(i => i.Ratings)                           
+                           .Include(i => i.Ratings)
                            .Include(i => i.Comments)
                                        where e.Status == 1
                                        select e;
@@ -345,9 +345,9 @@ namespace EnterpriseWeb.Controllers
                 case "department":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.Department.Name);
                     break;
-                case "lasted":
+                case "latest":
                     enterpriseWebContext = enterpriseWebContext.OrderByDescending(e => e.SubmissionDate);
-                    break;                    
+                    break;
                 default:
                     break;
             }
@@ -401,14 +401,14 @@ namespace EnterpriseWeb.Controllers
 
         [Authorize(Roles = "Admin, Staff, QACoordinator")]
         // GET: Idea/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string sortOrder)
         {
             if (id == null)
             {
                 return NotFound();
             }
             ViewData["UserID"] = new SelectList(_context.Set<IdentityUser>(), "Id", "Name");
-
+            ViewData["Latest"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             var idea = await _context.Idea
                 .Include(i => i.ClosureDate)
                 .Include(i => i.Department)
@@ -422,6 +422,19 @@ namespace EnterpriseWeb.Controllers
             {
                 return NotFound();
             }
+
+            // Sorting comments by latest date
+            ViewBag.SubmitDateSortParam = String.IsNullOrEmpty(sortOrder) ? "submit_date_desc" : "";
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    idea.Comments = idea.Comments.OrderByDescending(c => c.SubmitDate).ToList();
+                    break;
+                default:
+                    break;
+            }
+
             await ViewingIdea(id);
             ViewBag.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(idea);
