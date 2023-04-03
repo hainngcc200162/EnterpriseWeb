@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWeb.Models;
 using EnterpriseWeb.Areas.Identity.Data;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace EnterpriseWeb.Controllers
-{
+{   
+    [Authorize(Roles = "QACoordinator, Admin, QAManager")]
     public class IdeaCategoryController : Controller
     {
         private readonly EnterpriseWebIdentityDbContext _context;

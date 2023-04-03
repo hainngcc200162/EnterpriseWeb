@@ -50,23 +50,18 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="QACoordinatorID" class="control-label"></label>
-                <select asp-for="QACoordinatorID" class="form-control" asp-items="ViewBag.QACoordinatorID"></select>
-                <span asp-validation-for="QACoordinatorID" class="text-danger"></span>
-            </div>
-            </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
       </div>
+      </div>
       <div class="row">
         <div class="col-12">
-          <a href="#" class="btn btn-secondary">Cancel</a>
+          <a asp-action="Index" class="btn btn-secondary">Cancel</a>
           <input type="submit" value="Edit" class="btn btn-dark float-right">
         </div>
-      </div>
+        </div>
       </form>
     </section>
     <!-- /.content -->

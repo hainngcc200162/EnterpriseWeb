@@ -13,12 +13,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using EnterpriseWeb.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using EnterpriseWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using EnterpriseWeb.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using EnterpriseWeb.Areas.Identity.Services;
+using Microsoft.AspNetCore.StaticFiles;
+using System.IO;
+using System.IO.Compression;
+
 
 namespace EnterpriseWeb.Areas.Identity.Pages.Account
 {
@@ -30,13 +39,16 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdeaUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly EnterpriseWebIdentityDbContext _context;
+
 
         public RegisterModel(
             UserManager<IdeaUser> userManager,
             IUserStore<IdeaUser> userStore,
             SignInManager<IdeaUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            EnterpriseWebIdentityDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +56,7 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -81,8 +94,10 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             [Display(Name = "Full name")]
             public string Name { get; set; }
 
-            [Required]
+            [PersonalData]
             [Display(Name = "Date of Birth")]
+            [Required(ErrorMessage = "Please enter your date of birth.")]
+            [DOB18YearsOld(ErrorMessage = "You must be at least 18 years old.")]
             [DataType(DataType.DateTime)]
             public DateTime DOB { get; set; }
 
@@ -119,15 +134,37 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "Profile Picture")]
-            public byte[] ProfilePicture { get; set; }
+            [Required]
+            [Display(Name = "Department")]
+            public int Department { get; set; }
         }
 
+        public class DOB18YearsOldAttribute : ValidationAttribute
+        {
+            public override bool IsValid(object value)
+            {
+                if (value == null)
+                {
+                    return false;
+                }
 
+                DateTime dateOfBirth = (DateTime)value;
+                DateTime today = DateTime.Today;
+                int age = today.Year - dateOfBirth.Year;
+
+                if (dateOfBirth > today.AddYears(-age))
+                {
+                    age--;
+                }
+
+                return age >= 18;
+            }
+        }
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Name");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -138,6 +175,7 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                await _userManager.AddToRoleAsync(user, Enums.Roles.Staff.ToString());
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -173,14 +211,12 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
-            
-
+            ViewData["DepartmentID"] = new SelectList(_context.Set<Department>(), "Id", "Name");
             // If we got this far, something failed, redisplay form
             return Page();
         }
 
-        private  IdeaUser CreateUser()
+        private IdeaUser CreateUser()
         {
             try
             {
@@ -189,15 +225,14 @@ namespace EnterpriseWeb.Areas.Identity.Pages.Account
                 user.DOB = Input.DOB;
                 user.Address = Input.Address;
                 user.PhoneNumber = Input.PhoneNumber;
-                if (Request.Form.Files.Count > 0)
-            {
-                IFormFile file = Request.Form.Files.FirstOrDefault();
-                using (var dataStream = new MemoryStream())
-                {
-                    file.CopyToAsync(dataStream);
-                    user.ProfilePicture = dataStream.ToArray();
-                }
-            }
+                user.DepartmentID = Input.Department;
+                user.Department = _context.Department.FirstOrDefault(d => d.Id == Input.Department);
+
+                using var image = System.Drawing.Image.FromFile("././wwwroot/img/avatardefault.png");
+                using var mStream = new MemoryStream();
+                image.Save(mStream, image.RawFormat);
+                user.ProfilePicture = mStream.ToArray();
+
                 return user;
             }
             catch

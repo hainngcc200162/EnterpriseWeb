@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Log in";
+    Layout = "/Views/Shared/_MainLayout.cshtml";
 }
 @* <div class= "pad" style = "padding-top: 80px;">
 <h1>@ViewData["Title"]</h1>
@@ -81,6 +82,13 @@
 </div>
     
 </div> *@
+<style>
+#wrapper {
+    background-image: url("/img/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
 <div id = "wrapper">
     <div id ="form-login">
     <form id = "account" name ="login" align ="center" method ="post">

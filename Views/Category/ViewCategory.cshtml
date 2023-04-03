@@ -5,20 +5,10 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <p>
-                <a asp-action="Create">Create Category</a>
-            </p>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
+
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top:2%">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -46,22 +36,17 @@
                       <th>Name</th>
                       <th>Status</th>
                       <th>Description</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Name)</td>
                           <td>@Html.DisplayFor(modelItem => item.Status)</td>
                           <td>
                             <div class="sparkbar" data-color="#00a65a" data-height="20">@Html.DisplayFor(modelItem => item.Description)</div>
-                          </td>
-                          <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
-                          </td>         
+                          </td>     
                         </tr>
                       }
                   </tbody>
@@ -71,9 +56,9 @@
                     <li class="page-item"><a class="page-link" asp-action="ViewCategory"
                               asp-route-pageNumber="1"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                  <<                
-                              </a></li> 
-                          @{
+                                  <i class = "fas fa-angle-double-left"></i>                
+                              </a></li>                          
+                            @{
                             int i = Model.PageIndex;
                             if(i >= 1 && i <= 2 && Model.TotalPages < 3){
                               for(i = 1; i <= Model.TotalPages; i ++){
@@ -111,11 +96,19 @@
                           }
                           }
                           }
+                      @if(Model.TotalPages > 0){
                       <li class="page-item"><a class="page-link" asp-action="ViewCategory"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            >>               
-                        </a></li> 
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="ViewCategory"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
                 </ul>
               </div>
               </div>

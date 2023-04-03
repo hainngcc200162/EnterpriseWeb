@@ -1,92 +1,202 @@
 @model IEnumerable<EnterpriseWeb.Models.Idea>
 
 @{
-    ViewData["Title"] = "Index";
+  ViewData["Title"] = "Index";
 }
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-    <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
-    <a asp-action="Chart" class="btn btn-warning">Chart</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdeaUser.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupportingDocuments)
-            </th>
-            <th>
-                View
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosureDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div style="margin:auto; padding: 10px; text-align:center;">
+  <form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+      <p style="display:inline">
+        <a asp-action="Create" class="btn btn-secondary" style="margin-right:15px">New Idea</a>
+        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" style="width:500px" />
+        <input type="submit" value="Search" class="btn btn-default"> |
+        <a asp-action="Index" class="btn btn-default">Back to Full List</a>
+      <div style="display:inline-flex">
+        <a class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Filter
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" asp-action="Index">All Ideas</a></li>  
+          <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="latest">Sort by Latest</a></li>                            
+          <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="mostView">Sort by Most
+              Viewed</a></li>
+          <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="mostRating">Sort by
+              Rating</a></li>
+          <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="department">Sort by
+              Department</a></li>
+        </ul>
+      </div>
+      </p>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+
+@foreach (var item in Model)
+{
+
+  var ratingUp = @item.Ratings.GroupBy(u => u.IdeaID).Sum(g => g.Sum(u => u.RatingUp));
+  var ratingDown = @item.Ratings.GroupBy(d => d.IdeaID).Sum(g => g.Sum(d => d.RatingDown));
+  var totalComment = item.Comments?.Count() ?? 0;
+  var isLiked = item.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingUp==1);
+  var isDisliked = item.Ratings.Any(r => r.UserId == ViewBag.UserId && r.RatingDown==1);
+
+
+
+  <div id="blog" class="flex-container"
+    style="padding:30px; border: 0.5px outset; width:70%; margin:auto; margin-bottom:20px; border-radius:20px; background: rgb(247 247 247)">
+    <div class="col-md-8 col-sm-8 col-xs-12" style="margin: auto; ">
+      <div class="single-blog">
+        <div>
+          @if (@item.IdeaUser != null && @item.IdeaStatus == 0)
+          {
+            <img class="avatar-default" style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
+          }
+          else if (@item.IdeaUser != null && @item.IdeaStatus == 1)
+          {
+            <img src="data:image;base64,@System.Convert.ToBase64String(@item.IdeaUser.ProfilePicture)"
+              style="object-fit: cover;height: 150px;border-radius: 50%;width: 150px;" />
+          }
+          <h4 style="display: inline-block; padding-left:20px;">
+            @if (item.IdeaStatus == 1)
+            {
+              @item.IdeaUser.Name
+            }
+            else
+            {
+              <text>Anonymous</text>
+            }:
+            <br>
+            <span style="font-size:15px; text-align:center; display:block">&lt; Department: @Html.DisplayFor(modelItem =>
+            item.Department.Name) &gt;</span>
+          </h4>
+
+        </div>
+        <div class="blog-meta">
+          <span class="date-type">
+            <i class="fa fa-calendar"></i>Submission Date: @Html.DisplayFor(modelItem => item.SubmissionDate)
+            <br>
+            <i class='fas fa-calendar-times' style="color:rgba(255, 0, 0, 0.751)"></i>Closure Date:
+            @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
+          </span>
+        </div>
+        <div class="blog-text">
+          <h4>
+            Title:
+            <b>@Html.DisplayFor(modelItem => item.Title)</b>
+          </h4>
+          <p style="text-align: justify;">
+            <b>Description: &ldquo;</b>
+            <i>
+              @Html.DisplayFor(modelItem => item.Description)
+            </i>
+            <b>&rdquo; &middot;</b>
+          </p>
+        </div>
+
+        <a>
+          <i class="far fa-eye"></i> View: <span id="views-@item.Id">@Html.DisplayFor(modelItem =>
+          item.Viewings.Count)</span>
+          <i class="far fa-comment" style="padding-left: 15px"></i> Comments: @totalComment
+          <i class="far fa-thumbs-up" style="padding-left: 15px"></i> Rating Up: <span
+            id="rating-up-@item.Id">@ratingUp</span>
+          <i class="far fa-thumbs-down" style="padding-left: 15px"></i> Rating Down: <span
+            id="rating-down-@item.Id">@ratingDown</span>
+
+        </a>
+
+        <br><br>
+
+        @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
         {
-            var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdeaUser.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubmissionDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SupportingDocuments)
-                </td>
-                <td>
-                    @totalViews
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Department.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-                <td>
-                    @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
-                    {
-                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="true">Up</a>
-                        <text>|</text>
-                        <a asp-action="CreateRating" asp-route-id="@item.Id" asp-route-isUp="false">Down</a>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger">
-                            The closure date has passed.
-                        </div>
-                    }
-                </td>
-            </tr>
+          <div>
+            <a style="padding-left: 0" class="thumb-up-btn far fa-thumbs-up btn btn-light @(isLiked ? "active" : "")" data-id="@item.Id" data-isup=0
+              asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Up</a>
+            <a class=" thumb-down-btn far fa-thumbs-down btn btn-light @(isDisliked ? "active" : "")" data-id="@item.Id" data-isup=1
+              asp-action="CreateRating" asp-route-id="@item.Id"> Thumb Down</a>
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+          </div>
         }
-    </tbody>
-</table>
+        else
+        {
+          <div class="col-md-8" style="display: flex; justify-content: center;">
+            <div>
+              <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Idea Detail</a>
+            </div>
+          </div>
+          <br>
+          <div class="col-md-8 alert alert-danger">
+            The closure date has passed.
+          </div>
+        }
+        <br>
+        @if (item.ClosureDate != null && item.ClosureDate.FinalDate > DateTime.Now)
+        {
+          <form asp-action="Comment" asp-route-id="@item.Id">
+            <div class="input-group" style="max-width:80%;">
+              <input class="form-control comment-box" name="commenttext" placeholder="Comment"/>
+              <select name="incognito" style="min-with:20%; max-width:30%;">
+                <option value="no">Public</option>
+                <option value="yes">Incognito Comment</option>
+              </select>
+              <input type="submit" value="Comment" class="btn btn-dark" style=""/>
+            </div>
+          </form>
+        }
+        else
+        {
+          <div class="col-md-8 alert alert-danger">
+            The Final date has passed.
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+}
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    $(".thumb-up-btn, .thumb-down-btn").click(function (e) {
+      e.preventDefault();
+      var button = $(this);
+      var ideaId = button.data("id");
+      var isUp = button.data("isup");
+      var url = "/Idea/CreateRating?id=" + ideaId + "&isUp=" + isUp;
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          if (button.hasClass("active")) {
+            button.removeClass("active");
+          } else {
+            button.addClass("active");
+            button.siblings(".thumb-up-btn, .thumb-down-btn").removeClass("active");
+          }
+          var viewing = data.views;
+          var ratingUp = data.upvotes;
+          var ratingDown = data.downvotes;
+          $("#views-" + ideaId).text(viewing);
+          $("#rating-up-" + ideaId).text(ratingUp);
+          $("#rating-down-" + ideaId).text(ratingDown);
+        },
+        error: function () {
+          Swal.fire("Oops...", "Something went wrong!", "error");
+        }
+      });
+    });
+  });
+
+</script>
+

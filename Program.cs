@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Diagnostics;
 
 using EnterpriseWeb.Areas.Identity.Data;
 using EnterpriseWeb.Areas.Identity.Services;
@@ -12,8 +13,8 @@ builder.Services.AddDbContext<EnterpriseWebIdentityDbContext>(options =>
 builder.Services.AddDefaultIdentity<IdeaUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<EnterpriseWebIdentityDbContext>();
-    builder.Services.AddDbContext<EnterpriseWebIdentityDbContext>(options =>
-    options.UseSqlServer("EnterpriseWebIdentityDbContextConnection"));    
+builder.Services.AddDbContext<EnterpriseWebIdentityDbContext>(options =>
+options.UseSqlServer("EnterpriseWebIdentityDbContextConnection"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,7 +24,8 @@ builder.Services.AddScoped<NotificationSender>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope()){
+using (var scope = app.Services.CreateScope())
+{
     // var services = scope.ServiceProvider;
     // var context = services.GetRequiredService<IdeaUser>();
     // var userManager = services.GetRequiredService<UserManager<IdeaUser>>();
@@ -40,10 +42,36 @@ using (var scope = app.Services.CreateScope()){
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500; // or another Status code
+        context.Response.ContentType = "text/html";
+
+        await context.Response.WriteAsync("<html><body>\r\n");
+        await context.Response.WriteAsync("Error Page - Customized for Duplicate Data!<br><br>\r\n");
+
+        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        if (exceptionHandlerPathFeature?.Error is DbUpdateException)
+        {
+            await context.Response.WriteAsync("<h2>Duplicate data found!</h2>\r\n");
+            await context.Response.WriteAsync("<p>Please enter unique data.</p>\r\n");
+            // You can also add a link to redirect the user back to the input form.
+        }
+
+        await context.Response.WriteAsync("</body></html>\r\n");
+        await context.Response.CompleteAsync();
+    });
+});
 }
+
+// if (!app.Environment.IsDevelopment())
+// {
+    
+// }
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

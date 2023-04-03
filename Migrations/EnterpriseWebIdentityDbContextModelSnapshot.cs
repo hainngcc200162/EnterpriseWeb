@@ -40,6 +40,9 @@ namespace EnterpriseWeb.Migrations
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -88,6 +91,8 @@ namespace EnterpriseWeb.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentID");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -111,12 +116,16 @@ namespace EnterpriseWeb.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Category");
                 });
@@ -193,14 +202,13 @@ namespace EnterpriseWeb.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("QACoordinatorID")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QACoordinatorID");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Department");
                 });
@@ -225,8 +233,14 @@ namespace EnterpriseWeb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("IdeaStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("IdeaUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
@@ -274,22 +288,6 @@ namespace EnterpriseWeb.Migrations
                     b.ToTable("IdeaCategory");
                 });
 
-            modelBuilder.Entity("EnterpriseWeb.Models.QACoordinator", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QACoordinator");
-                });
-
             modelBuilder.Entity("EnterpriseWeb.Models.Rating", b =>
                 {
                     b.Property<int>("Id")
@@ -304,10 +302,10 @@ namespace EnterpriseWeb.Migrations
                     b.Property<string>("IdeaUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RatingDown")
+                    b.Property<int?>("RatingDown")
                         .HasColumnType("int");
 
-                    b.Property<int>("RatingUp")
+                    b.Property<int?>("RatingUp")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SubmitionDate")
@@ -494,6 +492,15 @@ namespace EnterpriseWeb.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EnterpriseWeb.Areas.Identity.Data.IdeaUser", b =>
+                {
+                    b.HasOne("EnterpriseWeb.Models.Department", "Department")
+                        .WithMany("IdeaUsers")
+                        .HasForeignKey("DepartmentID");
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("EnterpriseWeb.Models.Comment", b =>
                 {
                     b.HasOne("EnterpriseWeb.Models.Idea", "Idea")
@@ -509,15 +516,6 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("Idea");
 
                     b.Navigation("IdeaUser");
-                });
-
-            modelBuilder.Entity("EnterpriseWeb.Models.Department", b =>
-                {
-                    b.HasOne("EnterpriseWeb.Models.QACoordinator", "QACoordinator")
-                        .WithMany("Departments")
-                        .HasForeignKey("QACoordinatorID");
-
-                    b.Navigation("QACoordinator");
                 });
 
             modelBuilder.Entity("EnterpriseWeb.Models.Idea", b =>
@@ -662,6 +660,11 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("Ideas");
                 });
 
+            modelBuilder.Entity("EnterpriseWeb.Models.Department", b =>
+                {
+                    b.Navigation("IdeaUsers");
+                });
+
             modelBuilder.Entity("EnterpriseWeb.Models.Idea", b =>
                 {
                     b.Navigation("Comments");
@@ -671,11 +674,6 @@ namespace EnterpriseWeb.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Viewings");
-                });
-
-            modelBuilder.Entity("EnterpriseWeb.Models.QACoordinator", b =>
-                {
-                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,59 +1,143 @@
-@model IEnumerable<EnterpriseWeb.Models.Comment>
+@model PaginatedList<EnterpriseWeb.Models.Comment>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+ <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CommentText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmitDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idea)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubmitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idea.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">All Comments</h3>
+                <div class="card-tools">
+                    <div class="input-group-append">
+                        <form asp-action="Index" method="get">
+                          <p>
+                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                              <button class="btn btn-navbar" type="submit" value="Search"><i class="fas fa-search"></i></button>
+                          </p>
+                    </form>
+                
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Comment Owner</th>
+                      <th>SubmitDate</th>
+                      <th>CommentText</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                          <td>@Html.DisplayFor(modelItem => item.Idea.Title)</td>
+                          <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
+                          <td>@Html.DisplayFor(modelItem => item.SubmitDate)</td>
+                          <td>@Html.DisplayFor(modelItem => item.CommentText)</td>
+                          @* <td>@Html.DisplayFor(modelItem => item.status)</td>      *@
+                          @if(item.status == 0){
+                            <td><span class="badge bg-dark">Anonymous</span></td>
+                          }else if(item.status == 1){
+                            <td><span class="badge bg-light">Public</span></td>
+                          }
+                          <td>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
+                          </td>
+                        </tr>
+                      }
+                  </tbody>
+                </table>
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-left">
+                    <li class="page-item"><a class="page-link" asp-action="Index"
+                              asp-route-pageNumber="1"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  <i class = "fas fa-angle-double-left"></i>                
+                              </a></li>                          
+                            @{
+                            int i = Model.PageIndex;
+                            if(i >= 1 && i <= 2 && Model.TotalPages < 3){
+                              for(i = 1; i <= Model.TotalPages; i ++){
+                                <li class="page-item"><a class="page-link" asp-action="Index"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li>                     
+                                }
+                            }
+                            else if(i >= 0 && i <= 2 && Model.TotalPages >= 3){
+                                  for(i = 1; i <= 3; i ++){
+                                    <li class="page-item"><a class="page-link" asp-action="Index"
+                                    asp-route-pageNumber="@(i)"
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @(i)                
+                                    </a></li>                     
+                                    }
+                            }else if (i < Model.TotalPages && i >= 2 && Model.TotalPages >= 2){
+                              for(i = Model.PageIndex - 1; i < Model.PageIndex + 2; i++){
+                                  <li class="page-item"><a class="page-link" asp-action="Index"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li> 
+                              }
+                          } 
+                          else if (Model.PageIndex >= Model.TotalPages){
+                            for(i = Model.TotalPages - 2; i < Model.TotalPages + 1; i++){
+                                  <li class="page-item"><a class="page-link" asp-action="Index"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li> 
+                          }
+                          }
+                          }
+                      @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="@(Model.TotalPages)"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
+                </ul>
+              </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>

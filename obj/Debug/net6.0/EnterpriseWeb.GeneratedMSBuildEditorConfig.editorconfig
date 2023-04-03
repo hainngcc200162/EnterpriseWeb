@@ -179,12 +179,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/CreateQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcQ3JlYXRlUUEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/DarkTheme.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGFya1RoZW1lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/DeleteQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGVsZXRlUUEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/Details.cshtml]
@@ -195,12 +203,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/EditQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRWRpdFFBLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/ViewCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcVmlld0NhdGVnb3J5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/ViewCategoryQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcVmlld0NhdGVnb3J5UUEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Category/ViewQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcVmlld1FBLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/ClosureDate/Create.cshtml]
@@ -221,6 +241,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/ClosureDate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/ClosureDate/ViewQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvc3VyZURhdGVcVmlld1FBLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Comment/Commented.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbWVudFxDb21tZW50ZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Comment/Create.cshtml]
@@ -263,8 +291,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Department/ViewQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxWaWV3UUEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/About.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/AdminHomePage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBZG1pbkhvbWVQYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/Contact.cshtml]
@@ -277,6 +313,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/QACoordinatorHomePage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxRQUNvb3JkaW5hdG9ySG9tZVBhZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Home/QAManagerHomePage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxRQU1hbmFnZXJIb21lUGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/IdeaCategory/Create.cshtml]
@@ -315,12 +359,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/DeleteQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxEZWxldGVRQS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/EditQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxFZGl0UUEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/Filter.cshtml]
@@ -335,6 +387,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/Record.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxSZWNvcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/Search.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxTZWFyY2guY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -343,28 +399,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxTZWFyY2hDYXRlZ29yeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/ViewCategory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxWaWV3Q2F0ZWdvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/ViewIdea.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxWaWV3SWRlYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/QACoordinator/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxDcmVhdGUuY3NodG1s
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/ViewIdeaAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxWaWV3SWRlYUFkbWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/QACoordinator/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxEZWxldGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/QACoordinator/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxEZXRhaWxzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/QACoordinator/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxFZGl0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/QACoordinator/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUUFDb29yZGluYXRvclxJbmRleC5jc2h0bWw=
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Idea/ViewQA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWRlYVxWaWV3UUEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Rating/Create.cshtml]
@@ -403,6 +451,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NYWluTGF5b3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Shared/_QACoordinator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9RQUNvb3JkaW5hdG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Shared/_QAManager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9RQU1hbmFnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -411,8 +467,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WaWV3QWRtaW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/Shared/_ViewAdmin1.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WaWV3QWRtaW4xLmNzaHRtbA==
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/UserRoles/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclJvbGVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/UserRoles/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclJvbGVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Inspiron/OneDrive/Desktop/EnterpriseWeb/Views/UserRoles/index.cshtml]

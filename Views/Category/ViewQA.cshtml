@@ -1,0 +1,151 @@
+@model  PaginatedList<EnterpriseWeb.Models.Category>
+@{
+    ViewData["Title"] = "Create";
+}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    @if (ViewData["message"] != null)
+    {
+        <div class="alert @ViewData["messageClass"] alert-dismissible fade show" role="alert">
+            @ViewData["message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <p>
+                <a asp-action="Create">Create Category</a>
+            </p>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">All Category</h3>
+                <div class="card-tools">
+                    <div class="input-group-append">
+                        <form asp-action="ViewQA" method="get">
+                          <p>
+                              <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                              <button class="btn btn-navbar" type="submit" value="Search"><i class="fas fa-search"></i></button>
+                          </p>
+                    </form>
+                
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Status</th>
+                      <th>Description</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                          <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                          <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                          <td>
+                            <div class="sparkbar" data-color="#00a65a" data-height="20">@Html.DisplayFor(modelItem => item.Description)</div>
+                          </td>
+                          <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
+                          </td>         
+                        </tr>
+                      }
+                  </tbody>
+                </table>
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-left">
+                    <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                              asp-route-pageNumber="1"
+                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                  <i class = "fas fa-angle-double-left"></i>                
+                              </a></li>                          
+                            @{
+                            int i = Model.PageIndex;
+                            if(i >= 1 && i <= 2 && Model.TotalPages < 3){
+                              for(i = 1; i <= Model.TotalPages; i ++){
+                                <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li>                     
+                                }
+                            }
+                            else if(i >= 0 && i <= 2 && Model.TotalPages >= 3){
+                                  for(i = 1; i <= 3; i ++){
+                                    <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                                    asp-route-pageNumber="@(i)"
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @(i)                
+                                    </a></li>                     
+                                    }
+                            }else if (i < Model.TotalPages && i >= 2 && Model.TotalPages >= 2){
+                              for(i = Model.PageIndex - 1; i < Model.PageIndex + 2; i++){
+                                  <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li> 
+                              }
+                          } 
+                          else if (Model.PageIndex >= Model.TotalPages){
+                            for(i = Model.TotalPages - 2; i < Model.TotalPages + 1; i++){
+                                  <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                                asp-route-pageNumber="@(i)"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    @(i)                
+                                </a></li> 
+                          }
+                          }
+                          }
+                      @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                      asp-route-pageNumber="@(Model.TotalPages)"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="ViewQA"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
+                </ul>
+              </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>

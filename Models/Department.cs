@@ -1,4 +1,5 @@
 namespace EnterpriseWeb.Models;
+using EnterpriseWeb.Areas.Identity.Data;
 public class Department
 {
     public int Id { get ; set ; }
@@ -6,7 +7,5 @@ public class Department
     public string? Name { get ; set ; }
 
     public string? Description { get ; set ; }
-
-    public int? QACoordinatorID { get; set; }
-    public QACoordinator? QACoordinator { get; set; }
+    public ICollection<IdeaUser>? IdeaUsers { get; set; }
 }

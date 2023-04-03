@@ -299,6 +299,17 @@ div#preloader {
     }
 }
 
+.comment-box{
+    width: 100% !important;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .comment-box{
+        width: 50% !important;
+    }
+}
+
 .header-bg {
     background: url(~/img/background/page-header.jpg);
     background-repeat: no-repeat;
@@ -2296,6 +2307,12 @@ span.email-notes {
 .credits {
     padding-top: 5px;
     text-align: center;
+}
+
+.avatar-default {
+    background-image: url(../img/123.jpg);
+
+    background-position: center;
 }
 
 

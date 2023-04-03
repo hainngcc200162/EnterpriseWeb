@@ -1,0 +1,124 @@
+@model IEnumerable<EnterpriseWeb.Models.Idea>
+@{
+    ViewData["Title"] = "Record";
+
+}
+<section class="bg0 p-t-120 p-b-80">
+    <div class="container">
+        <div class="row p-b-20">
+            <div class="col-lg-12 col-xl-12 m-lr-auto m-b-50">
+                <div class="m-l-20 m-r-20 m-lr-0-xl">
+                    <div class="flex-w flex-t p-b-13">
+                        <div class="size-208">
+                            <h3 class="mtext-109 cl2 p-b-30">
+                                My Idea list
+                            </h3>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Title)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SubmissionDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupportingDocuments)
+                                </th>
+                                <th>
+                                    View
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Department)
+                                </th>
+                                <th>
+                                    RatingUp
+                                </th>
+                                <th>
+                                    RatingDown
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ClosureDate)
+                                </th>
+                                <th style="text-align: center;">
+                                    Status
+                                </th>
+                                <th style="text-align: center;">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
+                                var ratingUp = item.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingUp));
+                                var ratingDown = item.Ratings.GroupBy(v => v.IdeaID).Sum(g => g.Sum(v => v.RatingDown));
+                                <tr>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem =>
+                                        item.Title)</a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SubmissionDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupportingDocuments)
+                                    </td>
+                                    <td>
+                                        @totalViews
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Department.Name)
+                                    </td>
+                                    <td>
+                                        @ratingUp
+                                    </td>
+                                    <td>
+                                        @ratingDown
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ClosureDate.ClousureDate)
+                                    </td>
+                                    <td>
+                                        @if (item.Status == 0)
+                                        {
+                                            <span class="alert alert-primary d-flex align-items-center" role="alert">Under
+                                                review</span>
+                                        }
+                                        else if (item.Status == 1)
+                                        {
+                                            <span class="alert alert-success d-flex align-items-center"
+                                                role="alert">Approved</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="alert alert-danger d-flex align-items-center"
+                                                role="alert">Rejected</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark"><i
+                                                class="fas fa-eye"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i
+                                                class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/Identity/Account/Manage" type="button" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</section>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>

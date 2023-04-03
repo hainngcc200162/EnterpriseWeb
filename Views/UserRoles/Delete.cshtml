@@ -1,0 +1,35 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" style = "text-align: center;">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                    <h2>Confirm Delete</h2>
+                    <p>Are you sure you want to delete this user?</p>
+                    <form method="post" asp-action="Delete">
+                        <input type="hidden" name="userId" value="@Model.Id" />
+                        <a asp-action="Index" class="btn btn-primary">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>

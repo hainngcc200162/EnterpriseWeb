@@ -6,6 +6,17 @@
 
 
 <div class="content-wrapper">
+
+  @if (ViewData["message"] != null)
+  {
+      <div class="alert @ViewData["messageClass"] alert-dismissible fade show" role="alert">
+          @ViewData["message"]
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+  }
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -48,17 +59,15 @@
                       <th>Id</th>
                       <th>Name</th>
                       <th>Description</th>
-                      <th>QACoordinator</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Name)</td>
                           <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                          <td>@Html.DisplayFor(modelItem => item.QACoordinator.Id)</td>
                           <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
@@ -72,7 +81,7 @@
                     <li class="page-item"><a class="page-link" asp-action="Index"
                       asp-route-pageNumber="1"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            <<               
+                            <i class = "fas fa-angle-double-left"></i>                  
                         </a></li>
                         @{
                           int i = Model.PageIndex;
@@ -112,11 +121,19 @@
                         }
                         }
                         }
-                        <li class="page-item"><a class="page-link" asp-action="Index"
+                        @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="Index"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            >>               
+                            <i class = "fas fa-angle-double-right"></i>                
                         </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="Index"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
                 </ul> 
               </div>
               </div>

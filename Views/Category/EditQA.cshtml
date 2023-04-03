@@ -1,8 +1,9 @@
-@model EnterpriseWeb.Models.QACoordinator
+@model EnterpriseWeb.Models.Category
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
+
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -10,7 +11,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Create New QACoordinator</h1>
+            <h1>Edit Category</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Edit Category</li>
+            </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -18,8 +25,9 @@
 
     <!-- Main content -->
     <section class="content">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
       <div class="row">
         <div class="col-md-12">
           <div class="card card-secondary">
@@ -33,11 +41,21 @@
               </div>
             </div>
             <div class="card-body">
-            <div class="form-group">
+                <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>  
             </div>
             <!-- /.card-body -->
           </div>
@@ -47,7 +65,7 @@
       <div class="row">
         <div class="col-12">
           <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-          <input type="submit" value="Create" class="btn btn-dark float-right">
+          <input type="submit" value="Edit" class="btn btn-dark float-right">
         </div>
       </div>
       </form>

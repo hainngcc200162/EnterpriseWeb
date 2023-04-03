@@ -1,16 +1,24 @@
 @model PaginatedList<EnterpriseWeb.Models.Idea>
 <div class="content-wrapper">
-    <h1>Index</h1>
+    @if (ViewData["message"] != null)
+    {
+        <div class="alert @ViewData["messageClass"] alert-dismissible fade show" role="alert">
+            @ViewData["message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }  
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <p>
+            @* <p>
                 <a asp-action="Create" class="btn btn-primary">Create New</a>
                 <a asp-action="ExportIdeaList" type="submit" class="btn btn-secondary">Export Idea List</a>
                 <a asp-action="Chart" class="btn btn-warning">Chart</a>
-            </p>
+            </p> *@
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -30,6 +38,20 @@
                           <p>
                               <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
                               <button type = "submit" value="Search"><i class="fas fa-search"></i></button>
+                              <div display: inline-block;>
+                                <a class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Filter
+                                </a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item" asp-action="ViewIdea" asp-route-filterIdea="all">All</a></li>
+                                  <li><a class="dropdown-item" asp-action="ViewIdea" asp-route-filterIdea="approve">Filter by
+                                      Approve</a></li>
+                                  <li><a class="dropdown-item" asp-action="ViewIdea" asp-route-filterIdea="reject">Filter by
+                                      Reject</a></li>
+                                  <li><a class="dropdown-item" asp-action="ViewIdea" asp-route-filterIdea="underreview">Filter by
+                                      UnderReview</a></li>
+                              </ul>
+                            </div>
                           </p>
                     </form>
                 
@@ -46,9 +68,9 @@
                       <th>Description</th>
                       <th>Name</th>
                       <th>View</th>
+                      <th>Status</th>
                       <th>SubmissionDate</th>
                       <th>SupportingDocuments</th>
-                      <th>Department</th>
                       <th>ClosureDate</th>
                       <th>Action</th>
                     </tr>
@@ -57,21 +79,38 @@
                     @foreach (var item in Model) {
                          var totalViews = item.Viewings.GroupBy(v => v.IdeaId).Sum(g => g.Sum(v => v.Count));
                         <tr>                          
-                          <td><a asp-action="Details" asp-route-id="@item.Id" >@Html.DisplayFor(modelItem => item.Id)</a></td>
+                          <td>@Html.DisplayFor(modelItem => item.Id)</td>
                           <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                          <td>
+                            <textarea readonly>@Html.DisplayFor(modelItem => item.Description)</textarea>
+                          </td>
                           <td>@Html.DisplayFor(modelItem => item.IdeaUser.Name)</td>
                           <td>
                             @totalViews
                           </td>
+                          <td>
+                            @if(item.Status == 0)
+                            {
+                              <span class="alert alert-info">Under review</span>
+                            }
+                            else if(item.Status == 1)
+                            {
+                              <span class="alert alert-success">Approved</span>
+                            }
+                            else
+                            {
+                              <span class="alert alert-danger">Rejected</span>
+                            }
+                          </td>
                           <td>@Html.DisplayFor(modelItem => item.SubmissionDate)</td>
                           <td>@Html.DisplayFor(modelItem => item.SupportingDocuments)</td>
-                          <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                          @* <td>@Html.DisplayFor(modelItem => item.Department.Name)</td> *@
                           <td>@Html.DisplayFor(modelItem => item.ClosureDate.FinalDate)</td>
-                          <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
+                           <td>
+                            <a asp-action="EditQA" asp-route-id="@item.Id" class = "btn btn-dark"><i class = "fas fa-eye"></i></a>
+                            <a asp-action="DeleteQA" asp-route-id="@item.Id" class = "btn btn-danger"><i class = "fas fa-trash"></i></a>
                           </td>
+                          @*
                           <td>
                             @if (item.ClosureDate != null && item.ClosureDate.ClousureDate > DateTime.Now)
                             {
@@ -85,23 +124,23 @@
                                     The closure date has passed.
                                 </div>
                             }
-                        </td>         
+                        </td>          *@
                         </tr>
                       }
                   </tbody>
                 </table>
                 <div class="card-footer clearfix">
                   <ul class="pagination pagination-sm m-0 float-left">
-                    <li class="page-item"><a class="page-link" asp-action="Index"
+                    <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                               asp-route-pageNumber="1"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                  <<                
+                                  <i class = "fas fa-angle-double-left"></i>                  
                               </a></li> 
                         @{
                           int i = Model.PageIndex;
                           if(i >= 1 && i <= 2 && Model.TotalPages < 3){
                             for(i = 1; i <= Model.TotalPages; i ++){
-                              <li class="page-item"><a class="page-link" asp-action="Index"
+                              <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                               asp-route-pageNumber="@(i)"
                               asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                   @(i)                
@@ -135,11 +174,19 @@
                         }
                         }
                         }
-                        <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                        @if(Model.TotalPages > 0){
+                      <li class="page-item"><a class="page-link" asp-action="ViewIdea"
                       asp-route-pageNumber="@(Model.TotalPages)"
                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            >>               
+                            <i class = "fas fa-angle-double-right"></i>                
                         </a></li>
+                      }else{
+                        <li class="page-item"><a class="page-link" asp-action="ViewIdea"
+                      asp-route-pageNumber="1"
+                      asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                            <i class = "fas fa-angle-double-right"></i>                
+                        </a></li>
+                      }
                 </ul> 
               </div>
 
@@ -156,3 +203,7 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>

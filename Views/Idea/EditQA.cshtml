@@ -1,0 +1,163 @@
+@model EnterpriseWeb.Models.Idea
+
+@{
+  ViewData["Title"] = "Edit";
+}
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Check Idea</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <form asp-action="EditQA" enctype="multipart/form-data">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <input type="hidden" asp-for="Id" />
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="input-group" style="width:500px">
+                <select name="istatus" readonly>
+                  @if (Model.IdeaStatus == 1)
+                  {
+                    <option value="no" selected>Public Idea</option>
+                    <option value="yes">Anonymous Idea</option>
+                  }
+                  else
+                  {
+                    <option value="no">Public Idea</option>
+                    <option value="yes" selected>Anonymous Idea</option>
+                  }
+                </select>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="IdeaStatus" class="control-label"></label>
+                <input asp-for="IdeaStatus" class="form-control" />
+                <span asp-validation-for="IdeaStatus" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" readonly />
+                <span asp-validation-for="Title" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" readonly />
+                <span asp-validation-for="Description" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control">
+                  <option value=0>In Process</option>
+                  <option value=1>Accecpt</option>
+                  <option value=2>Reject</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">Categories</label>
+                <select name="selectedCategoryIds" asp-items="ViewBag.Categories" class="form-control"
+                  multiple></select>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="DepartmentID" class="control-label"></label>
+                <input asp-for="DepartmentID" class="form-control" />
+                <span asp-validation-for="DepartmentID" class="text-danger"></span>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="SubmissionDate" class="control-label"></label>
+                <input asp-for="SubmissionDate" class="form-control" />
+                <span asp-validation-for="SubmissionDate" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <dd class="col-sm-10">
+                  Current file:
+                  @Html.DisplayFor(model => model.SupportingDocuments)
+                </dd>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="SupportingDocuments" class="control-label"></label>
+                <input asp-for="SupportingDocuments" class="form-control" />
+                <span asp-validation-for="SupportingDocuments" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Upload file</label>
+                <input asp-for="DataFile" type="file" name="newfile" readonly />
+                <span asp-validation-for="DataFile" class="text-danger"></span>
+              </div>
+              <div class="form-group" hidden>
+                <label asp-for="DataFile" class="control-label"></label>
+                @if (Model.DataFile != null)
+                {
+                  <input asp-for="DataFile" class="form-control" value="@System.Convert.ToBase64String(Model.DataFile)" />
+                }
+              </div>
+              <div class="form-group">
+                <label asp-for="ClosureDateID" class="control-label"></label>
+                <select asp-for="ClosureDateID" class="form-control" asp-items="ViewBag.ClosureDateID"
+                  readonly></select>
+                <span asp-validation-for="ClosureDateID" class="text-danger"></span>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <a asp-action="ViewIdea" class="btn btn-secondary">Cancel</a>
+          <input type="submit" value="Edit" class="btn btn-dark float-right">
+        </div>
+      </div>
+    </form>
+  </section>
+  <!-- /.content -->
+</div>
+
+@section Scripts {
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  }
+  <script>
+    function toggleActive(button) {
+      // Remove active class from all buttons
+      var buttons = document.querySelectorAll('.btn');
+      buttons.forEach(function (btn) {
+        btn.classList.remove('active');
+      });
+
+      // Add active class to clicked button
+      button.classList.add('active');
+    }
+  </script>
+}
