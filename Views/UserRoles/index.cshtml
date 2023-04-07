@@ -37,6 +37,7 @@
                         <th>Date of Birth</th>
                         <th>Home Address</th>
                         <th>Email</th>
+                        <th>Confim</th>
                         <th>Roles</th>
                         <th>Action</th>
                     </tr>
@@ -48,6 +49,16 @@
                             <td>@item.DOB</td>
                             <td>@item.Address</td>
                             <td>@item.Email</td>
+                            <td>
+                              @if(item.Confirm == true)
+                              {
+                                <span class="alert alert-success">Confirmed</span>
+                              }
+                              else
+                              {
+                                <span class="alert alert-danger">Unconfirmed</span>
+                              }
+                            </td>
                             <td>@string.Join(" , ", item.Roles.ToList())</td>
 
                             

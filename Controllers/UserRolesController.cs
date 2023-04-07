@@ -40,6 +40,7 @@ namespace EnterpriseWeb.Controllers
                 var thisViewModel = new UserRolesViewModel();
                 thisViewModel.UserId = user.Id;
                 thisViewModel.Email = user.Email;
+                thisViewModel.Confirm = user.EmailConfirmed;
                 thisViewModel.Name = user.Name;
                 thisViewModel.DOB = user.DOB;
                 thisViewModel.Address = user.Address;

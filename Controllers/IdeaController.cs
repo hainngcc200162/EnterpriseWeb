@@ -212,7 +212,7 @@ namespace EnterpriseWeb.Controllers
             {
                 var worksheet = xlPackage.Workbook.Worksheets.Add("Ideas");
                 worksheet.Cells["E1"].Value = "List Idea";
-                worksheet.Cells["A3"].Value = "User Name";
+                worksheet.Cells["A3"].Value = "Staff Name";
                 worksheet.Cells["B3"].Value = "Title";
                 worksheet.Cells["C3"].Value = "Description";
                 worksheet.Cells["D3"].Value = "Rating Up";

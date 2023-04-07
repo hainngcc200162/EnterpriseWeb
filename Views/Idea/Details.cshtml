@@ -75,7 +75,7 @@
       <div style="border-radius: 5px 20px 5px; border: 2px outset; padding:20px; overflow:auto; max-height:250px">
         <dl id="comments-list" class="row comment-list" style="margin-bottom: 0rem;">
           <div class="text-right">
-              <a asp-action="Details" asp-route-id="@Model.Id" asp-route-sortOrder=@ViewData["Latest"]>
+              <a asp-action="Details" class="btn btn-outline-dark" asp-route-id="@Model.Id" asp-route-sortOrder=@ViewData["Latest"]>
                   Latest Comment
               </a>
           </div> 
@@ -98,6 +98,9 @@
               @Html.DisplayFor(modelItem => commentArray[i].CommentText)
               <br>
             </dd>
+            <dd class = "col-sm-2">
+              @Html.DisplayFor(modelItem => commentArray[i].SubmitDate)
+            </dd>
           }
         </dl>
         @* Hidden list *@
@@ -119,6 +122,9 @@
 
               @Html.DisplayFor(modelItem => commentArray[i].CommentText)
               <br>
+            </dd>
+            <dd class = "col-sm-2">
+              @Html.DisplayFor(modelItem => commentArray[i].SubmitDate)
             </dd>
           }
         </dl>
