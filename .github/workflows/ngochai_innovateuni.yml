@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'InnovateUni'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2114614B2DF249AE9CC37668B3B1A8C8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0809ADB30C814FC7ABC2F2C773C22863 }}
           package: .
